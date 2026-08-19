@@ -139,6 +139,8 @@ QA는 프로젝트의 기존 test, API 검사, Playwright, Codex browser 기능,
 
 `graph understand`는 명시적으로 요청할 때 기존 CodeGraph index를 사용하고, 그 외에는 범위가 제한된 Go AST 분석으로 fallback합니다. 각 선언의 정의 위치, import/reference, call/use, 입력 shape, 출력/side effect, Understanding Layer, provider와 confidence를 구체화합니다. `qa capabilities`는 native/Playwright runner를 발견하고, `qa execute`는 발견된 allowlist adapter만 허용합니다. Codex browser나 Chrome 도구가 생성한 UX/API/data 관찰은 `qa observe`가 schema 검증 후 evidence로 가져옵니다.
 
+저장소의 `testdata/reference-web`과 `tests/e2e`에는 실제 reference journey가 포함됩니다. `npm run test:e2e`는 Chromium으로 form, API boundary, validation, downstream failure/retry를 실행하고 read-only observer를 통해 persistent state까지 확인합니다.
+
 ## tene를 이용한 Secret-Safe 실행
 
 tene-codex와 `tene-workflow`는 secret 값을 소유하거나 복호화하거나 저장하지 않습니다. Secret metadata와 runtime injection은 별도의 [`tene`](https://github.com/agent-kay-it/tene) CLI에 위임합니다.

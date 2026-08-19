@@ -1,0 +1,12 @@
+{
+  "adapter": "playwright",
+  "command": [
+    "npx",
+    "playwright",
+    "test"
+  ],
+  "started_at": "2026-08-19T17:53:50.730548Z",
+  "finished_at": "2026-08-19T17:53:55.559633Z",
+  "passed": true,
+  "output": "\nRunning 3 tests using 1 worker\n\n(node:78831) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  ✓  1 tests/e2e/reference-web.spec.ts:3:5 › success crosses UI API and persistence (563ms)\n  ✓  2 tests/e2e/reference-web.spec.ts:10:5 › validation prevents a network write (276ms)\n  ✓  3 tests/e2e/reference-web.spec.ts:14:5 › downstream failure is visible and retry writes exactly once (539ms)\n\n  3 passed (3.1s)\n"
+}

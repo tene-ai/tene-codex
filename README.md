@@ -139,6 +139,8 @@ QA can combine project-native tests, API checks, Playwright, Codex browser capab
 
 `graph understand` uses an existing CodeGraph index when explicitly queried and otherwise falls back to bounded Go AST analysis. It materializes each declaration's definition, imports/references, calls/uses, input shape, output/side effects, Understanding Layer, provider and confidence. `qa capabilities` discovers native and Playwright runners; `qa execute` permits only discovered allowlisted adapters, while `qa observe` imports schema-validated UX/API/data observations produced by Codex browser or Chrome tools.
 
+The repository includes a real reference journey under `testdata/reference-web` and `tests/e2e`. `npm run test:e2e` drives Chromium through a form, API boundary, validation and downstream failure/retry paths, then verifies persistent state through a read-only observer.
+
 ## Secret-Safe Execution with tene
 
 tene-codex and `tene-workflow` do not own, decrypt, or store secret values. Secret metadata and runtime injection are delegated to the separate [`tene`](https://github.com/agent-kay-it/tene) CLI.

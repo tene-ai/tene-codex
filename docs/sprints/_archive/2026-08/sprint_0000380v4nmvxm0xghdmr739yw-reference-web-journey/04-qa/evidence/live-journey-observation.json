@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "playwright-chromium-1.62.1",
+  "run_id": "run_0000380v50py5ybj6recjze76r",
+  "case_id": "case_0000380v50py5gjesg4kq9jvbg",
+  "environment": "local-reference-web",
+  "started_at": "2026-08-19T17:53:40Z",
+  "finished_at": "2026-08-19T17:53:56Z",
+  "checkpoints": [
+    {"name": "interface", "kind": "ui", "before": "empty form", "after": "created/error/retry feedback asserted by accessible status"},
+    {"name": "boundary", "kind": "http", "before": "no request", "after": "201 success or 503 recoverable response asserted"},
+    {"name": "persistence", "kind": "file-via-read-only-api", "before": [], "after": [{"name": "one expected item"}]}
+  ],
+  "assertions": [
+    {"statement": "success crosses UI API and persistence", "passed": true, "actual": "201, confirmation, one observed item", "expected": "all three boundaries agree"},
+    {"statement": "validation prevents a network write", "passed": true, "actual": "required control focused and state empty", "expected": "no mutation"},
+    {"statement": "failure is visible and retry writes exactly once", "passed": true, "actual": "503 feedback, empty state, then one item", "expected": "safe recovery"}
+  ],
+  "redaction_status": "passed"
+}

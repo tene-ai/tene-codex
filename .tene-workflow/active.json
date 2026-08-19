@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 162,
-  "updated_at": "2026-08-19T17:49:49.907413Z",
+  "revision": 196,
+  "updated_at": "2026-08-19T17:54:50.276841Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -91,6 +91,28 @@
       "last_qa_status": "passed",
       "last_qa_id": "run_0000380v4frqbxwsjnd0pr3rrg",
       "report_path": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery/05-report/00-report.md"
+    },
+    "sprint_0000380v4nmvxm0xghdmr739yw": {
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "slug": "reference-web-journey",
+      "title": "Reference Web Journey Harness",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380v3xjbejnjk8w65p9q2w"
+      ],
+      "intent_ids": [
+        "intent_0000380v4qr9wrhtaf3y350ydm"
+      ],
+      "task_ids": [
+        "task_0000380v4rjhjyyjmsc8j214a8",
+        "task_0000380v4rk8tq2wr56vr3cwzr",
+        "task_0000380v4rm37skwdpp8z090sc"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380v4nmvxm0xghdmr739yw-reference-web-journey",
+      "archived_at": "2026-08-19T17:54:50.266322Z",
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380v50py5ybj6recjze76r",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380v4nmvxm0xghdmr739yw-reference-web-journey/05-report/00-report.md"
     }
   },
   "tasks": {
@@ -223,6 +245,36 @@
         "ac_0000380v40en0kw75gg67he44m"
       ],
       "layer": "persistence"
+    },
+    "task_0000380v4rjhjyyjmsc8j214a8": {
+      "task_id": "task_0000380v4rjhjyyjmsc8j214a8",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "title": "Build reference web app and data observer",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380v4qr9x9xqsqv8h51k0r"
+      ],
+      "layer": "interface"
+    },
+    "task_0000380v4rk8tq2wr56vr3cwzr": {
+      "task_id": "task_0000380v4rk8tq2wr56vr3cwzr",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "title": "Implement Playwright failure retry and accessibility journeys",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380v4r3s91617eyebhb1ew"
+      ],
+      "layer": "business"
+    },
+    "task_0000380v4rm37skwdpp8z090sc": {
+      "task_id": "task_0000380v4rm37skwdpp8z090sc",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "title": "Integrate observation evidence and CI",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380v4r4h1vw5hqzpz0sxyc"
+      ],
+      "layer": "infrastructure"
     }
   },
   "intents": {
@@ -268,6 +320,16 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-19T17:44:45.046675Z"
+    },
+    "intent_0000380v4qr9wrhtaf3y350ydm": {
+      "intent_id": "intent_0000380v4qr9wrhtaf3y350ydm",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "QA proves a complete user journey across browser API business rules and persisted data",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-19T17:51:13.04263Z"
     }
   },
   "acceptance_criteria": {
@@ -361,6 +423,27 @@
       "statement": "Doctor repairs only derived projections after validating journal and project",
       "priority": "blocking",
       "observable": "doctor repair recreates active and master plan and refuses corrupt source state"
+    },
+    "ac_0000380v4qr9x9xqsqv8h51k0r": {
+      "ac_id": "ac_0000380v4qr9x9xqsqv8h51k0r",
+      "intent_id": "intent_0000380v4qr9wrhtaf3y350ydm",
+      "statement": "A real Playwright journey proves successful UI network and persisted data outcomes",
+      "priority": "blocking",
+      "observable": "browser confirmation API 201 and observer state contain the submitted item"
+    },
+    "ac_0000380v4r3s91617eyebhb1ew": {
+      "ac_id": "ac_0000380v4r3s91617eyebhb1ew",
+      "intent_id": "intent_0000380v4qr9wrhtaf3y350ydm",
+      "statement": "Validation and downstream failure prevent writes and retry produces one recoverable success",
+      "priority": "blocking",
+      "observable": "UI error feedback and state observer show zero writes before retry and exactly one after retry"
+    },
+    "ac_0000380v4r4h1vw5hqzpz0sxyc": {
+      "ac_id": "ac_0000380v4r4h1vw5hqzpz0sxyc",
+      "intent_id": "intent_0000380v4qr9wrhtaf3y350ydm",
+      "statement": "Live journey results become schema-valid criterion-linked tene evidence and run in CI",
+      "priority": "blocking",
+      "observable": "Playwright reporter artifact imports through qa observe and CI includes e2e job"
     }
   },
   "gaps": {
@@ -522,6 +605,62 @@
         "ac_0000380v40en0kw75gg67he44m"
       ],
       "created_at": "2026-08-19T17:49:08.771193Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v51epq69jy1b3xvgyc4": {
+      "evidence_id": "evidence_0000380v51epq69jy1b3xvgyc4",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "run_id": "run_0000380v50py5ybj6recjze76r",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v4nmvxm0xghdmr739yw-reference-web-journey/04-qa/evidence/case_0000380v50py4cq0am7mgg5jvc-playwright.json",
+      "sha256": "a595f60e42fb19831cc322233f4a2fa110f36f45ebd2f7decb4d4514eda2302a",
+      "size": 752,
+      "ac_ids": [
+        "ac_0000380v4qr9x9xqsqv8h51k0r"
+      ],
+      "created_at": "2026-08-19T17:53:45.323306Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v51rh76ma2zm1v2wpx4": {
+      "evidence_id": "evidence_0000380v51rh76ma2zm1v2wpx4",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "run_id": "run_0000380v50py5ybj6recjze76r",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v4nmvxm0xghdmr739yw-reference-web-journey/04-qa/evidence/case_0000380v50py4tdctxthh22ef0-playwright.json",
+      "sha256": "a3d0cf40a6ce41707ff77d2cc6ff3bd6331fd550a9bdd5ab602596b1680b7ff5",
+      "size": 752,
+      "ac_ids": [
+        "ac_0000380v4r3s91617eyebhb1ew"
+      ],
+      "created_at": "2026-08-19T17:53:50.355111Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v522pgr661xxbpkntfw": {
+      "evidence_id": "evidence_0000380v522pgr661xxbpkntfw",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "run_id": "run_0000380v50py5ybj6recjze76r",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v4nmvxm0xghdmr739yw-reference-web-journey/04-qa/evidence/case_0000380v50py4my91vryafptxw-playwright.json",
+      "sha256": "6b1cf638b14feec5ed0a86b9b0e8912e4ceb9c9f385f7e40787ecc4f6c6ad7a2",
+      "size": 752,
+      "ac_ids": [
+        "ac_0000380v4r4h1vw5hqzpz0sxyc"
+      ],
+      "created_at": "2026-08-19T17:53:55.560503Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v53dtzxr301xxf81kdg": {
+      "evidence_id": "evidence_0000380v53dtzxr301xxf81kdg",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "run_id": "run_0000380v50py5ybj6recjze76r",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v4nmvxm0xghdmr739yw-reference-web-journey/04-qa/evidence/live-journey-observation.json",
+      "sha256": "dc618a00f91afb201bcdac249bff0e23cadbe94c9b607c581e3944468f220c67",
+      "size": 1243,
+      "ac_ids": [
+        "ac_0000380v4r4h1vw5hqzpz0sxyc"
+      ],
+      "created_at": "2026-08-19T17:54:17.647691Z",
       "redaction_status": "passed"
     }
   },
@@ -1678,6 +1817,394 @@
       ],
       "started_at": "2026-08-19T17:48:55.54176Z",
       "finished_at": "2026-08-19T17:49:33.556303Z"
+    },
+    "run_0000380v50py5ybj6recjze76r": {
+      "run_id": "run_0000380v50py5ybj6recjze76r",
+      "sprint_id": "sprint_0000380v4nmvxm0xghdmr739yw",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380v50py4cq0am7mgg5jvc",
+          "ac_ids": [
+            "ac_0000380v4qr9x9xqsqv8h51k0r"
+          ],
+          "title": "A real Playwright journey proves successful UI network and persisted data outcomes — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v51epq69jy1b3xvgyc4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "browser confirmation API 201 and observer state contain the submitted item",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py5b06ajh0e6vqj0",
+          "ac_ids": [
+            "ac_0000380v4qr9x9xqsqv8h51k0r"
+          ],
+          "title": "A real Playwright journey proves successful UI network and persisted data outcomes — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v51epq69jy1b3xvgyc4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "browser confirmation API 201 and observer state contain the submitted item",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py40rkrszgm5vdt8",
+          "ac_ids": [
+            "ac_0000380v4qr9x9xqsqv8h51k0r"
+          ],
+          "title": "A real Playwright journey proves successful UI network and persisted data outcomes — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v51epq69jy1b3xvgyc4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "browser confirmation API 201 and observer state contain the submitted item",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py4tdctxthh22ef0",
+          "ac_ids": [
+            "ac_0000380v4r3s91617eyebhb1ew"
+          ],
+          "title": "Validation and downstream failure prevent writes and retry produces one recoverable success — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v51rh76ma2zm1v2wpx4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "UI error feedback and state observer show zero writes before retry and exactly one after retry",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py52cn6b7v7k3xe0",
+          "ac_ids": [
+            "ac_0000380v4r3s91617eyebhb1ew"
+          ],
+          "title": "Validation and downstream failure prevent writes and retry produces one recoverable success — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v51rh76ma2zm1v2wpx4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "UI error feedback and state observer show zero writes before retry and exactly one after retry",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py5te6cfceqpa9fr",
+          "ac_ids": [
+            "ac_0000380v4r3s91617eyebhb1ew"
+          ],
+          "title": "Validation and downstream failure prevent writes and retry produces one recoverable success — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v51rh76ma2zm1v2wpx4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "UI error feedback and state observer show zero writes before retry and exactly one after retry",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py4my91vryafptxw",
+          "ac_ids": [
+            "ac_0000380v4r4h1vw5hqzpz0sxyc"
+          ],
+          "title": "Live journey results become schema-valid criterion-linked tene evidence and run in CI — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v522pgr661xxbpkntfw"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Playwright reporter artifact imports through qa observe and CI includes e2e job",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py5gjesg4kq9jvbg",
+          "ac_ids": [
+            "ac_0000380v4r4h1vw5hqzpz0sxyc"
+          ],
+          "title": "Live journey results become schema-valid criterion-linked tene evidence and run in CI — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v53dtzxr301xxf81kdg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Playwright reporter artifact imports through qa observe and CI includes e2e job",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v50py5vsy4bamz5mk78",
+          "ac_ids": [
+            "ac_0000380v4r4h1vw5hqzpz0sxyc"
+          ],
+          "title": "Live journey results become schema-valid criterion-linked tene evidence and run in CI — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v522pgr661xxbpkntfw"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Playwright reporter artifact imports through qa observe and CI includes e2e job",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-19T17:53:33.154434Z",
+      "finished_at": "2026-08-19T17:54:26.651436Z"
     }
   },
   "graph": {
