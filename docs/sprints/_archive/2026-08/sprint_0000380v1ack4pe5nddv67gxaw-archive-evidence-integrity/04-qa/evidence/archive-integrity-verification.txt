@@ -1,0 +1,15 @@
+Archive integrity stabilization verification
+Run date: 2026-08-20 Asia/Seoul
+
+PASS: go test -race ./...
+  Full Sprint integration stores evidence inside the Sprint tree, archives it,
+  asserts archive-manifest.json, checks the relocated evidence URI and file,
+  and runs doctor successfully after archive.
+
+PASS: go vet ./...
+PASS: Python hook tests (3/3)
+PASS: predecessor `evidence verify` with no active Sprint
+PASS: doctor verifies hash/redaction and reports healthy after predecessor archive
+PASS: doctor ignores future-phase blank documents while validating all due documents
+
+No live secret or production system was used.

@@ -1,0 +1,41 @@
+{
+  "name": "tene-codex",
+  "version": "0.1.0",
+  "description": "Spec-driven sprint workflow, durable intent memory, and evidence-based QA for Codex.",
+  "author": {
+    "name": "Kay Kim",
+    "email": "kay@agentkay.it",
+    "url": "https://github.com/agent-kay-it"
+  },
+  "homepage": "https://github.com/tene-ai/tene-codex",
+  "repository": "https://github.com/tene-ai/tene-codex",
+  "license": "Apache-2.0",
+  "keywords": [
+    "codex",
+    "spec-driven-development",
+    "agentic-coding",
+    "workflow",
+    "qa"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "tene-codex",
+    "shortDescription": "Spec-driven sprints and intent-based QA",
+    "longDescription": "Turn coding conversations into durable PRD, plan, design, implementation, loop-check, QA, and report sprints with traceable evidence.",
+    "developerName": "tene-ai",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Interactive"
+    ],
+    "websiteURL": "https://github.com/tene-ai/tene-codex",
+    "defaultPrompt": [
+      "Start a tene sprint for this feature request.",
+      "Resume the active sprint and show the next gate.",
+      "Run intent-based QA for the active sprint."
+    ],
+    "brandColor": "#6256E0"
+  }
+}
+

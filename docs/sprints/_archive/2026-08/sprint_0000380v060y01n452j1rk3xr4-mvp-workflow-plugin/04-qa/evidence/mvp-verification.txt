@@ -1,0 +1,39 @@
+tene-codex MVP verification evidence
+Run date: 2026-08-20 Asia/Seoul
+
+PASS: go test -race ./...
+  - internal/app includes complete PRD-to-archive system flow.
+  - internal/workflow rejects lifecycle skips and incomplete QA variants.
+  - internal/state verifies hash-chain integrity, stale revisions, compact and clear.
+  - internal/document rejects empty required sections.
+  - internal/projectconfig preserves existing custom agent profiles.
+
+PASS: make check
+  - go test ./...
+  - go vet ./...
+  - plugin.json and hooks.json JSON validation
+  - 3 Python hook tests: unsafe secret command denied, ordinary command allowed, unknown action rejected.
+
+PASS: official plugin validator
+  Plugin validation passed for repository root.
+
+PASS: official skill validator
+  All 9 skills valid: sprint, prd, plan, design, loop-check, qa, report, status, secrets.
+
+PASS: cross-platform packaging
+  - darwin-amd64: Mach-O x86_64; executed version 0.1.0 successfully.
+  - darwin-arm64: Mach-O arm64; cross-build succeeded.
+  - linux-amd64: statically linked ELF x86-64; cross-build succeeded.
+  - linux-arm64: statically linked ELF aarch64; cross-build succeeded.
+  - Every packaged file passed SHA-256 verification.
+
+PASS: dogfood gates
+  - An untraced-task plan-to-design transition failed.
+  - task link was implemented; all five tasks were linked and the retry passed.
+  - Empty required document sections are blockers.
+  - Blocking QA requires every generated case and matching evidence.
+
+Secret safety
+  - No live secret was used.
+  - Hook tests prove direct retrieval is denied.
+  - The Go runner uses exec argv and rejects shells/environment dumps.

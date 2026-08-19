@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tene-ai/tene-codex/schemas/event.schema.json",
+  "title": "tene-workflow journal event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sequence", "event_id", "event_type", "aggregate_id", "occurred_at", "actor", "expected_revision", "payload", "previous_hash", "hash"],
+  "properties": {
+    "sequence": {"type": "integer", "minimum": 1},
+    "event_id": {"type": "string", "pattern": "^event_[0-9a-z]+$"},
+    "event_type": {"type": "string", "minLength": 1},
+    "aggregate_id": {"type": "string", "minLength": 1},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "actor": {"type": "object", "required": ["kind"]},
+    "expected_revision": {"type": "integer", "minimum": 0},
+    "payload": {},
+    "previous_hash": {"type": "string"},
+    "hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
+

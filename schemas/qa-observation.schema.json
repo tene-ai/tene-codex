@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tene.ai/schemas/qa-observation.schema.json",
+  "title": "tene-workflow QA observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "adapter", "run_id", "case_id", "environment", "started_at", "finished_at", "checkpoints", "assertions", "redaction_status"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "adapter": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "environment": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "checkpoints": {"type": "array", "items": {"type": "object", "required": ["name", "kind"], "properties": {"name": {"type": "string"}, "kind": {"type": "string"}, "before": {}, "after": {}}}},
+    "assertions": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["statement", "passed"], "properties": {"statement": {"type": "string", "minLength": 1}, "passed": {"type": "boolean"}, "actual": {"type": "string"}, "expected": {"type": "string"}}}},
+    "redaction_status": {"const": "passed"}
+  }
+}

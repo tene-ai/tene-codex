@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+if command -v tene-workflow >/dev/null 2>&1; then
+  exec tene-workflow "$@"
+fi
+
+plugin_root=${PLUGIN_ROOT:-$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)}
+os_name=$(uname -s | tr '[:upper:]' '[:lower:]')
+arch_name=$(uname -m)
+case "$arch_name" in
+  x86_64) arch_name=amd64 ;;
+  arm64|aarch64) arch_name=arm64 ;;
+esac
+
+bundled="$plugin_root/bin/${os_name}-${arch_name}/tene-workflow"
+if [ -x "$bundled" ]; then
+  exec "$bundled" "$@"
+fi
+
+if [ -f "$plugin_root/go.mod" ] && command -v go >/dev/null 2>&1; then
+  exec go run "$plugin_root/cmd/tene-workflow" "$@"
+fi
+
+echo "tene-workflow binary not found for ${os_name}-${arch_name}" >&2
+echo "Install a release binary or build ./cmd/tene-workflow." >&2
+exit 5
+

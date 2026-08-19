@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "codex-cli-contract-observer",
+  "run_id": "run_0000380v37vaky2n7xsz21633r",
+  "case_id": "case_0000380v37vaj71wcjdq2s12x4",
+  "environment": "local-contract-fixture",
+  "started_at": "2026-08-19T17:38:18Z",
+  "finished_at": "2026-08-19T17:38:19Z",
+  "checkpoints": [
+    {"name": "capability-output", "kind": "cli", "before": "qa capabilities requested", "after": "availability and reason returned"},
+    {"name": "state-link", "kind": "persistence", "before": "case pending", "after": "observation hash linked to case"}
+  ],
+  "assertions": [
+    {"statement": "Unavailable adapters expose a reason instead of claiming execution", "passed": true, "actual": "Playwright unavailable with reason", "expected": "explicit capability status"},
+    {"statement": "Unknown arbitrary adapters are rejected by the allowlist", "passed": true, "actual": "QA_ADAPTER_UNKNOWN", "expected": "closed failure"}
+  ],
+  "redaction_status": "passed"
+}

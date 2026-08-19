@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tene-ai/tene-codex/schemas/evidence.schema.json",
+  "title": "tene-workflow QA evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["evidence_id", "sprint_id", "kind", "uri", "sha256", "size", "created_at", "redaction_status"],
+  "properties": {
+    "evidence_id": {"type": "string", "pattern": "^evidence_[0-9a-z]+$"},
+    "sprint_id": {"type": "string", "pattern": "^sprint_[0-9a-z]+$"},
+    "run_id": {"type": "string"},
+    "kind": {"type": "string", "minLength": 1},
+    "uri": {"type": "string", "minLength": 1},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "size": {"type": "integer", "minimum": 0},
+    "ac_ids": {"type": "array", "items": {"type": "string"}},
+    "created_at": {"type": "string", "format": "date-time"},
+    "redaction_status": {"enum": ["passed", "failed"]}
+  }
+}
+

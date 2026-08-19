@@ -1,0 +1,18 @@
+# Build output
+/dist/
+/bin/
+*.test
+coverage.out
+
+# Local workflow caches and large evidence
+.tene-workflow/.lock
+.tene-workflow/cache/
+.tene-workflow/evidence/**
+!.tene-workflow/evidence/**/manifest.json
+
+# Local development environments
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+

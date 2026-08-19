@@ -4,7 +4,42 @@
 
 자연스러운 코딩 대화를 Codex가 여러 세션에 걸쳐 재개하고 조사하고 검증하고 개선할 수 있는 지속 가능한 엔지니어링 workflow로 전환하는 것이 목적입니다. 생성된 코드나 통과한 test script만으로 완료를 판단하지 않고, 제품의 기획 의도, 구현 결정, 코드 영향, 사용자 여정, 데이터 흐름과 QA evidence를 작업 전체에서 연결해 관리합니다.
 
-> 프로젝트 상태: **설계 단계 / pre-alpha**. 제품 요구사항, 구현 계획과 기술 설계를 먼저 개발하고 있습니다. plugin과 `tene-workflow` CLI는 아직 production에서 사용할 준비가 되지 않았습니다.
+> 프로젝트 상태: **동작하는 pre-alpha**. 첫 번째 실행 가능한 `tene-workflow` vertical slice, Codex plugin manifest, 9개 skill, lifecycle hook, 전문 subagent profile, test와 release packaging이 포함되어 있습니다. Public API와 영속 schema는 아직 변경될 수 있으므로 유일한 production 통제로 사용하면 안 됩니다.
+
+## Source에서 빠르게 시작하기
+
+Go 1.24 이상, Python 3, Git과 최신 Codex가 필요합니다. 별도의 `tene` CLI는 secret이 필요한 command에서만 필수입니다.
+
+```bash
+git clone https://github.com/tene-ai/tene-codex.git
+cd tene-codex
+make check
+go build -o dist/tene-workflow ./cmd/tene-workflow
+
+# 적용할 repository에서
+/path/to/tene-codex/dist/tene-workflow init --name my-project --profile standard
+/path/to/tene-codex/dist/tene-workflow sprint create --title "My feature"
+/path/to/tene-codex/dist/tene-workflow status --json
+```
+
+Plugin 개발 중에는 `scripts/tene-workflow`가 설치된 binary, bundle에 포함된 platform binary 또는 Go source command를 순서대로 찾습니다. Tag release는 macOS와 Linux binary, plugin 파일과 SHA-256 checksum을 함께 package하도록 설계했습니다.
+
+Codex에 plugin을 설치하거나 link한 다음 `$tene-sprint`로 시작하고, `$tene-status`로 재개하며, `$tene-qa`로 evidence 기반 검증을 수행합니다. Plugin에 포함된 hook은 Codex에서 사용자가 내용을 검토하고 trust해야 실행됩니다.
+
+주요 core command:
+
+```text
+tene-workflow status --json
+tene-workflow phase transition <phase> --dry-run
+tene-workflow document validate <phase>
+tene-workflow context build
+tene-workflow loop check
+tene-workflow graph providers|build|understand|trace|validate
+tene-workflow qa capabilities|plan|execute|observe|case|evaluate|status
+tene-workflow evidence register|verify|list
+tene-workflow report generate|validate
+tene-workflow doctor|compact|clear
+```
 
 ## 왜 tene-codex인가?
 
@@ -57,7 +92,7 @@ Hooks는 lifecycle 자동화와 다중 안전장치를 제공합니다. Session 
 
 ### `tene-workflow` CLI
 
-`tene-workflow`는 다음 항목의 local source of truth가 될 예정입니다.
+`tene-workflow`는 다음 항목의 local source of truth입니다.
 
 - Sprint, phase, task와 승인 상태
 - 문서 scaffold와 validation
@@ -67,7 +102,7 @@ Hooks는 lifecycle 자동화와 다중 안전장치를 제공합니다. Session 
 - QA charter, evidence manifest와 gate 판정
 - compaction, recovery, migration과 archive
 
-Skills, subagents와 hooks는 workflow 상태를 독립적으로 편집하지 않고 이 CLI를 사용해야 합니다. 초기 구현은 이식 가능하고 결정론적으로 동작하면서 보안에 민감한 secret manager와 책임을 분리할 수 있도록 독립 Go binary로 계획하고 있습니다.
+Skills, subagents와 hooks는 workflow 상태를 독립적으로 편집하지 않고 이 CLI를 사용해야 합니다. 이식 가능하고 결정론적으로 동작하면서 보안에 민감한 secret manager와 책임을 분리할 수 있도록 독립 Go binary로 구현했습니다.
 
 ## Engineering Model
 
@@ -98,6 +133,8 @@ Skills, subagents와 hooks는 workflow 상태를 독립적으로 편집하지 �
 tene-codex는 제품 기획 의도를 실행 가능한 QA 입력으로 취급합니다. Confirmed intent와 acceptance criteria를 관련 happy, alternate, empty, validation, permission, failure, retry와 recovery 경로를 포함하는 test charter로 변환합니다.
 
 QA는 프로젝트의 기존 test, API 검사, Playwright, Codex browser 기능, Chrome 연동, database·queue observer, log, trace, screenshot과 manual checkpoint를 결합할 수 있습니다. Evidence manifest는 모든 blocking acceptance criterion을 재현 가능한 관찰 결과와 연결합니다. 평균 점수로 blocking criterion을 상쇄할 수 없으며, 모든 blocking criterion이 유효한 evidence와 함께 통과해야 Sprint를 archive할 수 있습니다.
+
+`graph understand`는 명시적으로 요청할 때 기존 CodeGraph index를 사용하고, 그 외에는 범위가 제한된 Go AST 분석으로 fallback합니다. 각 선언의 정의 위치, import/reference, call/use, 입력 shape, 출력/side effect, Understanding Layer, provider와 confidence를 구체화합니다. `qa capabilities`는 native/Playwright runner를 발견하고, `qa execute`는 발견된 allowlist adapter만 허용합니다. Codex browser나 Chrome 도구가 생성한 UX/API/data 관찰은 `qa observe`가 schema 검증 후 evidence로 가져옵니다.
 
 ## tene를 이용한 Secret-Safe 실행
 
@@ -148,4 +185,3 @@ docs/                조사, 요구사항, 계획과 설계
 Apache-2.0은 상업적 사용, 수정, 사적 사용과 재배포를 허용합니다. 배포할 때는 적용되는 저작권, license와 NOTICE 정보를 보존하고 수정한 파일에는 중요한 변경사항을 표시해야 합니다. 명시적인 특허권 허여를 포함하며 trademark 사용 권한은 부여하지 않습니다.
 
 이 설명은 정보 제공 목적이며 법률 자문이 아닙니다. 실제 조건은 `LICENSE`가 우선합니다.
-

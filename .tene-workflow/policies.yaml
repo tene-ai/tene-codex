@@ -1,0 +1,6 @@
+schema_version: 1.0.0
+workflow_profile: strict
+qa:
+  blocking_coverage: 100
+secrets:
+  provider: tene

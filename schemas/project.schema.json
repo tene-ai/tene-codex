@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/tene-ai/tene-codex/schemas/project.schema.json",
+  "title": "tene-workflow project state",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "project_id",
+    "name",
+    "profile",
+    "revision",
+    "sprints",
+    "tasks",
+    "intents",
+    "acceptance_criteria",
+    "gaps",
+    "evidence",
+    "qa_runs",
+    "graph"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "project_id": {"type": "string", "pattern": "^project_[0-9a-z]+$"},
+    "name": {"type": "string", "minLength": 1},
+    "profile": {"enum": ["strict", "standard", "light", "off"]},
+    "active_sprint_id": {"type": "string"},
+    "revision": {"type": "integer", "minimum": 0},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "sprints": {"type": "object", "additionalProperties": {"$ref": "#/$defs/sprint"}},
+    "tasks": {"type": "object"},
+    "intents": {"type": "object"},
+    "acceptance_criteria": {"type": "object"},
+    "gaps": {"type": "object"},
+    "evidence": {"type": "object"},
+    "qa_runs": {"type": "object"},
+    "graph": {"type": "object"}
+  },
+  "$defs": {
+    "sprint": {
+      "type": "object",
+      "required": ["sprint_id", "slug", "title", "phase", "document_root"],
+      "properties": {
+        "sprint_id": {"type": "string", "pattern": "^sprint_[0-9a-z]+$"},
+        "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "title": {"type": "string", "minLength": 1},
+        "phase": {"enum": ["draft", "prd", "plan", "design", "do", "loop-check", "qa", "report", "archived"]},
+        "document_root": {"type": "string"}
+      }
+    }
+  }
+}
+

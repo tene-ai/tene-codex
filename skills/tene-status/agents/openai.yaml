@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene Status"
+  short_description: "Resume the active sprint with context"
+  default_prompt: "Use $tene-status to show the active sprint and its next action."
+policy:
+  allow_implicit_invocation: true
+

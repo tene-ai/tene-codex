@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene QA"
+  short_description: "Verify intent, UX, and data-flow evidence"
+  default_prompt: "Use $tene-qa to run evidence-based QA for the active sprint."
+policy:
+  allow_implicit_invocation: true
+

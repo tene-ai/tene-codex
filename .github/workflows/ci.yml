@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+          cache: true
+      - name: Test
+        run: go test ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Validate JSON and hooks
+        run: |
+          python3 -m json.tool .codex-plugin/plugin.json >/dev/null
+          python3 -m json.tool hooks/hooks.json >/dev/null
+          for schema in schemas/*.json; do python3 -m json.tool "$schema" >/dev/null; done
+          python3 -m unittest discover -s tests -p '*_test.py'
+      - name: Build
+        run: go build -trimpath ./cmd/tene-workflow

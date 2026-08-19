@@ -1,0 +1,26 @@
+{
+  "active_sprint_id": "",
+  "project_id": "project_0000380v060bf8678xh7wgm6y8",
+  "revision": 126,
+  "schema_version": "1.0.0",
+  "sprints": [
+    {
+      "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
+      "title": "MVP workflow engine and Codex plugin",
+      "phase": "archived"
+    },
+    {
+      "sprint_id": "sprint_0000380v1ack4pe5nddv67gxaw",
+      "title": "Archive evidence integrity stabilization",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380v060y01n452j1rk3xr4"
+      ]
+    },
+    {
+      "sprint_id": "sprint_0000380v2b2q0668t7tajkj3m0",
+      "title": "Code Intelligence and Intent QA Adapters",
+      "phase": "archived"
+    }
+  ]
+}

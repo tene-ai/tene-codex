@@ -4,7 +4,42 @@
 
 It is designed to turn an informal coding conversation into a durable engineering workflow that Codex can resume, inspect, verify, and improve across sessions. Instead of treating generated code or passing test scripts as proof of completion, tene-codex keeps product intent, implementation decisions, code impact, user journeys, data flows, and QA evidence connected throughout the work.
 
-> Project status: **design-stage / pre-alpha**. The product requirements, implementation plan, and technical design are being developed first. The plugin and `tene-workflow` CLI are not yet ready for production use.
+> Project status: **working pre-alpha**. The repository contains the first runnable `tene-workflow` vertical slice, Codex plugin manifest, nine skills, lifecycle hooks, specialized subagent profiles, tests, and release packaging. Public APIs and persisted schemas can still change; do not rely on it as the only production control.
+
+## Quick Start from Source
+
+Requirements: Go 1.24 or later, Python 3, Git, and a current Codex installation. The separate `tene` CLI is required only for commands that need secrets.
+
+```bash
+git clone https://github.com/tene-ai/tene-codex.git
+cd tene-codex
+make check
+go build -o dist/tene-workflow ./cmd/tene-workflow
+
+# In a target repository
+/path/to/tene-codex/dist/tene-workflow init --name my-project --profile standard
+/path/to/tene-codex/dist/tene-workflow sprint create --title "My feature"
+/path/to/tene-codex/dist/tene-workflow status --json
+```
+
+During plugin development, `scripts/tene-workflow` finds an installed binary, a bundled platform binary, or runs the source command with Go. Tagged releases are designed to package macOS and Linux binaries with the plugin files and SHA-256 checksums.
+
+After installing or linking the plugin in Codex, start with `$tene-sprint`, resume with `$tene-status`, and use `$tene-qa` for evidence-based verification. Codex requires users to review and trust plugin-bundled hooks before those hooks can run.
+
+Common core commands:
+
+```text
+tene-workflow status --json
+tene-workflow phase transition <phase> --dry-run
+tene-workflow document validate <phase>
+tene-workflow context build
+tene-workflow loop check
+tene-workflow graph providers|build|understand|trace|validate
+tene-workflow qa capabilities|plan|execute|observe|case|evaluate|status
+tene-workflow evidence register|verify|list
+tene-workflow report generate|validate
+tene-workflow doctor|compact|clear
+```
 
 ## Why tene-codex?
 
@@ -57,7 +92,7 @@ Hooks provide lifecycle automation and defense in depth: restoring sprint contex
 
 ### `tene-workflow` CLI
 
-`tene-workflow` is the planned local source of truth for:
+`tene-workflow` is the local source of truth for:
 
 - sprint, phase, task, and approval state;
 - document scaffolding and validation;
@@ -67,7 +102,7 @@ Hooks provide lifecycle automation and defense in depth: restoring sprint contex
 - QA charters, evidence manifests, and gate verdicts;
 - compaction, recovery, migration, and archive operations.
 
-Skills, subagents, and hooks must use this CLI instead of editing workflow state independently. The initial implementation is planned as a standalone Go binary so it can be portable and deterministic while remaining separate from the security-sensitive secret manager.
+Skills, subagents, and hooks must use this CLI instead of editing workflow state independently. It is implemented as a standalone Go binary so it can be portable and deterministic while remaining separate from the security-sensitive secret manager.
 
 ## Engineering Model
 
@@ -98,6 +133,8 @@ These checks are intended to reduce fragmented changes, hidden coupling, acciden
 tene-codex treats product intent as executable QA input. Confirmed intent and acceptance criteria are compiled into test charters covering relevant happy, alternate, empty, validation, permission, failure, retry, and recovery paths.
 
 QA can combine project-native tests, API checks, Playwright, Codex browser capabilities, Chrome integration, database or queue observers, logs, traces, screenshots, and manual checkpoints. An evidence manifest connects every blocking acceptance criterion to reproducible observations. A blocking criterion cannot be offset by an average score: all blocking criteria must pass with valid evidence before the sprint can be archived.
+
+`graph understand` uses an existing CodeGraph index when explicitly queried and otherwise falls back to bounded Go AST analysis. It materializes each declaration's definition, imports/references, calls/uses, input shape, output/side effects, Understanding Layer, provider and confidence. `qa capabilities` discovers native and Playwright runners; `qa execute` permits only discovered allowlisted adapters, while `qa observe` imports schema-validated UX/API/data observations produced by Codex browser or Chrome tools.
 
 ## Secret-Safe Execution with tene
 
@@ -148,4 +185,3 @@ tene-codex, including the planned `tene-workflow` CLI and Codex plugin component
 Apache-2.0 permits commercial use, modification, private use, and redistribution. Distributions must preserve the applicable copyright, license, and NOTICE information, and modified files must carry notices describing significant changes. The license also includes an express patent grant and does not grant trademark rights.
 
 This summary is informational and is not legal advice. The terms in `LICENSE` control.
-

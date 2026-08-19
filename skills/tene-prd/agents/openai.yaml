@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene PRD"
+  short_description: "Capture intent and acceptance criteria"
+  default_prompt: "Use $tene-prd to turn this feature request into confirmed intent and acceptance criteria."
+policy:
+  allow_implicit_invocation: true
+
