@@ -19,6 +19,26 @@ func fixture() (*domain.Project, *domain.Sprint) {
 	return p, sp
 }
 
+func TestActiveWaiverFailsClosed(t *testing.T) {
+	now := time.Now().UTC()
+	p := domain.NewProject("project_test", "x", "strict", now)
+	g := &domain.Gap{GapID: "gap_test", SprintID: "sprint_test", Category: "mismatch", Severity: "blocker", Status: "open"}
+	p.Gaps[g.GapID] = g
+	p.Waivers["waiver_test"] = &domain.Waiver{WaiverID: "waiver_test", SprintID: g.SprintID, GapID: g.GapID, Status: "active", ExpiresAt: now.Add(time.Hour)}
+	if !ActiveWaiver(p, g, now) {
+		t.Fatal("active waiver rejected")
+	}
+	p.Waivers["waiver_test"].ExpiresAt = now.Add(-time.Second)
+	if ActiveWaiver(p, g, now) {
+		t.Fatal("expired waiver accepted")
+	}
+	g.Category = "security"
+	p.Waivers["waiver_test"].ExpiresAt = now.Add(time.Hour)
+	if ActiveWaiver(p, g, now) {
+		t.Fatal("security waiver accepted")
+	}
+}
+
 func TestFixedLifecycleRejectsSkip(t *testing.T) {
 	p, sp := fixture()
 	findings := CanTransition(p, sp, domain.PhaseDesign, func(domain.Phase) bool { return true })

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/tene-ai/tene-codex/internal/domain"
 )
@@ -92,7 +93,7 @@ func CanTransition(p *domain.Project, sprint *domain.Sprint, target domain.Phase
 		}
 	case sprint.Phase == domain.PhaseLoopCheck && target == domain.PhaseQA:
 		for _, id := range sprint.OpenGapIDs {
-			if g := p.Gaps[id]; g != nil && g.Status == "open" && g.Severity == "blocker" {
+			if g := p.Gaps[id]; g != nil && g.Status == "open" && g.Severity == "blocker" && !ActiveWaiver(p, g, time.Now().UTC()) {
 				findings = append(findings, finding("GAP_OPEN", "blocker", id, g.Description, "Resolve the blocking gap before QA.", false))
 			}
 		}
@@ -106,6 +107,18 @@ func CanTransition(p *domain.Project, sprint *domain.Sprint, target domain.Phase
 		}
 	}
 	return findings
+}
+
+func ActiveWaiver(p *domain.Project, gap *domain.Gap, now time.Time) bool {
+	if gap == nil || gap.Category == "security" || gap.Category == "evidence-integrity" {
+		return false
+	}
+	for _, w := range p.Waivers {
+		if w.GapID == gap.GapID && w.SprintID == gap.SprintID && w.Status == "active" && w.ExpiresAt.After(now) {
+			return true
+		}
+	}
+	return false
 }
 
 func Blocking(findings []domain.Finding) bool {

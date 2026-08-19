@@ -42,6 +42,7 @@ type Project struct {
 	Intents        map[string]*Intent       `json:"intents"`
 	Criteria       map[string]*Criterion    `json:"acceptance_criteria"`
 	Gaps           map[string]*Gap          `json:"gaps"`
+	Waivers        map[string]*Waiver       `json:"waivers"`
 	Evidence       map[string]*Evidence     `json:"evidence"`
 	QARuns         map[string]*QARun        `json:"qa_runs"`
 	Graph          Graph                    `json:"graph"`
@@ -115,6 +116,19 @@ type Gap struct {
 	SubjectRefs  []string `json:"subject_refs,omitempty"`
 	EvidenceRefs []string `json:"evidence_refs,omitempty"`
 	Resolution   string   `json:"resolution,omitempty"`
+}
+
+type Waiver struct {
+	WaiverID  string     `json:"waiver_id"`
+	SprintID  string     `json:"sprint_id"`
+	GapID     string     `json:"gap_id"`
+	Reason    string     `json:"reason"`
+	Scope     string     `json:"scope"`
+	Approver  string     `json:"approver"`
+	Status    string     `json:"status"`
+	CreatedAt time.Time  `json:"created_at"`
+	ExpiresAt time.Time  `json:"expires_at"`
+	RevokedAt *time.Time `json:"revoked_at,omitempty"`
 }
 
 type Evidence struct {
@@ -221,6 +235,7 @@ func NewProject(id, name, profile string, now time.Time) *Project {
 		SchemaVersion: SchemaVersion, ProjectID: id, Name: name, Profile: profile,
 		UpdatedAt: now.UTC(), Sprints: map[string]*Sprint{}, Tasks: map[string]*Task{},
 		Intents: map[string]*Intent{}, Criteria: map[string]*Criterion{}, Gaps: map[string]*Gap{},
+		Waivers:  map[string]*Waiver{},
 		Evidence: map[string]*Evidence{}, QARuns: map[string]*QARun{},
 		Graph:          Graph{Nodes: map[string]Node{}, Edges: map[string]Edge{}},
 		RequestResults: map[string]RequestResult{},

@@ -3,6 +3,7 @@
   "$id": "https://github.com/tene-ai/tene-codex/schemas/project.schema.json",
   "title": "tene-workflow project state",
   "type": "object",
+  "additionalProperties": false,
   "required": [
     "schema_version",
     "project_id",
@@ -14,6 +15,7 @@
     "intents",
     "acceptance_criteria",
     "gaps",
+    "waivers",
     "evidence",
     "qa_runs",
     "graph"
@@ -31,11 +33,23 @@
     "intents": {"type": "object"},
     "acceptance_criteria": {"type": "object"},
     "gaps": {"type": "object"},
+    "waivers": {"type": "object", "additionalProperties": {"$ref": "#/$defs/waiver"}},
     "evidence": {"type": "object"},
     "qa_runs": {"type": "object"},
-    "graph": {"type": "object"}
+    "graph": {"type": "object"},
+    "request_results": {"type": "object"}
   },
   "$defs": {
+    "waiver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["waiver_id", "sprint_id", "gap_id", "reason", "scope", "approver", "status", "created_at", "expires_at"],
+      "properties": {
+        "waiver_id": {"type": "string", "pattern": "^waiver_[0-9a-z]+$"}, "sprint_id": {"type": "string"}, "gap_id": {"type": "string"},
+        "reason": {"type": "string", "minLength": 1}, "scope": {"type": "string", "minLength": 1}, "approver": {"type": "string", "minLength": 1},
+        "status": {"enum": ["active", "revoked"]}, "created_at": {"type": "string", "format": "date-time"}, "expires_at": {"type": "string", "format": "date-time"}, "revoked_at": {"type": "string", "format": "date-time"}
+      }
+    },
     "sprint": {
       "type": "object",
       "required": ["sprint_id", "slug", "title", "phase", "document_root"],
@@ -49,4 +63,3 @@
     }
   }
 }
-

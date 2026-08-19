@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 126,
-  "updated_at": "2026-08-19T17:39:54.07615Z",
+  "revision": 162,
+  "updated_at": "2026-08-19T17:49:49.907413Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -66,6 +66,31 @@
       "last_qa_status": "passed",
       "last_qa_id": "run_0000380v37vaky2n7xsz21633r",
       "report_path": "docs/sprints/_archive/2026-08/sprint_0000380v2b2q0668t7tajkj3m0-code-intelligence-intent-qa/05-report/00-report.md"
+    },
+    "sprint_0000380v3xjbejnjk8w65p9q2w": {
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "slug": "waiver-schema-recovery",
+      "title": "Waiver Schema Migration and Recovery",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380v2b2q0668t7tajkj3m0"
+      ],
+      "intent_ids": [
+        "intent_0000380v3zvc1mw49fqkmyt0d0"
+      ],
+      "task_ids": [
+        "task_0000380v40h5kxjf6b9xwc7s50",
+        "task_0000380v40wpr7rbpz33f704p4",
+        "task_0000380v40xhhkzw7pea6nbr6c"
+      ],
+      "open_gap_ids": [
+        "gap_0000380v4d3aas9weqex1ajbb0"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery",
+      "archived_at": "2026-08-19T17:49:49.893212Z",
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380v4frqbxwsjnd0pr3rrg",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery/05-report/00-report.md"
     }
   },
   "tasks": {
@@ -168,6 +193,36 @@
         "ac_0000380v2f45svfdanc9e8ses4"
       ],
       "layer": "interface"
+    },
+    "task_0000380v40h5kxjf6b9xwc7s50": {
+      "task_id": "task_0000380v40h5kxjf6b9xwc7s50",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "title": "Implement waiver lifecycle and gates",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380v3zvc07d1drfnr1y93c"
+      ],
+      "layer": "business"
+    },
+    "task_0000380v40wpr7rbpz33f704p4": {
+      "task_id": "task_0000380v40wpr7rbpz33f704p4",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "title": "Implement schema migration backup and event",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380v40dqh03c9yyyefhfvg"
+      ],
+      "layer": "persistence"
+    },
+    "task_0000380v40xhhkzw7pea6nbr6c": {
+      "task_id": "task_0000380v40xhhkzw7pea6nbr6c",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "title": "Implement derived projection repair and strict validation",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380v40en0kw75gg67he44m"
+      ],
+      "layer": "persistence"
     }
   },
   "intents": {
@@ -203,6 +258,16 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-19T17:31:16.920995Z"
+    },
+    "intent_0000380v3zvc1mw49fqkmyt0d0": {
+      "intent_id": "intent_0000380v3zvc1mw49fqkmyt0d0",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Repository owners can manage bounded exceptions and safely migrate or repair workflow state",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-19T17:44:45.046675Z"
     }
   },
   "acceptance_criteria": {
@@ -275,6 +340,27 @@
       "statement": "The integrated plugin passes deterministic regression and workflow gates",
       "priority": "blocking",
       "observable": "race, vet, schema, plugin, skill, evidence and doctor checks pass"
+    },
+    "ac_0000380v3zvc07d1drfnr1y93c": {
+      "ac_id": "ac_0000380v3zvc07d1drfnr1y93c",
+      "intent_id": "intent_0000380v3zvc1mw49fqkmyt0d0",
+      "statement": "Waivers are explicit time-bound revocable and cannot bypass security or integrity gates",
+      "priority": "blocking",
+      "observable": "waiver commands and phase gates enforce scope approver reason expiry and forbidden categories"
+    },
+    "ac_0000380v40dqh03c9yyyefhfvg": {
+      "ac_id": "ac_0000380v40dqh03c9yyyefhfvg",
+      "intent_id": "intent_0000380v3zvc1mw49fqkmyt0d0",
+      "statement": "Declared legacy state migrates with deterministic preview backup event and atomic projections",
+      "priority": "blocking",
+      "observable": "migrate dry-run and apply report changes preserve backup and produce valid current state"
+    },
+    "ac_0000380v40en0kw75gg67he44m": {
+      "ac_id": "ac_0000380v40en0kw75gg67he44m",
+      "intent_id": "intent_0000380v3zvc1mw49fqkmyt0d0",
+      "statement": "Doctor repairs only derived projections after validating journal and project",
+      "priority": "blocking",
+      "observable": "doctor repair recreates active and master plan and refuses corrupt source state"
     }
   },
   "gaps": {
@@ -285,6 +371,27 @@
       "severity": "blocker",
       "status": "resolved",
       "description": "Dogfood task creation lacked a post-creation trace repair command"
+    },
+    "gap_0000380v4d3aas9weqex1ajbb0": {
+      "gap_id": "gap_0000380v4d3aas9weqex1ajbb0",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "category": "debt",
+      "severity": "blocker",
+      "status": "open",
+      "description": "Live downgrade and cross-major migration are outside the declared 0.9 to 1.0 contract"
+    }
+  },
+  "waivers": {
+    "waiver_0000380v4dk6505tfdtdkej274": {
+      "waiver_id": "waiver_0000380v4dk6505tfdtdkej274",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "gap_id": "gap_0000380v4d3aas9weqex1ajbb0",
+      "reason": "Bounded migration scope is explicitly 0.9 to 1.0 for pre-alpha; broader paths require real released fixtures",
+      "scope": "phase-transition",
+      "approver": "kay",
+      "status": "active",
+      "created_at": "2026-08-19T17:48:19.938524Z",
+      "expires_at": "2026-08-22T00:00:00Z"
     }
   },
   "evidence": {
@@ -373,6 +480,48 @@
         "ac_0000380v2f3bsngnt2b92sq9w4"
       ],
       "created_at": "2026-08-19T17:38:37.87801Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v4gfhzjemaz4cac14qg": {
+      "evidence_id": "evidence_0000380v4gfhzjemaz4cac14qg",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "run_id": "run_0000380v4frqbxwsjnd0pr3rrg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery/04-qa/evidence/case_0000380v4frqb2ekdnabdmxx00-go-test.json",
+      "sha256": "611901b7723ce43fcabae2ee5cda1533919b1259601e0aa73355da823d2267d3",
+      "size": 873,
+      "ac_ids": [
+        "ac_0000380v3zvc07d1drfnr1y93c"
+      ],
+      "created_at": "2026-08-19T17:49:07.23183Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v4gh2yfshd1dkg736h0": {
+      "evidence_id": "evidence_0000380v4gh2yfshd1dkg736h0",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "run_id": "run_0000380v4frqbxwsjnd0pr3rrg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery/04-qa/evidence/case_0000380v4frqbwf9tzh8s7an68-go-test.json",
+      "sha256": "9a24b9acf3d626750d8487370fb339d2c55d4c69c854785af2d7dfced5c03d75",
+      "size": 875,
+      "ac_ids": [
+        "ac_0000380v40dqh03c9yyyefhfvg"
+      ],
+      "created_at": "2026-08-19T17:49:08.01596Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380v4gjj6mzmcd9wxq9e0c": {
+      "evidence_id": "evidence_0000380v4gjj6mzmcd9wxq9e0c",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "run_id": "run_0000380v4frqbxwsjnd0pr3rrg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery/04-qa/evidence/case_0000380v4frqazqs1cxmpfd7nc-go-test.json",
+      "sha256": "05694125770871a05005217ef0140e7ada27d9696e69858c692d3592e3f23ae9",
+      "size": 874,
+      "ac_ids": [
+        "ac_0000380v40en0kw75gg67he44m"
+      ],
+      "created_at": "2026-08-19T17:49:08.771193Z",
       "redaction_status": "passed"
     }
   },
@@ -1141,6 +1290,394 @@
       ],
       "started_at": "2026-08-19T17:38:01.513374Z",
       "finished_at": "2026-08-19T17:38:40.810533Z"
+    },
+    "run_0000380v4frqbxwsjnd0pr3rrg": {
+      "run_id": "run_0000380v4frqbxwsjnd0pr3rrg",
+      "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380v4frqb2ekdnabdmxx00",
+          "ac_ids": [
+            "ac_0000380v3zvc07d1drfnr1y93c"
+          ],
+          "title": "Waivers are explicit time-bound revocable and cannot bypass security or integrity gates — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gfhzjemaz4cac14qg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "waiver commands and phase gates enforce scope approver reason expiry and forbidden categories",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqa23jn7v86a77rr",
+          "ac_ids": [
+            "ac_0000380v3zvc07d1drfnr1y93c"
+          ],
+          "title": "Waivers are explicit time-bound revocable and cannot bypass security or integrity gates — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gfhzjemaz4cac14qg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "waiver commands and phase gates enforce scope approver reason expiry and forbidden categories",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqastf7hbpcg0s3w",
+          "ac_ids": [
+            "ac_0000380v3zvc07d1drfnr1y93c"
+          ],
+          "title": "Waivers are explicit time-bound revocable and cannot bypass security or integrity gates — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gfhzjemaz4cac14qg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "waiver commands and phase gates enforce scope approver reason expiry and forbidden categories",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqbwf9tzh8s7an68",
+          "ac_ids": [
+            "ac_0000380v40dqh03c9yyyefhfvg"
+          ],
+          "title": "Declared legacy state migrates with deterministic preview backup event and atomic projections — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gh2yfshd1dkg736h0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "migrate dry-run and apply report changes preserve backup and produce valid current state",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqae665d2w8h4atg",
+          "ac_ids": [
+            "ac_0000380v40dqh03c9yyyefhfvg"
+          ],
+          "title": "Declared legacy state migrates with deterministic preview backup event and atomic projections — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gh2yfshd1dkg736h0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "migrate dry-run and apply report changes preserve backup and produce valid current state",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqb3t42dy0gnw8qc",
+          "ac_ids": [
+            "ac_0000380v40dqh03c9yyyefhfvg"
+          ],
+          "title": "Declared legacy state migrates with deterministic preview backup event and atomic projections — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gh2yfshd1dkg736h0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "migrate dry-run and apply report changes preserve backup and produce valid current state",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqazqs1cxmpfd7nc",
+          "ac_ids": [
+            "ac_0000380v40en0kw75gg67he44m"
+          ],
+          "title": "Doctor repairs only derived projections after validating journal and project — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gjj6mzmcd9wxq9e0c"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "doctor repair recreates active and master plan and refuses corrupt source state",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqa1a5tkr268pgy4",
+          "ac_ids": [
+            "ac_0000380v40en0kw75gg67he44m"
+          ],
+          "title": "Doctor repairs only derived projections after validating journal and project — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gjj6mzmcd9wxq9e0c"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "doctor repair recreates active and master plan and refuses corrupt source state",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380v4frqab36h0e2mc3zaw",
+          "ac_ids": [
+            "ac_0000380v40en0kw75gg67he44m"
+          ],
+          "title": "Doctor repairs only derived projections after validating journal and project — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380v4gjj6mzmcd9wxq9e0c"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "doctor repair recreates active and master plan and refuses corrupt source state",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-19T17:48:55.54176Z",
+      "finished_at": "2026-08-19T17:49:33.556303Z"
     }
   },
   "graph": {

@@ -36,6 +36,9 @@ tene-workflow context build
 tene-workflow loop check
 tene-workflow graph providers|build|understand|trace|validate
 tene-workflow qa capabilities|plan|execute|observe|case|evaluate|status
+tene-workflow waiver create|list|revoke
+tene-workflow migrate status|dry-run|apply
+tene-workflow doctor [--repair]
 tene-workflow evidence register|verify|list
 tene-workflow report generate|validate
 tene-workflow doctor|compact|clear

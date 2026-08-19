@@ -16,6 +16,10 @@ Before any phase work:
 
 Never edit `.tene-workflow/*.json` or `events.ndjson` directly. Markdown under `docs/sprints/` is user-editable, but validate it through the CLI.
 
+Blocking non-security gaps may cross a phase gate only through an active waiver created with an explicit reason, approver, scope, and future expiry. Security and evidence-integrity gaps are never waivable. Revocation or expiry restores the block immediately.
+
+Before upgrading persisted state, use `migrate dry-run`. Apply accepts only declared source versions, preserves the original projection under `.tene-workflow/backups`, and records a migration event. `doctor --repair` verifies the journal and project, then repairs only derived `active.json` and `master-plan.json`; it does not rewrite history.
+
 ## Understanding contract
 
 Every analysis, design, QA result, and report must cover or explicitly mark N/A for:
@@ -30,4 +34,3 @@ For important changed components answer: name, definition file, import/reference
 ## Delegation
 
 Delegate only bounded, independent work when subagents are available. Good roles are product-intent discovery, read-only code exploration, builder, QA executor, and independent evaluator. Give each subagent the phase context and required output, not the full conversation. Subagents return evidence; the parent commits canonical state through the CLI.
-

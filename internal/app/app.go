@@ -97,6 +97,8 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		result, revision, err = rt.context(args[1:])
 	case "loop":
 		result, revision, err = rt.loop(args[1:])
+	case "waiver":
+		result, revision, err = rt.waiver(args[1:])
 	case "evidence":
 		result, revision, err = rt.evidence(args[1:])
 	case "qa":
@@ -105,8 +107,10 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		result, revision, err = rt.report(args[1:])
 	case "secret":
 		result, revision, err = rt.secrets(args[1:])
+	case "migrate":
+		result, revision, err = rt.migrate(args[1:])
 	case "doctor":
-		result, revision, err = rt.doctor()
+		result, revision, err = rt.doctor(args[1:])
 	case "compact":
 		result, revision, err = rt.compact()
 	case "clear":
@@ -874,6 +878,84 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 	}
 }
 
+func (rt *runtime) waiver(args []string) (any, uint64, error) {
+	if len(args) == 0 {
+		return nil, 0, usageErr("waiver action required")
+	}
+	s := state.New(rt.root)
+	p, err := s.Load()
+	if err != nil {
+		return nil, 0, err
+	}
+	sp, err := activeSprint(p)
+	if err != nil {
+		return nil, 0, err
+	}
+	switch args[0] {
+	case "list":
+		var out []*domain.Waiver
+		for _, w := range p.Waivers {
+			if w.SprintID == sp.SprintID {
+				out = append(out, w)
+			}
+		}
+		sort.Slice(out, func(i, j int) bool { return out[i].WaiverID < out[j].WaiverID })
+		return out, p.Revision, nil
+	case "create":
+		fs := flag.NewFlagSet("waiver create", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		gapID := fs.String("gap", "", "")
+		reason := fs.String("reason", "", "")
+		approver := fs.String("approver", "", "")
+		expires := fs.String("expires", "", "")
+		scope := fs.String("scope", "phase-transition", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		if *gapID == "" || *reason == "" || *approver == "" || *expires == "" {
+			return nil, 0, usageErr("--gap --reason --approver --expires are required")
+		}
+		gap := p.Gaps[*gapID]
+		if gap == nil || gap.SprintID != sp.SprintID {
+			return nil, 0, notFound("gap", *gapID)
+		}
+		if gap.Category == "security" || gap.Category == "evidence-integrity" {
+			return nil, 0, &commandError{"WAIVER_FORBIDDEN", "security and evidence-integrity gaps cannot be waived", "Resolve the gap with valid evidence.", 3}
+		}
+		expiry, parseErr := time.Parse(time.RFC3339, *expires)
+		if parseErr != nil || !expiry.After(time.Now().UTC()) {
+			return nil, 0, &commandError{"WAIVER_EXPIRY_INVALID", "expiry must be a future RFC3339 timestamp", "Provide a bounded future expiry.", 2}
+		}
+		id := domain.NewID("waiver")
+		w := &domain.Waiver{WaiverID: id, SprintID: sp.SprintID, GapID: *gapID, Reason: *reason, Scope: *scope, Approver: *approver, Status: "active", CreatedAt: time.Now().UTC(), ExpiresAt: expiry.UTC()}
+		r, err := s.Mutate(rt.expected, actor(), "WaiverCreated", id, w, func(p *domain.Project) error { p.Waivers[id] = w; return nil })
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Waivers[id], r.Revision, nil
+	case "revoke":
+		if len(args) < 2 {
+			return nil, 0, usageErr("waiver id required")
+		}
+		id := args[1]
+		if p.Waivers[id] == nil {
+			return nil, 0, notFound("waiver", id)
+		}
+		now := time.Now().UTC()
+		r, err := s.Mutate(rt.expected, actor(), "WaiverRevoked", id, nil, func(p *domain.Project) error {
+			p.Waivers[id].Status = "revoked"
+			p.Waivers[id].RevokedAt = &now
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Waivers[id], r.Revision, nil
+	default:
+		return nil, 0, usageErr("unknown waiver action")
+	}
+}
+
 func (rt *runtime) evidence(args []string) (any, uint64, error) {
 	if len(args) == 0 {
 		return nil, 0, usageErr("evidence action required")
@@ -1247,8 +1329,46 @@ func (rt *runtime) secrets(args []string) (any, uint64, error) {
 	}
 }
 
-func (rt *runtime) doctor() (any, uint64, error) {
+func (rt *runtime) migrate(args []string) (any, uint64, error) {
+	if len(args) == 0 {
+		return nil, 0, usageErr("migrate action required")
+	}
 	s := state.New(rt.root)
+	plan, err := s.PlanMigration()
+	if err != nil {
+		return nil, 0, err
+	}
+	switch args[0] {
+	case "status", "dry-run":
+		return plan, 0, nil
+	case "apply":
+		updated, err := s.Migrate()
+		if err != nil {
+			return updated, 0, err
+		}
+		p, loadErr := s.Load()
+		if loadErr != nil {
+			return updated, 0, loadErr
+		}
+		return updated, p.Revision, nil
+	default:
+		return nil, 0, usageErr("unknown migrate action")
+	}
+}
+
+func (rt *runtime) doctor(args []string) (any, uint64, error) {
+	s := state.New(rt.root)
+	var repaired []string
+	if len(args) > 0 {
+		if len(args) != 1 || args[0] != "--repair" {
+			return nil, 0, usageErr("use doctor [--repair]")
+		}
+		var repairErr error
+		repaired, repairErr = s.RepairDerived()
+		if repairErr != nil {
+			return nil, 0, repairErr
+		}
+	}
 	p, err := s.Load()
 	if err != nil {
 		return nil, 0, err
@@ -1268,7 +1388,7 @@ func (rt *runtime) doctor() (any, uint64, error) {
 			}
 		}
 	}
-	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }()}}, p.Revision, nil
+	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }()}}, p.Revision, nil
 }
 
 func invalidEvidence(root string, p *domain.Project) []string {
@@ -1336,6 +1456,10 @@ func buildGraph(p *domain.Project) domain.Graph {
 		for _, ac := range e.CriterionIDs {
 			addEdge(&g, id, ac, "verifies")
 		}
+	}
+	for id, w := range p.Waivers {
+		g.Nodes[id] = domain.Node{ID: id, Kind: "Waiver", Label: w.Reason, Source: "authored", Confidence: 1, Attributes: map[string]any{"status": w.Status, "expires_at": w.ExpiresAt, "approver": w.Approver, "scope": w.Scope}}
+		addEdge(&g, w.GapID, id, "waived_by")
 	}
 	return g
 }
@@ -1572,5 +1696,5 @@ Usage:
 
 Commands:
   init, status, sprint, phase, task, intent, document, graph, context,
-  loop, evidence, qa, report, secret, doctor, compact, clear, version`
+  loop, waiver, evidence, qa, report, secret, migrate, doctor, compact, clear, version`
 }

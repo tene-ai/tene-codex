@@ -14,10 +14,12 @@ tene-workflow document scaffold|validate
 tene-workflow graph providers|build|understand [--changed|--path CSV]|trace ID|validate
 tene-workflow context build
 tene-workflow loop check|record-gap|resolve-gap
+tene-workflow waiver create --gap ID --reason TEXT --approver ID --expires RFC3339|list|revoke ID
 tene-workflow qa capabilities|plan|execute CASE --adapter NAME|observe CASE --input FILE|case|evaluate|status
 tene-workflow evidence register|verify|list
 tene-workflow report generate|validate
-tene-workflow doctor|compact|clear
+tene-workflow migrate status|dry-run|apply
+tene-workflow doctor [--repair]|compact|clear
 tene-workflow secret check|list ENV|run ENV -- COMMAND
 ```
 

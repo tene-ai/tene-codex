@@ -13,3 +13,4 @@ Scaffold documents on creation. Advance one legal phase at a time after a dry-ru
 
 Use subagents only for bounded independent phase work; the parent owns state transitions.
 
+For a deliberately accepted non-security gap, use the explicit `waiver` lifecycle with a named approver, bounded scope, reason, and future expiry; never rewrite a failed result as passed. Before state upgrades run `migrate dry-run`, and use `doctor --repair` only for derived projections after journal verification.

@@ -88,11 +88,127 @@ func (s *Store) Load() (*domain.Project, error) {
 		return nil, err
 	}
 	var p domain.Project
-	if err := json.Unmarshal(b, &p); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(b))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&p); err != nil {
 		return nil, fmt.Errorf("%w: %v", ErrCorrupt, err)
 	}
 	ensureMaps(&p)
 	return &p, nil
+}
+
+type MigrationPlan struct {
+	From      string   `json:"from"`
+	To        string   `json:"to"`
+	Required  bool     `json:"required"`
+	Supported bool     `json:"supported"`
+	Changes   []string `json:"changes"`
+	Backup    string   `json:"backup,omitempty"`
+}
+
+func (s *Store) PlanMigration() (MigrationPlan, error) {
+	b, err := os.ReadFile(s.ProjectPath())
+	if errors.Is(err, os.ErrNotExist) {
+		return MigrationPlan{}, ErrNotInitialized
+	}
+	if err != nil {
+		return MigrationPlan{}, err
+	}
+	var header struct {
+		SchemaVersion string `json:"schema_version"`
+	}
+	if err := json.Unmarshal(b, &header); err != nil {
+		return MigrationPlan{}, fmt.Errorf("%w: %v", ErrCorrupt, err)
+	}
+	plan := MigrationPlan{From: header.SchemaVersion, To: domain.SchemaVersion, Changes: []string{}}
+	switch header.SchemaVersion {
+	case domain.SchemaVersion:
+		plan.Supported = true
+	case "0.9.0":
+		plan.Required = true
+		plan.Supported = true
+		plan.Changes = []string{"set schema_version to 1.0.0", "initialize waivers and request_results maps", "regenerate active and master-plan projections"}
+	default:
+		plan.Required = header.SchemaVersion != domain.SchemaVersion
+		plan.Supported = false
+	}
+	return plan, nil
+}
+
+func (s *Store) Migrate() (MigrationPlan, error) {
+	plan, err := s.PlanMigration()
+	if err != nil {
+		return plan, err
+	}
+	if !plan.Supported {
+		return plan, fmt.Errorf("STATE_MIGRATION_UNSUPPORTED: %s", plan.From)
+	}
+	if !plan.Required {
+		return plan, nil
+	}
+	err = s.withLock(func() error {
+		b, err := os.ReadFile(s.ProjectPath())
+		if err != nil {
+			return err
+		}
+		backup := filepath.Join(s.Dir(), "backups", fmt.Sprintf("pre-migration-%s-%d.json", plan.From, time.Now().UTC().UnixNano()))
+		if err := atomicBytes(backup, b); err != nil {
+			return err
+		}
+		var p domain.Project
+		if err := json.Unmarshal(b, &p); err != nil {
+			return err
+		}
+		ensureMaps(&p)
+		p.SchemaVersion = domain.SchemaVersion
+		prev, seq, err := s.lastEvent()
+		if err != nil {
+			return err
+		}
+		old := p.Revision
+		p.Revision++
+		p.UpdatedAt = s.Now().UTC()
+		e := domain.Event{Sequence: seq + 1, EventID: domain.NewID("event"), EventType: "SchemaMigrated", AggregateID: p.ProjectID, OccurredAt: p.UpdatedAt, Actor: domain.Actor{Kind: "system"}, ExpectedRevision: old, Payload: plan, PreviousHash: prev}
+		e.Hash = eventHash(e)
+		if err := appendEvent(s.EventsPath(), e); err != nil {
+			return err
+		}
+		if err := atomicJSON(s.ProjectPath(), &p); err != nil {
+			return err
+		}
+		if err := atomicJSON(s.ActivePath(), &p); err != nil {
+			return err
+		}
+		if err := atomicJSON(s.MasterPlanPath(), masterPlan(&p)); err != nil {
+			return err
+		}
+		plan.Backup = filepath.ToSlash(backup)
+		return nil
+	})
+	return plan, err
+}
+
+func (s *Store) RepairDerived() ([]string, error) {
+	if _, err := s.VerifyJournal(); err != nil {
+		return nil, err
+	}
+	var repaired []string
+	err := s.withLock(func() error {
+		p, err := s.Load()
+		if err != nil {
+			return err
+		}
+		if err := atomicJSON(s.ActivePath(), p); err != nil {
+			return err
+		}
+		repaired = append(repaired, s.ActivePath())
+		if err := atomicJSON(s.MasterPlanPath(), masterPlan(p)); err != nil {
+			return err
+		}
+		repaired = append(repaired, s.MasterPlanPath())
+		return nil
+	})
+	return repaired, err
 }
 
 func (s *Store) Mutate(expected *uint64, actor domain.Actor, eventType, aggregateID string, payload any, fn func(*domain.Project) error) (*domain.Project, error) {
@@ -344,6 +460,9 @@ func ensureMaps(p *domain.Project) {
 	}
 	if p.Gaps == nil {
 		p.Gaps = map[string]*domain.Gap{}
+	}
+	if p.Waivers == nil {
+		p.Waivers = map[string]*domain.Waiver{}
 	}
 	if p.Evidence == nil {
 		p.Evidence = map[string]*domain.Evidence{}

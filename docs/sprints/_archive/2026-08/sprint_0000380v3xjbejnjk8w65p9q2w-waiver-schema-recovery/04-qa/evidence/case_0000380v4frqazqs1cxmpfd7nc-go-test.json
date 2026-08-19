@@ -1,0 +1,12 @@
+{
+  "adapter": "go-test",
+  "command": [
+    "go",
+    "test",
+    "./..."
+  ],
+  "started_at": "2026-08-19T17:49:08.421452Z",
+  "finished_at": "2026-08-19T17:49:08.77053Z",
+  "passed": true,
+  "output": "?   \tgithub.com/tene-ai/tene-codex/cmd/tene-workflow\t[no test files]\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/codeintel\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/document\t(cached)\n?   \tgithub.com/tene-ai/tene-codex/internal/domain\t[no test files]\nok  \tgithub.com/tene-ai/tene-codex/internal/projectconfig\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/qaadapter\t(cached)\n?   \tgithub.com/tene-ai/tene-codex/internal/secret\t[no test files]\nok  \tgithub.com/tene-ai/tene-codex/internal/state\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/workflow\t(cached)\n"
+}
