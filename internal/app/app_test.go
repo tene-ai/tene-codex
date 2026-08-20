@@ -192,3 +192,42 @@ func TestCLICodeIntelAndTaskReferenceValidation(t *testing.T) {
 		t.Fatal("missing AC accepted")
 	}
 }
+
+func TestCLIGraphImpactAndContextFreshness(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "context fixture")
+	_, created := execute(t, root, "sprint", "create", "--title", "Fresh context")
+	sprint := created.Result.(map[string]any)["sprint"].(map[string]any)
+	execute(t, root, "phase", "transition", "prd")
+	completeDocument(t, root, filepath.ToSlash(filepath.Join(sprint["document_root"].(string), "00-prd", "00-prd.md")))
+	_, captured := execute(t, root, "intent", "capture", "--statement", "fresh context", "--ac", "impact is traced", "--observable", "an AC is returned")
+	intentID := captured.Result.(map[string]any)["intent"].(map[string]any)["intent_id"].(string)
+	acID := captured.Result.(map[string]any)["criterion"].(map[string]any)["ac_id"].(string)
+	execute(t, root, "intent", "confirm", intentID)
+	if code, _ := execute(t, root, "graph", "build"); code != 0 {
+		t.Fatal(code)
+	}
+	code, impacted := execute(t, root, "graph", "impact", intentID, "--depth", "4")
+	if code != 0 {
+		t.Fatalf("impact failed: %#v", impacted)
+	}
+	ids := impacted.Result.(map[string]any)["impacted_ac_ids"].([]any)
+	if len(ids) != 1 || ids[0] != acID {
+		t.Fatalf("unexpected impact: %#v", impacted.Result)
+	}
+	packPath := filepath.Join(".tene-workflow", "cache", "prd-context.json")
+	code, built := execute(t, root, "context", "build", "--phase", "prd", "--budget", "8192", "--output", packPath)
+	if code != 0 || built.Result.(map[string]any)["budget_unit"] != "utf8-bytes" {
+		t.Fatalf("build failed: %#v", built)
+	}
+	if code, valid := execute(t, root, "context", "validate", "--input", packPath); code != 0 || !valid.Result.(map[string]any)["fresh"].(bool) {
+		t.Fatalf("validate failed: %#v", valid)
+	}
+	policy := filepath.Join(root, ".tene-workflow", "policies.yaml")
+	if err := os.WriteFile(policy, []byte("changed: true\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code, stale := execute(t, root, "context", "validate", "--input", packPath); code != 3 || stale.OK {
+		t.Fatalf("expected stale context: code=%d %#v", code, stale)
+	}
+}

@@ -11,8 +11,9 @@ tene-workflow intent confirm ID
 tene-workflow task add --title TEXT --layer LAYER [--ac IDS]
 tene-workflow task link ID [--ac IDS] [--intent IDS] [--replace]
 tene-workflow document scaffold|validate
-tene-workflow graph providers|build|understand [--changed|--path CSV]|trace ID|validate
-tene-workflow context build
+tene-workflow graph providers|build|understand [--changed|--path CSV]|trace ID|impact ID [--depth N] [--call-depth N]|validate
+tene-workflow context build [--phase PHASE] [--budget BYTES] [--output PATH]
+tene-workflow context validate --input PATH
 tene-workflow loop check|record-gap|resolve-gap
 tene-workflow waiver create --gap ID --reason TEXT --approver ID --expires RFC3339|list|revoke ID
 tene-workflow qa capabilities|plan|execute CASE --adapter NAME|observe CASE --input FILE|case|evaluate|status

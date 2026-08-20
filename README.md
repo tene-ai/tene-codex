@@ -32,9 +32,10 @@ Common core commands:
 tene-workflow status --json
 tene-workflow phase transition <phase> --dry-run
 tene-workflow document validate <phase>
-tene-workflow context build
+tene-workflow context build --phase design --budget 32768 --output .tene-workflow/cache/context.json
+tene-workflow context validate --input .tene-workflow/cache/context.json
 tene-workflow loop check
-tene-workflow graph providers|build|understand|trace|validate
+tene-workflow graph providers|build|understand|trace|impact|validate
 tene-workflow qa capabilities|plan|execute|observe|case|evaluate|status
 tene-workflow waiver create|list|revoke
 tene-workflow migrate status|dry-run|apply

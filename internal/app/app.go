@@ -27,6 +27,7 @@ import (
 	"github.com/tene-ai/tene-codex/internal/qaadapter"
 	"github.com/tene-ai/tene-codex/internal/secret"
 	"github.com/tene-ai/tene-codex/internal/state"
+	"github.com/tene-ai/tene-codex/internal/tracecontext"
 	"github.com/tene-ai/tene-codex/internal/workflow"
 )
 
@@ -765,6 +766,22 @@ func (rt *runtime) graph(args []string) (any, uint64, error) {
 			return nil, 0, usageErr("node id required")
 		}
 		return traceGraph(p, args[1]), p.Revision, nil
+	case "impact":
+		if len(args) < 2 {
+			return nil, 0, usageErr("use graph impact <node-id> [--depth N] [--call-depth N]")
+		}
+		fs := flag.NewFlagSet("graph impact", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		depth := fs.Int("depth", 8, "")
+		callDepth := fs.Int("call-depth", 4, "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		result, err := tracecontext.Impact(p.Graph, args[1], *depth, *callDepth)
+		if err != nil {
+			return nil, 0, &commandError{"GRAPH_IMPACT_INVALID", err.Error(), "Build the graph and provide valid traversal limits.", 2}
+		}
+		return result, p.Revision, nil
 	case "validate":
 		findings := validateGraph(p)
 		if workflow.Blocking(findings) {
@@ -777,38 +794,71 @@ func (rt *runtime) graph(args []string) (any, uint64, error) {
 }
 
 func (rt *runtime) context(args []string) (any, uint64, error) {
-	if len(args) == 0 || args[0] != "build" {
-		return nil, 0, usageErr("use context build")
+	if len(args) == 0 {
+		return nil, 0, usageErr("use context build|validate")
 	}
 	p, err := state.New(rt.root).Load()
 	if err != nil {
 		return nil, 0, err
 	}
-	sp, err := activeSprint(p)
-	if err != nil {
-		return nil, 0, err
-	}
-	var intents []*domain.Intent
-	var criteria []*domain.Criterion
-	for _, id := range sp.IntentIDs {
-		if in := p.Intents[id]; in != nil && in.Status == "confirmed" {
-			intents = append(intents, in)
-			for _, ac := range p.Criteria {
-				if ac.IntentID == id {
-					criteria = append(criteria, ac)
-				}
+	switch args[0] {
+	case "build":
+		sp, err := activeSprint(p)
+		if err != nil {
+			return nil, 0, err
+		}
+		fs := flag.NewFlagSet("context build", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		phaseText := fs.String("phase", string(sp.Phase), "")
+		budget := fs.Int("budget", 32768, "")
+		output := fs.String("output", "", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		phase, err := workflow.ParsePhase(*phaseText)
+		if err != nil {
+			return nil, 0, err
+		}
+		pack, err := tracecontext.BuildContextPack(rt.root, p, sp, tracecontext.BuildOptions{Phase: phase, Budget: *budget}, codeintel.Discover(rt.root))
+		if err != nil {
+			return nil, p.Revision, &commandError{"CONTEXT_BUILD_FAILED", err.Error(), "Increase the budget or repair the referenced workflow state.", 3}
+		}
+		if *output != "" {
+			if err := writeDerivedJSON(rt.root, *output, pack); err != nil {
+				return nil, p.Revision, err
 			}
 		}
+		return pack, p.Revision, nil
+	case "validate":
+		fs := flag.NewFlagSet("context validate", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		input := fs.String("input", "", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		if *input == "" {
+			return nil, 0, usageErr("--input is required")
+		}
+		path, err := safeRootPath(rt.root, *input)
+		if err != nil {
+			return nil, p.Revision, err
+		}
+		b, err := os.ReadFile(path)
+		if err != nil {
+			return nil, p.Revision, err
+		}
+		var pack tracecontext.ContextPack
+		if err := json.Unmarshal(b, &pack); err != nil {
+			return nil, p.Revision, &commandError{"CONTEXT_PACK_INVALID", err.Error(), "Rebuild the context pack.", 2}
+		}
+		result := tracecontext.ValidateContextPack(rt.root, p, pack)
+		if !result.Fresh {
+			return result, p.Revision, &commandError{"CONTEXT_STALE", "context pack no longer matches state or provenance", "Run context build again before mutation.", 3}
+		}
+		return result, p.Revision, nil
+	default:
+		return nil, 0, usageErr("use context build|validate")
 	}
-	var tasks []*domain.Task
-	for _, id := range sp.TaskIDs {
-		tasks = append(tasks, p.Tasks[id])
-	}
-	var gaps []*domain.Gap
-	for _, id := range sp.OpenGapIDs {
-		gaps = append(gaps, p.Gaps[id])
-	}
-	return map[string]any{"id": domain.NewID("context"), "phase": sp.Phase, "state_revision": p.Revision, "objective": sp.Title, "confirmed_intents": intents, "acceptance_criteria": criteria, "tasks": tasks, "open_gaps": gaps, "provenance": []string{state.DirName + "/project.json", sp.DocumentRoot}}, p.Revision, nil
 }
 
 func (rt *runtime) loop(args []string) (any, uint64, error) {
@@ -1457,6 +1507,12 @@ func buildGraph(p *domain.Project) domain.Graph {
 			addEdge(&g, id, ac, "verifies")
 		}
 	}
+	for id, gap := range p.Gaps {
+		g.Nodes[id] = domain.Node{ID: id, Kind: "Gap", Label: gap.Description, Source: "authored", Confidence: 1, Attributes: map[string]any{"category": gap.Category, "severity": gap.Severity, "status": gap.Status}}
+		for _, subject := range gap.SubjectRefs {
+			addEdge(&g, subject, id, "depends_on")
+		}
+	}
 	for id, w := range p.Waivers {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "Waiver", Label: w.Reason, Source: "authored", Confidence: 1, Attributes: map[string]any{"status": w.Status, "expires_at": w.ExpiresAt, "approver": w.Approver, "scope": w.Scope}}
 		addEdge(&g, w.GapID, id, "waived_by")
@@ -1478,6 +1534,12 @@ func mergeCodeGraph(g *domain.Graph, report codeintel.Report) {
 		g.Nodes[c.ID] = domain.Node{ID: c.ID, Kind: "Symbol", Label: c.Name, Locator: c.Locator, Source: "derived", Confidence: c.Confidence, Attributes: map[string]any{"kind": c.Kind, "primary_layer": c.PrimaryLayer, "layer_reason": c.LayerReason, "imports": c.Imports, "references": c.References, "calls": c.Calls, "inputs": c.Inputs, "outputs": c.Outputs, "effects": c.Effects, "unknown": c.Unknown, "provider": c.Provider}}
 	}
 	for _, e := range report.Edges {
+		if _, ok := g.Nodes[e.From]; !ok {
+			g.Nodes[e.From] = domain.Node{ID: e.From, Kind: "Unknown", Label: e.From, Source: "derived", Confidence: e.Confidence}
+		}
+		if _, ok := g.Nodes[e.To]; !ok {
+			g.Nodes[e.To] = domain.Node{ID: e.To, Kind: "ExternalSymbol", Label: strings.TrimPrefix(e.To, "call:"), Source: "derived", Confidence: e.Confidence, Attributes: map[string]any{"resolution": "unresolved by current provider"}}
+		}
 		id := domain.NewID("edge")
 		g.Edges[id] = domain.Edge{ID: id, From: e.From, To: e.To, Kind: e.Kind, SourceLocator: e.Locator, Provider: e.Provider, Confidence: e.Confidence}
 	}
@@ -1514,33 +1576,41 @@ func traceGraph(p *domain.Project, id string) map[string]any {
 	return map[string]any{"nodes": nodes, "edges": edges}
 }
 func validateGraph(p *domain.Project) []domain.Finding {
-	var f []domain.Finding
-	for id, in := range p.Intents {
-		if in.Status != "confirmed" {
-			continue
-		}
-		hasAC := false
-		for _, ac := range p.Criteria {
-			if ac.IntentID == id {
-				hasAC = true
-				if ac.Priority == "blocking" {
-					verified := false
-					for _, e := range p.Evidence {
-						if slices.Contains(e.CriterionIDs, ac.CriterionID) {
-							verified = true
-						}
-					}
-					if !verified {
-						f = append(f, domain.Finding{Code: "GRAPH_AC_UNVERIFIED", Severity: "warning", SubjectRefs: []string{ac.CriterionID}, Message: "blocking criterion has no evidence edge", Remediation: "Register QA evidence."})
-					}
-				}
-			}
-		}
-		if !hasAC {
-			f = append(f, domain.Finding{Code: "GRAPH_INTENT_ORPHAN", Severity: "blocker", SubjectRefs: []string{id}, Message: "confirmed intent has no acceptance criterion", Remediation: "Add an acceptance criterion."})
-		}
+	return tracecontext.ValidateGraph(p)
+}
+
+func safeRootPath(root, requested string) (string, error) {
+	if filepath.IsAbs(requested) {
+		return "", &commandError{"CONTEXT_PATH_OUTSIDE_ROOT", "absolute paths are not allowed", "Use a repository-relative path.", 2}
 	}
-	return f
+	clean := filepath.Clean(requested)
+	if clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
+		return "", &commandError{"CONTEXT_PATH_OUTSIDE_ROOT", "path escapes repository root", "Use a repository-relative path.", 2}
+	}
+	return filepath.Join(root, clean), nil
+}
+func writeDerivedJSON(root, requested string, value any) error {
+	path, err := safeRootPath(root, requested)
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return err
+	}
+	b, err := json.MarshalIndent(value, "", "  ")
+	if err != nil {
+		return err
+	}
+	b = append(b, '\n')
+	tmp := path + ".tmp"
+	if err := os.WriteFile(tmp, b, 0644); err != nil {
+		return err
+	}
+	if err := os.Rename(tmp, path); err != nil {
+		_ = os.Remove(tmp)
+		return err
+	}
+	return nil
 }
 func appendUniqueEdge(v []domain.Edge, e domain.Edge) []domain.Edge {
 	for _, x := range v {

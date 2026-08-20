@@ -1,0 +1,43 @@
+Graph Context Freshness Sprint verification
+Date: 2026-08-20 UTC
+
+PASS make check
+- go test ./...
+- go vet ./...
+- JSON manifest/hook/schema parsing
+- Python unittest: 3 passed
+
+PASS go test -race ./...
+- internal/app: passed
+- internal/tracecontext: passed
+- all remaining packages: passed
+
+PASS npm run test:e2e
+- success crosses UI API and persistence
+- validation prevents a network write
+- downstream failure is visible and retry writes exactly once
+- 3 passed
+
+PASS Codex plugin validator
+- Plugin validation passed
+
+PASS Codex skill validator
+- 9 of 9 tene skills valid
+- The validator was invoked through the project validation virtual environment because its source file is not executable and system Python lacks PyYAML.
+
+PASS live graph and context journeys
+- graph build materialized workflow, Gap, File, Symbol, and unresolved ExternalSymbol nodes.
+- graph validate returned valid=true with no dangling-edge blocker.
+- context build reported phase, utf8-byte budget, used bytes, exclusions, capabilities, provenance hashes, and content hash.
+- context validate passed before drift.
+- integration tests changed policy provenance, observed stale exit 3, rebuilt, and passed.
+- integration tests verified directed impact, bounded call depth, unknown/orphan/dangling cases, phase filtering, and mandatory budget overflow.
+
+PASS evidence verify
+- 13 pre-existing evidence records were hash-valid and secret scan passed before this artifact registration.
+
+PASS doctor
+- healthy=true
+- events=225
+- blockers=0
+- four GRAPH_AC_UNVERIFIED warnings were expected before this Sprint evidence was registered.
