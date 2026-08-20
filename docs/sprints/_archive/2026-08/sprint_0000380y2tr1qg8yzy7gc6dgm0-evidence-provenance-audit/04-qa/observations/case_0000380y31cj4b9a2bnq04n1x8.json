@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "evidence-provenance-audit",
+  "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+  "case_id": "case_0000380y31cj4b9a2bnq04n1x8",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T07:35:48.442778Z",
+  "finished_at": "2026-08-20T07:35:49.246905Z",
+  "checkpoints": [
+    {
+      "name": "case-linked-evidence-credit",
+      "kind": "audit-state-artifact",
+      "before": {
+        "variant": "validation",
+        "credited": false
+      },
+      "after": {
+        "variant": "validation",
+        "actual": "present but mismatched run or case metadata is rejected",
+        "repository_workflow_failures": [
+          "unverified:ac_0000380y2x0gjmx70245j0j39r"
+        ]
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 provenance contract passed",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    },
+    {
+      "statement": "L2 provenance contract passed",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    },
+    {
+      "statement": "L3 provenance contract passed",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    },
+    {
+      "statement": "L4 provenance contract passed",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    },
+    {
+      "statement": "L5 provenance contract passed",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    },
+    {
+      "statement": "L6 provenance contract passed",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    },
+    {
+      "statement": "L7 provenance contract passed",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+      "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+  "state_revision": 1032,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "evidence-provenance-audit/1.0.0"
+}

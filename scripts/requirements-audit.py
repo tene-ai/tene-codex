@@ -53,19 +53,18 @@ def state_findings(root,final):
     failures += ["task:"+x["task_id"] for x in state["tasks"].values() if x["status"] not in ("done","deferred")]
     failures += ["archive:"+s["sprint_id"] for s in state["sprints"].values() if s["phase"]=="archived" and s.get("last_qa_status")!="passed"]
     verified=set()
-    archived_passed={s["sprint_id"] for s in state["sprints"].values() if s["phase"]=="archived" and s.get("last_qa_status")=="passed"}
-    for ev in state["evidence"].values():
-        path=root/ev.get("uri",""); valid=path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==ev.get("sha256")
-        if valid and ev.get("redaction_status")=="passed" and ev.get("sprint_id") in archived_passed:
-            verified.update(ev.get("ac_ids",[]))
     for run in state["qa_runs"].values():
         if run.get("status")!="passed": continue
         for case in run.get("cases",[]):
             if case.get("status")!="passed": continue
             for eid in case.get("evidence_ids",[]):
                 ev=state["evidence"].get(eid,{}); path=root/ev.get("uri","")
-                valid=path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==ev.get("sha256")
-                if valid and ev.get("redaction_status")=="passed" and ev.get("run_id")==run.get("run_id") and ev.get("case_id")==case.get("case_id"):
+                valid=path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==ev.get("sha256") and ev.get("redaction_status")=="passed" and ev.get("sprint_id")==run.get("sprint_id")
+                # Schema compatibility is explicit and still case-linked: older evidence may
+                # omit run/case fields, but a mismatched field can never be ignored. The
+                # evidence ID must be referenced by this passed case and include the same AC.
+                binding=(not ev.get("run_id") or ev.get("run_id")==run.get("run_id")) and (not ev.get("case_id") or ev.get("case_id")==case.get("case_id"))
+                if valid and binding:
                     verified.update(ac for ac in case.get("ac_ids",[]) if ac in ev.get("ac_ids",[]))
     blocking={ac["ac_id"] for ac in state["acceptance_criteria"].values() if ac.get("priority")=="blocking"}
     failures += ["unverified:"+identifier for identifier in sorted(blocking-verified)]

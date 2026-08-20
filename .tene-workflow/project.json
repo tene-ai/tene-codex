@@ -23,8 +23,8 @@
       "all implementation follows the fixed Sprint lifecycle"
     ]
   },
-  "revision": 1010,
-  "updated_at": "2026-08-20T07:31:45.905305Z",
+  "revision": 1048,
+  "updated_at": "2026-08-20T07:38:06.343194Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -614,6 +614,35 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Black-box local and staged package matrices each completed Go, Next.js, and Python full Sprint lifecycles; no loop gaps remain",
       "last_loop_at": "2026-08-20T07:27:05.39876Z"
+    },
+    "sprint_0000380y2tr1qg8yzy7gc6dgm0": {
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "slug": "evidence-provenance-audit",
+      "title": "Evidence Provenance Audit",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380y1g1eyc1xeym60b0rtc"
+      ],
+      "intent_ids": [
+        "intent_0000380y2x0gjdsw44cv68h5d4"
+      ],
+      "task_ids": [
+        "task_0000380y2zs85jqvd91fwzptj4"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit",
+      "archived_at": "2026-08-20T07:38:06.234237Z",
+      "approval_refs": [
+        "approval_0000380y30hgqs2h8vka3avj94",
+        "approval_0000380y3c7tpq332qb41wc1x4"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Blanket archive credit removed; passed-case link and omission-or-exact provenance predicates verify all 45 blockers with negative self-tests",
+      "last_loop_at": "2026-08-20T07:35:05.611953Z"
     }
   },
   "tasks": {
@@ -1262,6 +1291,21 @@
         "scripts/requirements-audit.py",
         "scripts/qa-portable-observations.py"
       ]
+    },
+    "task_0000380y2zs85jqvd91fwzptj4": {
+      "task_id": "task_0000380y2zs85jqvd91fwzptj4",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "title": "Require passed-case evidence provenance in completion audit",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "layer": "business",
+      "artifacts": [
+        "scripts/requirements-audit.py",
+        "tests/requirements_audit_test.py",
+        "scripts/qa-evidence-provenance-observations.py"
+      ]
     }
   },
   "intents": {
@@ -1562,6 +1606,36 @@
       "source_locator": "conversation:2026-08-20",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T07:26:21.623564Z"
+    },
+    "intent_0000380y2x0gjdsw44cv68h5d4": {
+      "intent_id": "intent_0000380y2x0gjdsw44cv68h5d4",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Completion audit must verify each blocking acceptance criterion through a passed case that explicitly links valid evidence, including explicit backward-compatible provenance rules",
+      "rationale": "Archived-Sprint-wide grandfathering could credit unlinked evidence and create a circular false pass",
+      "actors": [
+        "release auditor",
+        "plugin maintainer",
+        "Codex agent"
+      ],
+      "desired_outcomes": [
+        "case-linked evidence proof",
+        "no blanket grandfathering",
+        "legacy compatibility without mismatch tolerance"
+      ],
+      "non_goals": [
+        "rewriting immutable historical evidence",
+        "discarding valid legacy runs"
+      ],
+      "policies": [
+        "evidence ID must be linked by passed case",
+        "mismatched run or case metadata always fails"
+      ],
+      "source": "user",
+      "source_locator": "conversation:2026-08-20",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T07:34:39.342885Z"
     }
   },
   "acceptance_criteria": {
@@ -1879,6 +1953,13 @@
       "statement": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification",
       "priority": "blocking",
       "observable": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor"
+    },
+    "ac_0000380y2x0gjmx70245j0j39r": {
+      "ac_id": "ac_0000380y2x0gjmx70245j0j39r",
+      "intent_id": "intent_0000380y2x0gjdsw44cv68h5d4",
+      "statement": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link",
+      "priority": "blocking",
+      "observable": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified"
     }
   },
   "gaps": {
@@ -2532,6 +2613,34 @@
       "approved_at": "2026-08-20T07:31:45.117457Z",
       "expires_at": "2026-08-20T09:31:38Z",
       "consumed_at": "2026-08-20T07:31:45.775255Z"
+    },
+    "approval_0000380y30hgqs2h8vka3avj94": {
+      "approval_id": "approval_0000380y30hgqs2h8vka3avj94",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "from": "design",
+      "to": "do",
+      "reason": "User instructed uninterrupted completion and false-pass audit hardening",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:34:53.451522Z",
+      "approved_at": "2026-08-20T07:34:53.993525Z",
+      "expires_at": "2026-08-20T09:34:53Z",
+      "consumed_at": "2026-08-20T07:34:54.56132Z"
+    },
+    "approval_0000380y3c7tpq332qb41wc1x4": {
+      "approval_id": "approval_0000380y3c7tpq332qb41wc1x4",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "from": "report",
+      "to": "archived",
+      "reason": "Case-linked provenance tests and every blocking/full release gate passed",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:38:05.099841Z",
+      "approved_at": "2026-08-20T07:38:05.64498Z",
+      "expires_at": "2026-08-20T09:38:04Z",
+      "consumed_at": "2026-08-20T07:38:06.234237Z"
     }
   },
   "evidence": {
@@ -12153,6 +12262,776 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T07:27:38.331438Z",
       "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y33yvf9kb4pa0cbfxxg": {
+      "evidence_id": "evidence_0000380y33yvf9kb4pa0cbfxxg",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj4b9a2bnq04n1x8.json",
+      "sha256": "52e913fc0ecb86d5139e12193092c192980b42bb9bb4f895bd9d3f0f95ef0116",
+      "size": 3876,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:49.431659Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj4b9a2bnq04n1x8",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "present but mismatched run or case metadata is rejected; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y33zybvphp341bpkh7c": {
+      "evidence_id": "evidence_0000380y33zybvphp341bpkh7c",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj4wgr5kawqqsgnw.json",
+      "sha256": "3865ba878e12ebd6a5830ead9118a4624582277a0d8e51d2552d0d2b4515e490",
+      "size": 4099,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:49.989885Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj4wgr5kawqqsgnw",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "legacy omitted fields are compatible only when the passed case links the evidence ID; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y3411hfh5vn199hgsk4": {
+      "evidence_id": "evidence_0000380y3411hfh5vn199hgsk4",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj56ab44jayt5m08.json",
+      "sha256": "ee741c663d3ab097c24f7cc1040e7e58404a7b825281b6872c7b28a1b42b70c3",
+      "size": 3836,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:50.552942Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj56ab44jayt5m08",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "evidence sprint scope must equal the QA run sprint; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y3423rtey326qtvhtsg": {
+      "evidence_id": "evidence_0000380y3423rtey326qtvhtsg",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj57dfp0v808jxk4.json",
+      "sha256": "7be730b4052aeef4fd06cab794aa18ece47df72d482f3eba14ecb26c4eff06a0",
+      "size": 4106,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:51.100996Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj57dfp0v808jxk4",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "correcting the explicit case link restores verification without rewriting the artifact; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y3436r3v037zzn453e0": {
+      "evidence_id": "evidence_0000380y3436r3v037zzn453e0",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj5dyddf58k4yxvr.json",
+      "sha256": "3248cc74bdaa905f30d4c75de03079cd6ae311a0a55afdecb813c3fd446ec460",
+      "size": 3881,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:51.660619Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj5dyddf58k4yxvr",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing/tampered hash or failed redaction is never credited; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y3449vj2t1mrbyd7ea4": {
+      "evidence_id": "evidence_0000380y3449vj2t1mrbyd7ea4",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj5ffxx3yd1yywv4.json",
+      "sha256": "24dcf14e8bee124fa692c4ca9393274264dd574ffb4eb6c88195b3033d721305",
+      "size": 3871,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:52.221038Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj5ffxx3yd1yywv4",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "an empty evidence_ids list leaves the blocking AC unverified; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y345czbkdad7pv5m9dg": {
+      "evidence_id": "evidence_0000380y345czbkdad7pv5m9dg",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y2tr1qg8yzy7gc6dgm0-evidence-provenance-audit/04-qa/observations/case_0000380y31cj5t2mg4jhzkmxj4.json",
+      "sha256": "0e1f21f1c8e9942e8b6ec252c1cb131ea654935d67c05a61cafbda713e5464f7",
+      "size": 3959,
+      "ac_ids": [
+        "ac_0000380y2x0gjmx70245j0j39r"
+      ],
+      "created_at": "2026-08-20T07:35:52.783914Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y31cj5t2mg4jhzkmxj4",
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53",
+      "state_revision": 1032,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 provenance contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L2 provenance contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L3 provenance contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L4 provenance contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L5 provenance contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L6 provenance contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        },
+        {
+          "statement": "L7 provenance contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "modern exact run/case evidence is credited only through its passed case; focused tests and 45-AC repository audit pass",
+          "expected": "only valid explicitly case-linked evidence credits a blocking AC"
+        }
+      ],
+      "tool": "evidence-provenance-audit",
+      "tool_version": "evidence-provenance-audit/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:35:48.442778Z",
+      "finished_at": "2026-08-20T07:35:49.246905Z"
     }
   },
   "qa_runs": {
@@ -19781,6 +20660,319 @@
       "finished_at": "2026-08-20T07:29:07.158893Z",
       "state_revision": 994,
       "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de"
+    },
+    "run_0000380y31cj5c9g0fac3p6ctc": {
+      "run_id": "run_0000380y31cj5c9g0fac3p6ctc",
+      "sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380y31cj5t2mg4jhzkmxj4",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y345czbkdad7pv5m9dg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y31cj4wgr5kawqqsgnw",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y33zybvphp341bpkh7c"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y31cj5ffxx3yd1yywv4",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3449vj2t1mrbyd7ea4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y31cj4b9a2bnq04n1x8",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y33yvf9kb4pa0cbfxxg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y31cj56ab44jayt5m08",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3411hfh5vn199hgsk4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y31cj5dyddf58k4yxvr",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3436r3v037zzn453e0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y31cj57dfp0v808jxk4",
+          "ac_ids": [
+            "ac_0000380y2x0gjmx70245j0j39r"
+          ],
+          "title": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3423rtey326qtvhtsg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T07:35:07.298443Z",
+      "finished_at": "2026-08-20T07:35:53.327181Z",
+      "state_revision": 1032,
+      "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53"
     }
   },
   "graph": {

@@ -1,0 +1,24 @@
+$ python3 -m unittest tests/requirements_audit_test.py
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.525s
+
+OK
+
+$ python3 scripts/requirements-audit.py --no-exec
+{
+  "schema_version": "1.0.0",
+  "coverage": {
+    "functional_requirements": 11,
+    "product_acceptance": 8,
+    "work_packages": 14
+  },
+  "missing": [],
+  "contract_failures": {},
+  "command_results": {},
+  "workflow_failures": [
+    "unverified:ac_0000380y2x0gjmx70245j0j39r"
+  ],
+  "active_sprint_id": "sprint_0000380y2tr1qg8yzy7gc6dgm0",
+  "passed": false
+}

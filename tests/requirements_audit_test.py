@@ -1,5 +1,6 @@
-import json,pathlib,subprocess,sys,tempfile,unittest
+import hashlib,importlib.util,json,pathlib,subprocess,sys,tempfile,unittest
 ROOT=pathlib.Path(__file__).resolve().parents[1];SCRIPT=ROOT/'scripts/requirements-audit.py'
+SPEC=importlib.util.spec_from_file_location('requirements_audit',SCRIPT);AUDIT=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(AUDIT)
 class RequirementsAuditTests(unittest.TestCase):
     def test_current_repository_has_complete_required_id_ranges(self):
         r=subprocess.run([sys.executable,str(SCRIPT),'--root',str(ROOT),'--no-exec'],capture_output=True,text=True)
@@ -23,4 +24,16 @@ class RequirementsAuditTests(unittest.TestCase):
         expected=1 if state.get('active_sprint_id') else 0
         self.assertEqual(r.returncode,expected,r.stdout+r.stderr)
         self.assertEqual(json.loads(r.stdout)['passed'],expected==0)
+    def test_legacy_evidence_requires_passed_case_link_and_matching_provenance(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=pathlib.Path(directory);(root/'.tene-workflow').mkdir();artifact=root/'proof.txt';artifact.write_text('verified execution\n')
+            evidence={'evidence_id':'ev','sprint_id':'sprint','kind':'legacy','uri':'proof.txt','sha256':hashlib.sha256(artifact.read_bytes()).hexdigest(),'ac_ids':['ac'],'redaction_status':'passed'}
+            case={'case_id':'case','ac_ids':['ac'],'status':'passed','evidence_ids':[]}
+            state={'active_sprint_id':'','gaps':{},'tasks':{},'sprints':{'sprint':{'sprint_id':'sprint','phase':'archived','last_qa_status':'passed'}},'acceptance_criteria':{'ac':{'ac_id':'ac','priority':'blocking'}},'evidence':{'ev':evidence},'qa_runs':{'run':{'run_id':'run','sprint_id':'sprint','status':'passed','cases':[case]}}}
+            path=root/'.tene-workflow/project.json';path.write_text(json.dumps(state))
+            failures,_=AUDIT.state_findings(root,False);self.assertIn('unverified:ac',failures)
+            case['evidence_ids']=['ev'];path.write_text(json.dumps(state))
+            failures,_=AUDIT.state_findings(root,False);self.assertNotIn('unverified:ac',failures)
+            evidence['run_id']='different-run';path.write_text(json.dumps(state))
+            failures,_=AUDIT.state_findings(root,False);self.assertIn('unverified:ac',failures)
 if __name__=='__main__':unittest.main()
