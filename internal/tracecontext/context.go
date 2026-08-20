@@ -21,6 +21,7 @@ const ContextSchemaVersion = "1.0.0"
 
 type ContextItem struct {
 	Kind           string `json:"kind"`
+	Category       string `json:"category"`
 	RefID          string `json:"ref_id"`
 	Priority       int    `json:"priority"`
 	Mandatory      bool   `json:"mandatory"`
@@ -55,6 +56,8 @@ type ContextPack struct {
 	Provenance       []SourceRef            `json:"provenance"`
 	ExcludedSummary  []ExcludedSummary      `json:"excluded_summary"`
 	ContentHash      string                 `json:"content_hash"`
+	BudgetAllocation map[string]int         `json:"budget_allocation"`
+	CategoryUsage    map[string]int         `json:"category_usage"`
 }
 type BuildOptions struct {
 	Phase  domain.Phase
@@ -80,37 +83,43 @@ func BuildContextPack(root string, p *domain.Project, sp *domain.Sprint, options
 		return ContextPack{}, fmt.Errorf("CONTEXT_PHASE_INVALID: %s", phase)
 	}
 	var candidates []ContextItem
-	add := func(kind, id, content, locator string, priority int, mandatory bool) {
+	add := func(category, kind, id, content, locator string, priority int, mandatory bool) {
 		content = strings.TrimSpace(content)
 		if content == "" {
 			return
 		}
 		sum := sha256.Sum256([]byte(content))
-		candidates = append(candidates, ContextItem{Kind: kind, RefID: id, Priority: priority, Mandatory: mandatory, Content: content, Locator: locator, SourceRevision: p.Revision, ContentHash: hex.EncodeToString(sum[:]), Size: len([]byte(content))})
+		candidates = append(candidates, ContextItem{Category: category, Kind: kind, RefID: id, Priority: priority, Mandatory: mandatory, Content: content, Locator: locator, SourceRevision: p.Revision, ContentHash: hex.EncodeToString(sum[:]), Size: len([]byte(content))})
 	}
-	add("policy", "workflow-profile", "workflow_profile="+p.Profile+"; secrets=tene-boundary; blocking_coverage=100", ".tene-workflow/policies.yaml", 100, true)
+	masterPolicy, _ := json.Marshal(map[string]any{"profile": p.Profile, "objective": p.MasterPlan.Objective, "invariants": p.MasterPlan.CrossSprintInvariants})
+	add("policy", "policy", "workflow-profile", string(masterPolicy), ".tene-workflow/project.json", 100, true)
 	for _, id := range sortedStrings(sp.IntentIDs) {
 		if in := p.Intents[id]; in != nil && in.Status == "confirmed" {
 			b, _ := json.Marshal(in)
-			add("intent", id, string(b), ".tene-workflow/project.json", 90, true)
+			add("spec", "intent", id, string(b), ".tene-workflow/project.json", 90, true)
 		}
 	}
 	for _, id := range sortedCriteria(p, sp) {
 		ac := p.Criteria[id]
 		b, _ := json.Marshal(ac)
-		add("acceptance-criterion", id, string(b), ".tene-workflow/project.json", 85, ac.Priority == "blocking")
+		add("spec", "acceptance-criterion", id, string(b), ".tene-workflow/project.json", 85, ac.Priority == "blocking")
 	}
 	for _, id := range sortedStrings(sp.OpenGapIDs) {
 		if gap := p.Gaps[id]; gap != nil && gap.Status == "open" {
 			b, _ := json.Marshal(gap)
-			add("gap", id, string(b), ".tene-workflow/project.json", 80, gap.Severity == "blocker")
+			add("evidence", "gap", id, string(b), ".tene-workflow/project.json", 80, gap.Severity == "blocker")
 		}
 	}
 	if phaseAllowsTasks(phase) {
 		for _, id := range sortedStrings(sp.TaskIDs) {
 			if task := p.Tasks[id]; task != nil {
 				b, _ := json.Marshal(task)
-				add("task", id, string(b), ".tene-workflow/project.json", 60, false)
+				add("work", "task", id, string(b), ".tene-workflow/project.json", 60, false)
+			}
+		}
+		if locator := phaseDocument(sp, phase); locator != "" {
+			if b, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(locator))); err == nil {
+				add("work", "phase-document", string(phase), string(b), locator, 70, false)
 			}
 		}
 	}
@@ -119,8 +128,20 @@ func BuildContextPack(root string, p *domain.Project, sp *domain.Sprint, options
 			node := p.Graph.Nodes[id]
 			if node.Kind == "File" || node.Kind == "Symbol" {
 				b, _ := json.Marshal(node)
-				add("graph-node", id, string(b), node.Locator, 40, false)
+				add("graph", "graph-node", id, string(b), node.Locator, 40, false)
 			}
+		}
+	}
+	for id, approval := range p.Approvals {
+		if approval.SprintID == sp.SprintID {
+			b, _ := json.Marshal(approval)
+			add("evidence", "decision", id, string(b), ".tene-workflow/project.json", 55, false)
+		}
+	}
+	for id, waiver := range p.Waivers {
+		if waiver.SprintID == sp.SprintID {
+			b, _ := json.Marshal(waiver)
+			add("evidence", "decision", id, string(b), ".tene-workflow/project.json", 55, false)
 		}
 	}
 	sort.SliceStable(candidates, func(i, j int) bool {
@@ -132,7 +153,8 @@ func BuildContextPack(root string, p *domain.Project, sp *domain.Sprint, options
 		}
 		return candidates[i].Priority > candidates[j].Priority
 	})
-	pack := ContextPack{SchemaVersion: ContextSchemaVersion, ID: contextID(p.Revision, phase), Phase: phase, StateRevision: p.Revision, Budget: options.Budget, BudgetUnit: "utf8-bytes", Objective: sp.Title, ToolCapabilities: caps, Items: []ContextItem{}, Provenance: []SourceRef{}, ExcludedSummary: []ExcludedSummary{}}
+	allocations := map[string]int{"policy": options.Budget * 15 / 100, "spec": options.Budget * 25 / 100, "work": options.Budget * 20 / 100, "graph": options.Budget * 25 / 100, "evidence": options.Budget * 10 / 100, "reserve": options.Budget * 5 / 100}
+	pack := ContextPack{SchemaVersion: ContextSchemaVersion, ID: contextID(p.Revision, phase), Phase: phase, StateRevision: p.Revision, Budget: options.Budget, BudgetUnit: "utf8-bytes", Objective: sp.Title, ToolCapabilities: caps, Items: []ContextItem{}, Provenance: []SourceRef{}, ExcludedSummary: []ExcludedSummary{}, BudgetAllocation: allocations, CategoryUsage: map[string]int{}}
 	seen := map[string]bool{}
 	excluded := ExcludedSummary{Reason: "budget", Count: 0, Bytes: 0}
 	for _, item := range candidates {
@@ -140,7 +162,7 @@ func BuildContextPack(root string, p *domain.Project, sp *domain.Sprint, options
 			continue
 		}
 		seen[item.ContentHash] = true
-		if pack.Used+item.Size > pack.Budget {
+		if pack.Used+item.Size > pack.Budget || (!item.Mandatory && pack.CategoryUsage[item.Category]+item.Size > allocations[item.Category]) {
 			if item.Mandatory {
 				return ContextPack{}, fmt.Errorf("CONTEXT_MANDATORY_OVERFLOW: %s requires %d bytes with %d remaining", item.RefID, item.Size, pack.Budget-pack.Used)
 			}
@@ -150,6 +172,7 @@ func BuildContextPack(root string, p *domain.Project, sp *domain.Sprint, options
 		}
 		pack.Items = append(pack.Items, item)
 		pack.Used += item.Size
+		pack.CategoryUsage[item.Category] += item.Size
 	}
 	if excluded.Count > 0 {
 		pack.ExcludedSummary = append(pack.ExcludedSummary, excluded)
@@ -217,7 +240,7 @@ func validPhase(p domain.Phase) bool {
 	return false
 }
 func phaseDocument(sp *domain.Sprint, p domain.Phase) string {
-	names := map[domain.Phase]string{domain.PhasePRD: "00-prd/00-prd.md", domain.PhasePlan: "01-plan/00-plan.md", domain.PhaseDesign: "02-design/00-design.md", domain.PhaseLoopCheck: "03-analysis/00-loop-check.md", domain.PhaseQA: "04-qa/00-qa-plan.md", domain.PhaseReport: "05-report/00-report.md"}
+	names := map[domain.Phase]string{domain.PhasePRD: "00-prd/00-prd.md", domain.PhasePlan: "01-plan/00-plan.md", domain.PhaseDesign: "02-design/00-design.md", domain.PhaseDo: "02-design/00-design.md", domain.PhaseLoopCheck: "03-analysis/00-loop-check.md", domain.PhaseQA: "04-qa/00-qa-plan.md", domain.PhaseReport: "05-report/00-report.md"}
 	if n := names[p]; n != "" {
 		return filepath.ToSlash(filepath.Join(sp.DocumentRoot, n))
 	}

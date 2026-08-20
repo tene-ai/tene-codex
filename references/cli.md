@@ -33,3 +33,7 @@ Global options can appear anywhere: `--root`, `--json`, `--expected-revision`, `
 Exit codes: 0 success; 2 validation/usage; 3 guard or QA failure; 4 conflict/lock; 5 missing capability; 6 security; 7 corruption/migration; 8 child tool failure; 10 internal.
 
 `compact` creates a full, hash-chained projection checkpoint and snapshot. Later events contain compact merge patches. `doctor` compares journal replay with project, active, and master-plan projections; `doctor --repair` backs up divergent files and rebuilds them from replay. It never repairs a corrupt journal.
+
+`master create --objective TEXT --milestones CSV --releases CSV --risks CSV --invariants CSV` persists release-level context and cross-Sprint invariants. `sprint create` accepts optional `--milestone` and `--release` links.
+
+`intent capture` accepts `--actors`, `--outcomes`, `--non-goals`, `--policies`, `--business-rules`, `--ux-states`, `--data-invariants`, `--constraints`, `--assumptions`, `--open-questions`, and `--source-locator`. Confirmation requires an actor and desired outcome. `intent supersede ID --statement TEXT` preserves the old intent and creates a candidate replacement.

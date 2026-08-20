@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/tene-ai/tene-codex/internal/domain"
@@ -20,8 +21,9 @@ type eventEnvelope struct {
 	Projection      *domain.Project `json:"projection,omitempty"`
 }
 type ProjectionDrift struct {
-	Path   string `json:"path"`
-	Status string `json:"status"`
+	Path        string   `json:"path"`
+	Status      string   `json:"status"`
+	Differences []string `json:"differences,omitempty"`
 }
 
 func mergePatch(before, after any) any {
@@ -195,11 +197,52 @@ func (s *Store) ProjectionDrift() ([]ProjectionDrift, *domain.Project, error) {
 		} else if err != nil {
 			status = "unreadable"
 		} else if !bytes.Equal(expected, actual) {
-			status = "drift"
+			var expectedTree, actualTree any
+			if json.Unmarshal(expected, &expectedTree) != nil || json.Unmarshal(actual, &actualTree) != nil || !equalJSON(expectedTree, actualTree) {
+				status = "drift"
+			}
 		}
-		out = append(out, ProjectionDrift{Path: c.path, Status: status})
+		differences := []string{}
+		if status == "drift" {
+			var expectedTree, actualTree any
+			_ = json.Unmarshal(expected, &expectedTree)
+			_ = json.Unmarshal(actual, &actualTree)
+			differences = diffPaths("$", expectedTree, actualTree, 20)
+		}
+		out = append(out, ProjectionDrift{Path: c.path, Status: status, Differences: differences})
 	}
 	return out, p, nil
+}
+
+func diffPaths(path string, expected, actual any, limit int) []string {
+	if limit <= 0 || equalJSON(expected, actual) {
+		return nil
+	}
+	em, eok := expected.(map[string]any)
+	am, aok := actual.(map[string]any)
+	if eok && aok {
+		keys := map[string]bool{}
+		for k := range em {
+			keys[k] = true
+		}
+		for k := range am {
+			keys[k] = true
+		}
+		names := make([]string, 0, len(keys))
+		for k := range keys {
+			names = append(names, k)
+		}
+		sort.Strings(names)
+		var out []string
+		for _, k := range names {
+			out = append(out, diffPaths(path+"."+k, em[k], am[k], limit-len(out))...)
+			if len(out) >= limit {
+				break
+			}
+		}
+		return out
+	}
+	return []string{path}
 }
 
 func (s *Store) RepairFromJournal() ([]string, error) {

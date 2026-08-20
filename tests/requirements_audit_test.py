@@ -2,13 +2,24 @@ import json,pathlib,subprocess,sys,tempfile,unittest
 ROOT=pathlib.Path(__file__).resolve().parents[1];SCRIPT=ROOT/'scripts/requirements-audit.py'
 class RequirementsAuditTests(unittest.TestCase):
     def test_current_repository_has_complete_required_id_ranges(self):
-        r=subprocess.run([sys.executable,str(SCRIPT),'--root',str(ROOT)],capture_output=True,text=True)
+        r=subprocess.run([sys.executable,str(SCRIPT),'--root',str(ROOT),'--no-exec'],capture_output=True,text=True)
         v=json.loads(r.stdout)
         self.assertEqual(v['coverage'],{'functional_requirements':11,'product_acceptance':8,'work_packages':14})
         self.assertEqual(v['missing'],[])
+    def test_missing_symbol_and_unknown_command_fail_closed(self):
+        manifest=json.loads((ROOT/'docs/release/semantic-contracts.json').read_text())
+        manifest['functional_requirements']['FR-01']['symbols']=[['internal/domain/types.go','DefinitelyMissingSymbol']]
+        manifest['functional_requirements']['FR-01']['commands']=['untrusted-shell-command']
+        with tempfile.TemporaryDirectory() as directory:
+            path=pathlib.Path(directory)/'manifest.json';path.write_text(json.dumps(manifest))
+            r=subprocess.run([sys.executable,str(SCRIPT),'--root',str(ROOT),'--manifest',str(path),'--no-exec'],capture_output=True,text=True)
+        self.assertNotEqual(r.returncode,0)
+        missing=json.loads(r.stdout)['missing']
+        self.assertTrue(any('symbol-missing' in value for value in missing),missing)
+        self.assertTrue(any('command-unknown' in value for value in missing),missing)
     def test_final_mode_matches_active_state_contract(self):
         state=json.loads((ROOT/'.tene-workflow/project.json').read_text())
-        r=subprocess.run([sys.executable,str(SCRIPT),'--root',str(ROOT),'--final'],capture_output=True,text=True)
+        r=subprocess.run([sys.executable,str(SCRIPT),'--root',str(ROOT),'--final','--no-exec'],capture_output=True,text=True)
         expected=1 if state.get('active_sprint_id') else 0
         self.assertEqual(r.returncode,expected,r.stdout+r.stderr)
         self.assertEqual(json.loads(r.stdout)['passed'],expected==0)

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "functional_requirements": {
+    "FR-01": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/domain/types.go","type MasterPlan struct"],["internal/app/app.go","func \\(rt \\*runtime\\) master"]],"commands":["app-master"]},
+    "FR-02": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/workflow/workflow.go","func CanTransition"]],"commands":["workflow"]},
+    "FR-03": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/domain/types.go","type Intent struct"],["internal/app/app.go","case \"supersede\""]],"commands":["app-intent"]},
+    "FR-04": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/document/document.go","var specs"],["internal/document/document.go","func Validate"]],"commands":["document"]},
+    "FR-05": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/loopcheck/analyzer.go","func Analyze"],["internal/app/app.go","case \"check\""]],"commands":["loopcheck"]},
+    "FR-06": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/qaadapter/qaadapter.go","type Observation struct"],["internal/app/app.go","func qaVariants"]],"commands":["qa","references"]},
+    "FR-07": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/workflow/workflow.go","func EvaluateQAGateAtRoot"],["internal/app/app.go","QA_MANUAL_PASS_FORBIDDEN"]],"commands":["workflow","qa"]},
+    "FR-08": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/state/replay.go","func \\(s \\*Store\\) Replay"],["internal/tracecontext/context.go","func BuildContextPack"]],"commands":["state","context"]},
+    "FR-09": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/state/store.go","func \\(s \\*Store\\) Compact"],["internal/state/store.go","func \\(s \\*Store\\) ClearDerived"]],"commands":["state"]},
+    "FR-10": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/router/router.go","func Route"]],"commands":["routing"]},
+    "FR-11": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/secret/runner.go","func Run"],["hooks/tene_hook.py","DENIED"]],"commands":["secret","hooks"]}
+  },
+  "product_acceptance": {
+    "AC-PRODUCT-01": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/workflow/workflow.go","WF_INVALID_TRANSITION"],["skills/tene-sprint/SKILL.md","status --json"]],"commands":["workflow","routing"]},
+    "AC-PRODUCT-02": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/state/replay.go","Replay"],["skills/tene-status/SKILL.md","context build"]],"commands":["state","context"]},
+    "AC-PRODUCT-03": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/codeintel/codeintel.go","type Component struct"],["internal/codeintel/reference_matrix_test.go","TestReferenceProjectMatrix"]],"commands":["codeintel","references"]},
+    "AC-PRODUCT-04": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/workflow/workflow.go","EvaluateQAGateAtRoot"],["internal/app/app_test.go","TestQA"]],"commands":["workflow","qa"]},
+    "AC-PRODUCT-05": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["tests/e2e/reference-web.spec.ts","success crosses UI API and persistence"],["testdata/reference-nextjs/runtime/journey.mjs","runCheckoutJourney"]],"commands":["references","playwright"]},
+    "AC-PRODUCT-06": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/secret/runner.go","DetectLeak"],["hooks/tene_hook.py","deny"]],"commands":["secret","hooks"]},
+    "AC-PRODUCT-07": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/codeintel/reference_matrix_test.go","nextjs-fullstack"],["internal/codeintel/reference_matrix_test.go","python-worker"]],"commands":["references","release"]},
+    "AC-PRODUCT-08": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/document/document.go","PhaseReport"],["internal/app/app.go","Generated Sprint Summary"]],"commands":["document","app-report"]}
+  },
+  "work_packages": {
+    "WP-01":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/domain/types.go","const SchemaVersion"]],"commands":["schema"]},
+    "WP-02":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/state/store.go","func \\(s \\*Store\\) Mutate"]],"commands":["state"]},
+    "WP-03":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/workflow/workflow.go","func CanTransition"]],"commands":["workflow"]},
+    "WP-04":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/document/document.go","func Sync"]],"commands":["document"]},
+    "WP-05":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/domain/types.go","type Intent struct"]],"commands":["app-intent"]},
+    "WP-06":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/tracecontext/graph.go","func Impact"]],"commands":["graph"]},
+    "WP-07":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/tracecontext/context.go","BudgetAllocation"]],"commands":["context"]},
+    "WP-08":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/codeintel/codeintel.go","analyzeBoundedLanguage"]],"commands":["codeintel"]},
+    "WP-09":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/loopcheck/analyzer.go","func Reconcile"]],"commands":["loopcheck"]},
+    "WP-10":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/qaadapter/qaadapter.go","func Discover"]],"commands":["qa"]},
+    "WP-11":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/secret/runner.go","func Run"]],"commands":["secret"]},
+    "WP-12":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/router/router.go","tene-sprint"]],"commands":["routing"]},
+    "WP-13":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[[".codex-plugin/plugin.json","tene"]],"commands":["plugin"]},
+    "WP-14":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["scripts/package-plugin.sh","PACKAGE_TARGETS"]],"commands":["release"]}
+  }
+}

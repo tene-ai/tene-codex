@@ -55,7 +55,9 @@ type envelope struct {
 type apiError struct {
 	Code        string `json:"code"`
 	Message     string `json:"message"`
+	Details     any    `json:"details,omitempty"`
 	Remediation string `json:"remediation,omitempty"`
+	Retryable   bool   `json:"retryable"`
 }
 type commandError struct {
 	code, message, remediation string
@@ -139,7 +141,7 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		err = &commandError{"CLI_UNKNOWN_COMMAND", "unknown command: " + args[0], "Run tene-workflow help.", 2}
 	}
 	if err != nil {
-		return rt.fail(err)
+		return rt.failResult(err, result, revision)
 	}
 	if rt.requestID != "" && isMutationCommand(args) {
 		cached, rememberErr := rt.rememberRequest(commandHash, result, revision)
@@ -166,7 +168,7 @@ func isMutationCommand(args []string) bool {
 	if len(args) < 2 {
 		return false
 	}
-	reads := map[string][]string{"sprint": {"list", "show", "master-plan"}, "master": {"status", "validate", "create"}, "phase": {"show"}, "approval": {"list"}, "task": {"list"}, "intent": {"list"}, "document": {"validate"}, "graph": {"providers", "understand", "trace", "impact", "validate"}, "context": {"validate"}, "loop": {}, "waiver": {"list"}, "evidence": {"list", "verify"}, "qa": {"capabilities", "status"}, "report": {"validate"}, "secret": {"check", "list"}, "migrate": {"status", "dry-run"}, "doctor": {}}
+	reads := map[string][]string{"sprint": {"list", "show", "master-plan"}, "master": {"status", "validate"}, "phase": {"show"}, "approval": {"list"}, "task": {"list"}, "intent": {"list"}, "document": {"validate"}, "graph": {"providers", "understand", "trace", "impact", "validate"}, "context": {"validate"}, "loop": {}, "waiver": {"list"}, "evidence": {"list", "verify"}, "qa": {"capabilities", "status"}, "report": {"validate"}, "secret": {"check", "list"}, "migrate": {"status", "dry-run"}, "doctor": {}}
 	for _, x := range reads[args[0]] {
 		if args[1] == x {
 			return false
@@ -215,9 +217,29 @@ func (rt *runtime) master(args []string) (any, uint64, error) {
 	if err != nil {
 		return nil, 0, err
 	}
-	view := map[string]any{"project_id": p.ProjectID, "active_sprint_id": p.ActiveSprintID, "revision": p.Revision, "sprints": sortedSprints(p)}
+	view := map[string]any{"project_id": p.ProjectID, "active_sprint_id": p.ActiveSprintID, "revision": p.Revision, "plan": p.MasterPlan, "sprints": sortedSprints(p)}
 	switch args[0] {
-	case "create", "status":
+	case "create":
+		fs := flag.NewFlagSet("master create", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		objective := fs.String("objective", p.MasterPlan.Objective, "")
+		milestones := fs.String("milestones", strings.Join(p.MasterPlan.Milestones, ","), "")
+		releases := fs.String("releases", strings.Join(p.MasterPlan.Releases, ","), "")
+		risks := fs.String("risks", strings.Join(p.MasterPlan.CommonRisks, ","), "")
+		invariants := fs.String("invariants", strings.Join(p.MasterPlan.CrossSprintInvariants, ","), "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		if strings.TrimSpace(*objective) == "" || len(csv(*invariants)) == 0 {
+			return nil, 0, usageErr("--objective and --invariants are required")
+		}
+		plan := domain.MasterPlan{Objective: strings.TrimSpace(*objective), Milestones: csv(*milestones), Releases: csv(*releases), CommonRisks: csv(*risks), CrossSprintInvariants: csv(*invariants)}
+		r, err := state.New(rt.root).Mutate(rt.expected, rt.actor(), "MasterPlanChanged", p.ProjectID, plan, func(p *domain.Project) error { p.MasterPlan = plan; return nil })
+		if err != nil {
+			return nil, 0, err
+		}
+		return map[string]any{"project_id": r.ProjectID, "plan": r.MasterPlan, "sprints": sortedSprints(r)}, r.Revision, nil
+	case "status":
 		return view, p.Revision, nil
 	case "validate":
 		findings := validateMaster(p)
@@ -251,6 +273,12 @@ func validateMaster(p *domain.Project) []domain.Finding {
 	}
 	if cycleMap(p.Tasks, func(t *domain.Task) []string { return t.DependsOn }) {
 		fs = append(fs, domain.Finding{Code: "MASTER_TASK_CYCLE", Severity: "blocker", Message: "task dependency graph contains a cycle", Remediation: "Remove a cyclic task dependency."})
+	}
+	if strings.TrimSpace(p.MasterPlan.Objective) == "" {
+		fs = append(fs, domain.Finding{Code: "MASTER_OBJECTIVE_MISSING", Severity: "blocker", Message: "master objective is missing", Remediation: "Run master create with an objective."})
+	}
+	if len(p.MasterPlan.CrossSprintInvariants) == 0 {
+		fs = append(fs, domain.Finding{Code: "MASTER_INVARIANT_MISSING", Severity: "blocker", Message: "cross-sprint invariants are missing", Remediation: "Run master create with at least one invariant."})
 	}
 	return fs
 }
@@ -369,9 +397,12 @@ func (rt *runtime) success(result any, revision uint64) int {
 }
 
 func (rt *runtime) fail(err error) int {
+	return rt.failResult(err, nil, 0)
+}
+func (rt *runtime) failResult(err error, details any, revision uint64) int {
 	ce := classify(err)
 	if rt.json {
-		_ = json.NewEncoder(rt.out).Encode(envelope{OK: false, SchemaVersion: domain.SchemaVersion, RequestID: rt.requestID, Warnings: []string{}, Errors: []apiError{{Code: ce.code, Message: ce.message, Remediation: ce.remediation}}})
+		_ = json.NewEncoder(rt.out).Encode(envelope{OK: false, SchemaVersion: domain.SchemaVersion, RequestID: rt.requestID, Revision: revision, Warnings: []string{}, Errors: []apiError{{Code: ce.code, Message: ce.message, Details: details, Remediation: ce.remediation, Retryable: ce.exit == 4 || ce.exit == 5 || ce.exit == 8}}})
 	} else {
 		fmt.Fprintf(rt.err, "%s: %s\n", ce.code, ce.message)
 		if ce.remediation != "" {
@@ -402,6 +433,10 @@ func classify(err error) *commandError {
 		code = msg[:i]
 		if strings.HasPrefix(code, "SEC_") {
 			exit = 6
+		} else if strings.HasSuffix(code, "_UNAVAILABLE") {
+			exit = 5
+		} else if strings.HasPrefix(code, "QA_ADAPTER_FAILED") || strings.HasPrefix(code, "SEC_CHILD_FAILED") {
+			exit = 8
 		} else {
 			exit = 2
 		}
@@ -467,6 +502,8 @@ func (rt *runtime) sprint(args []string) (any, uint64, error) {
 		title := fs.String("title", "", "")
 		slug := fs.String("slug", "", "")
 		pred := fs.String("predecessors", "", "")
+		milestone := fs.String("milestone", "", "")
+		release := fs.String("release", "", "")
 		maxIterations := fs.Int("max-iterations", 5, "")
 		if err := fs.Parse(args[1:]); err != nil {
 			return nil, 0, err
@@ -481,7 +518,7 @@ func (rt *runtime) sprint(args []string) (any, uint64, error) {
 			*slug = slugify(*title)
 		}
 		id := domain.NewID("sprint")
-		sp := &domain.Sprint{SprintID: id, Slug: *slug, Title: *title, Phase: domain.PhaseDraft, Predecessors: csv(*pred), DocumentRoot: filepath.ToSlash(filepath.Join("docs", "sprints", id+"-"+*slug)), MaxLoopIterations: *maxIterations}
+		sp := &domain.Sprint{SprintID: id, Slug: *slug, Title: *title, Milestone: *milestone, Release: *release, Phase: domain.PhaseDraft, Predecessors: csv(*pred), DocumentRoot: filepath.ToSlash(filepath.Join("docs", "sprints", id+"-"+*slug)), MaxLoopIterations: *maxIterations}
 		result, err := s.Mutate(rt.expected, rt.actor(), "SprintCreated", id, sp, func(p *domain.Project) error { p.Sprints[id] = sp; p.ActiveSprintID = id; return nil })
 		if err != nil {
 			return nil, 0, err
@@ -945,6 +982,17 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 		acText := fs.String("ac", "", "")
 		observable := fs.String("observable", "", "")
 		priority := fs.String("priority", "blocking", "")
+		actors := fs.String("actors", "project user", "")
+		outcomes := fs.String("outcomes", "", "")
+		nonGoals := fs.String("non-goals", "", "")
+		policies := fs.String("policies", "", "")
+		businessRules := fs.String("business-rules", "", "")
+		uxStates := fs.String("ux-states", "", "")
+		dataInvariants := fs.String("data-invariants", "", "")
+		constraints := fs.String("constraints", "", "")
+		assumptions := fs.String("assumptions", "", "")
+		openQuestions := fs.String("open-questions", "", "")
+		sourceLocator := fs.String("source-locator", "conversation:current", "")
 		if err := fs.Parse(args[1:]); err != nil {
 			return nil, 0, err
 		}
@@ -952,7 +1000,11 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 			return nil, 0, usageErr("--statement is required")
 		}
 		id := domain.NewID("intent")
-		in := &domain.Intent{IntentID: id, SprintID: sp.SprintID, Revision: 1, Status: "candidate", Statement: *statement, Rationale: *rationale, Source: "user"}
+		desired := csv(*outcomes)
+		if len(desired) == 0 {
+			desired = csv(firstNonEmpty(*observable, *acText))
+		}
+		in := &domain.Intent{IntentID: id, SprintID: sp.SprintID, Revision: 1, Status: "candidate", Statement: *statement, Rationale: *rationale, Actors: csv(*actors), DesiredOutcomes: desired, NonGoals: csv(*nonGoals), Policies: csv(*policies), BusinessRules: csv(*businessRules), UXStates: csv(*uxStates), DataInvariants: csv(*dataInvariants), Constraints: csv(*constraints), Assumptions: csv(*assumptions), OpenQuestions: csv(*openQuestions), Source: "user", SourceLocator: *sourceLocator}
 		var ac *domain.Criterion
 		if *acText != "" {
 			ac = &domain.Criterion{CriterionID: domain.NewID("ac"), IntentID: id, Statement: *acText, Observable: *observable, Priority: *priority}
@@ -978,6 +1030,9 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 			return nil, 0, notFound("intent", id)
 		}
 		status := map[string]string{"confirm": "confirmed", "deprecate": "deprecated"}[args[0]]
+		if status == "confirmed" && (len(p.Intents[id].Actors) == 0 || len(p.Intents[id].DesiredOutcomes) == 0) {
+			return nil, p.Revision, &commandError{"INTENT_INCOMPLETE", "confirmed intent requires actors and desired outcomes", "Revise the intent with structured actors/outcomes.", 3}
+		}
 		now := time.Now().UTC()
 		r, err := s.Mutate(rt.expected, rt.actor(), "IntentChanged", id, map[string]string{"status": status}, func(p *domain.Project) error {
 			in := p.Intents[id]
@@ -1005,11 +1060,15 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 		fs.SetOutput(io.Discard)
 		statement := fs.String("statement", "", "")
 		rationale := fs.String("rationale", "", "")
+		actors := fs.String("actors", "", "")
+		outcomes := fs.String("outcomes", "", "")
+		policies := fs.String("policies", "", "")
+		openQuestions := fs.String("open-questions", "", "")
 		if err := fs.Parse(args[2:]); err != nil {
 			return nil, 0, err
 		}
-		if *statement == "" && *rationale == "" {
-			return nil, 0, usageErr("--statement or --rationale is required")
+		if *statement == "" && *rationale == "" && *actors == "" && *outcomes == "" && *policies == "" && *openQuestions == "" {
+			return nil, 0, usageErr("at least one revision field is required")
 		}
 		r, err := s.Mutate(rt.expected, rt.actor(), "IntentRevised", id, map[string]string{"statement": *statement, "rationale": *rationale}, func(p *domain.Project) error {
 			in := p.Intents[id]
@@ -1018,6 +1077,18 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 			}
 			if *rationale != "" {
 				in.Rationale = *rationale
+			}
+			if *actors != "" {
+				in.Actors = csv(*actors)
+			}
+			if *outcomes != "" {
+				in.DesiredOutcomes = csv(*outcomes)
+			}
+			if *policies != "" {
+				in.Policies = csv(*policies)
+			}
+			if *openQuestions != "" {
+				in.OpenQuestions = csv(*openQuestions)
 			}
 			in.Revision++
 			in.Status = "candidate"
@@ -1029,6 +1100,49 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 			return nil, 0, err
 		}
 		return r.Intents[id], r.Revision, nil
+	case "supersede":
+		if len(args) < 2 {
+			return nil, 0, usageErr("intent id required")
+		}
+		oldID := args[1]
+		old := p.Intents[oldID]
+		if old == nil {
+			return nil, 0, notFound("intent", oldID)
+		}
+		fs := flag.NewFlagSet("intent supersede", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		statement := fs.String("statement", "", "")
+		rationale := fs.String("rationale", "", "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		if strings.TrimSpace(*statement) == "" {
+			return nil, 0, usageErr("--statement is required")
+		}
+		id := domain.NewID("intent")
+		replacement := *old
+		replacement.IntentID = id
+		replacement.SprintID = sp.SprintID
+		replacement.Revision = 1
+		replacement.Status = "candidate"
+		replacement.Statement = *statement
+		replacement.Supersedes = oldID
+		replacement.ConfirmedAt = nil
+		replacement.ConfirmedBy = ""
+		if *rationale != "" {
+			replacement.Rationale = *rationale
+		}
+		r, err := s.Mutate(rt.expected, rt.actor(), "IntentSuperseded", oldID, map[string]string{"replacement_id": id}, func(p *domain.Project) error {
+			p.Intents[oldID].Status = "superseded"
+			p.Intents[oldID].Revision++
+			p.Intents[id] = &replacement
+			p.Sprints[sp.SprintID].IntentIDs = append(p.Sprints[sp.SprintID].IntentIDs, id)
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return map[string]any{"superseded": r.Intents[oldID], "replacement": r.Intents[id]}, r.Revision, nil
 	case "add-ac":
 		if len(args) < 2 {
 			return nil, 0, usageErr("intent id required")
@@ -2219,6 +2333,11 @@ func buildGraph(p *domain.Project) domain.Graph {
 	g := domain.Graph{Nodes: map[string]domain.Node{}, Edges: map[string]domain.Edge{}}
 	for id, in := range p.Intents {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "Intent", Label: in.Statement, Source: "authored", Confidence: 1}
+		for _, policy := range in.Policies {
+			policyID := semanticNodeID("policy", id, policy)
+			g.Nodes[policyID] = domain.Node{ID: policyID, Kind: "Policy", Label: policy, Source: "authored", Confidence: 1}
+			addEdge(&g, id, policyID, "depends_on")
+		}
 	}
 	for id, ac := range p.Criteria {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "AcceptanceCriterion", Label: ac.Statement, Source: "authored", Confidence: 1}
@@ -2236,6 +2355,20 @@ func buildGraph(p *domain.Project) domain.Graph {
 			addEdge(&g, id, ac, "verifies")
 		}
 	}
+	for runID, run := range p.QARuns {
+		g.Nodes[runID] = domain.Node{ID: runID, Kind: "Run", Label: run.Status, Source: "observed", Confidence: 1}
+		addEdge(&g, run.SprintID, runID, "belongs_to")
+		for _, qaCase := range run.Cases {
+			g.Nodes[qaCase.CaseID] = domain.Node{ID: qaCase.CaseID, Kind: "TestCase", Label: qaCase.Title, Source: "authored", Confidence: 1, Attributes: map[string]any{"variant": qaCase.Variant, "status": qaCase.Status}}
+			addEdge(&g, runID, qaCase.CaseID, "observed_by")
+			for _, acID := range qaCase.CriterionIDs {
+				addEdge(&g, qaCase.CaseID, acID, "verifies")
+			}
+			for _, evidenceID := range qaCase.EvidenceIDs {
+				addEdge(&g, evidenceID, qaCase.CaseID, "verifies")
+			}
+		}
+	}
 	for id, gap := range p.Gaps {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "Gap", Label: gap.Description, Source: "authored", Confidence: 1, Attributes: map[string]any{"category": gap.Category, "severity": gap.Severity, "status": gap.Status}}
 		for _, subject := range gap.SubjectRefs {
@@ -2244,6 +2377,18 @@ func buildGraph(p *domain.Project) domain.Graph {
 	}
 	for id, sprint := range p.Sprints {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "Sprint", Label: sprint.Title, Locator: sprint.DocumentRoot, Source: "authored", Confidence: 1, Attributes: map[string]any{"phase": sprint.Phase}}
+		for _, intentID := range sprint.IntentIDs {
+			addEdge(&g, id, intentID, "belongs_to")
+		}
+		for _, taskID := range sprint.TaskIDs {
+			addEdge(&g, id, taskID, "belongs_to")
+		}
+		for _, name := range []string{"00-prd/00-prd.md", "01-plan/00-plan.md", "02-design/00-design.md", "03-analysis/00-loop-check.md", "04-qa/00-qa-plan.md", "05-report/00-report.md"} {
+			locator := filepath.ToSlash(filepath.Join(sprint.DocumentRoot, name))
+			docID := semanticNodeID("document", id, name)
+			g.Nodes[docID] = domain.Node{ID: docID, Kind: "DocumentSection", Label: name, Locator: locator, Source: "authored", Confidence: 1}
+			addEdge(&g, id, docID, "belongs_to")
+		}
 	}
 	for id, approval := range p.Approvals {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "Approval", Label: string(approval.From) + " → " + string(approval.To), Source: "authored", Confidence: 1, Attributes: map[string]any{"status": approval.Status, "requester": approval.Requester, "approver": approval.Approver, "expires_at": approval.ExpiresAt}}
@@ -2267,7 +2412,22 @@ func mergeCodeGraph(g *domain.Graph, report codeintel.Report) {
 		g.Nodes[f.ID] = domain.Node{ID: f.ID, Kind: "File", Label: f.Path, Locator: f.Path, Source: "derived", Confidence: f.Confidence, Attributes: map[string]any{"primary_layer": f.Layer, "layer_reason": f.LayerReason}}
 	}
 	for _, c := range report.Components {
-		g.Nodes[c.ID] = domain.Node{ID: c.ID, Kind: "Symbol", Label: c.Name, Locator: c.Locator, Source: "derived", Confidence: c.Confidence, Attributes: map[string]any{"kind": c.Kind, "primary_layer": c.PrimaryLayer, "layer_reason": c.LayerReason, "imports": c.Imports, "references": c.References, "calls": c.Calls, "inputs": c.Inputs, "outputs": c.Outputs, "effects": c.Effects, "unknown": c.Unknown, "provider": c.Provider}}
+		g.Nodes[c.ID] = domain.Node{ID: c.ID, Kind: "Symbol", Label: c.Name, Locator: c.Locator, Source: "derived", Confidence: c.Confidence, Attributes: map[string]any{"kind": c.Kind, "primary_layer": c.PrimaryLayer, "layer_reason": c.LayerReason, "imports": nonNilStrings(c.Imports), "references": nonNilStrings(c.References), "calls": nonNilStrings(c.Calls), "inputs": nonNilStrings(c.Inputs), "outputs": nonNilStrings(c.Outputs), "effects": nonNilStrings(c.Effects), "unknown": nonNilStrings(c.Unknown), "provider": c.Provider}}
+		if c.PrimaryLayer != "" && c.PrimaryLayer != "Unknown" {
+			layerID := semanticNodeID("layer", c.PrimaryLayer)
+			g.Nodes[layerID] = domain.Node{ID: layerID, Kind: "Layer", Label: c.PrimaryLayer, Source: "derived", Confidence: c.Confidence}
+			addEdge(g, c.ID, layerID, "belongs_to")
+		}
+		for _, input := range c.Inputs {
+			shapeID := semanticNodeID("data-shape", "input", input)
+			g.Nodes[shapeID] = domain.Node{ID: shapeID, Kind: "DataShape", Label: input, Source: "derived", Confidence: c.Confidence}
+			addEdge(g, c.ID, shapeID, "reads")
+		}
+		for _, output := range append(append([]string{}, c.Outputs...), c.Effects...) {
+			shapeID := semanticNodeID("data-shape", "output", output)
+			g.Nodes[shapeID] = domain.Node{ID: shapeID, Kind: "DataShape", Label: output, Source: "derived", Confidence: c.Confidence}
+			addEdge(g, c.ID, shapeID, "writes")
+		}
 	}
 	for _, e := range report.Edges {
 		if _, ok := g.Nodes[e.From]; !ok {
@@ -2279,6 +2439,16 @@ func mergeCodeGraph(g *domain.Graph, report codeintel.Report) {
 		id := deterministicEdgeID(e.From, e.To, e.Kind, e.Provider, e.Locator)
 		g.Edges[id] = domain.Edge{ID: id, From: e.From, To: e.To, Kind: e.Kind, SourceLocator: e.Locator, Provider: e.Provider, Confidence: e.Confidence}
 	}
+}
+func semanticNodeID(kind string, values ...string) string {
+	sum := sha256.Sum256([]byte(kind + "\x00" + strings.Join(values, "\x00")))
+	return kind + "_" + hex.EncodeToString(sum[:12])
+}
+func nonNilStrings(values []string) []string {
+	if values == nil {
+		return []string{}
+	}
+	return values
 }
 func deterministicEdgeID(from, to, kind, provider, locator string) string {
 	sum := sha256.Sum256([]byte(strings.Join([]string{from, to, kind, provider, locator}, "\x00")))
@@ -2451,6 +2621,14 @@ func csv(v string) []string {
 		}
 	}
 	return out
+}
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if strings.TrimSpace(value) != "" {
+			return value
+		}
+	}
+	return ""
 }
 func remove(v []string, s string) []string {
 	out := v[:0]

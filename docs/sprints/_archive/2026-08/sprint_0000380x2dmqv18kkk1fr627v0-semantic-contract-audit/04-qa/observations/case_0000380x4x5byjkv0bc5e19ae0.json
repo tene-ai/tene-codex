@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "semantic-contract-auditor",
+  "run_id": "run_0000380x4x5bx76nykm72c0w18",
+  "case_id": "case_0000380x4x5byjkv0bc5e19ae0",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T03:13:53.391665Z",
+  "finished_at": "2026-08-20T03:13:53.397558Z",
+  "checkpoints": [
+    {
+      "name": "semantic-audit-validation",
+      "kind": "contract-command-state",
+      "before": {
+        "variant": "validation",
+        "verdict": "pending"
+      },
+      "after": {
+        "variant": "validation",
+        "verdict": "rejected-as-designed",
+        "actual": "missing MasterPlan symbol was rejected as symbol-missing"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 semantic audit validation contract",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    },
+    {
+      "statement": "L2 semantic audit validation contract",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    },
+    {
+      "statement": "L3 semantic audit validation contract",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    },
+    {
+      "statement": "L4 semantic audit validation contract",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    },
+    {
+      "statement": "L5 semantic audit validation contract",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    },
+    {
+      "statement": "L6 semantic audit validation contract",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    },
+    {
+      "statement": "L7 semantic audit validation contract",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "missing MasterPlan symbol was rejected as symbol-missing",
+      "expected": "valid contracts pass and every invalid/missing/untrusted/failing proof is rejected"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "1289f9f9246a48fc56022bf67485c5c83b349f6a446b8202c2ecc45e7806cc86",
+  "state_revision": 854,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "requirements-audit/2.0.0"
+}

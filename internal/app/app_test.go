@@ -99,6 +99,68 @@ func TestMasterPlanStatusAndDependencyValidation(t *testing.T) {
 	}
 }
 
+func TestMasterMetadataAndStructuredIntentLifecycle(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "semantic")
+	if code, env := execute(t, root, "master", "create", "--objective", "ship safely", "--milestones", "mvp,ga", "--releases", "v1", "--risks", "false-pass", "--invariants", "evidence required,secret safe"); code != 0 || env.Result.(map[string]any)["plan"].(map[string]any)["objective"] != "ship safely" {
+		t.Fatalf("code=%d env=%#v", code, env)
+	}
+	_, created := execute(t, root, "sprint", "create", "--title", "Rich intent", "--milestone", "mvp", "--release", "v1")
+	sprint := created.Result.(map[string]any)["sprint"].(map[string]any)
+	if sprint["milestone"] != "mvp" || sprint["release"] != "v1" {
+		t.Fatalf("%#v", sprint)
+	}
+	execute(t, root, "phase", "transition", "prd")
+	_, captured := execute(t, root, "intent", "capture", "--statement", "remember semantics", "--actors", "buyer,operator", "--outcomes", "visible success", "--policies", "tenant isolation", "--business-rules", "one active order", "--ux-states", "empty,confirmed", "--data-invariants", "one write", "--constraints", "offline", "--assumptions", "local", "--open-questions", "retention", "--source-locator", "conversation:42", "--ac", "works", "--observable", "confirmed")
+	intent := captured.Result.(map[string]any)["intent"].(map[string]any)
+	if len(intent["actors"].([]any)) != 2 || intent["source_locator"] != "conversation:42" {
+		t.Fatalf("%#v", intent)
+	}
+	id := intent["intent_id"].(string)
+	if code, _ := execute(t, root, "intent", "confirm", id); code != 0 {
+		t.Fatal(code)
+	}
+	code, superseded := execute(t, root, "intent", "supersede", id, "--statement", "remember revised semantics")
+	if code != 0 || superseded.Result.(map[string]any)["superseded"].(map[string]any)["status"] != "superseded" || superseded.Result.(map[string]any)["replacement"].(map[string]any)["supersedes"] != id {
+		t.Fatalf("%#v", superseded)
+	}
+	if code, _ := execute(t, root, "graph", "build"); code != 0 {
+		t.Fatal(code)
+	}
+	p, err := state.New(root).Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	kinds := map[string]bool{}
+	for _, node := range p.Graph.Nodes {
+		kinds[node.Kind] = true
+	}
+	if !kinds["Policy"] || !kinds["DocumentSection"] || !kinds["Sprint"] || !kinds["Intent"] {
+		t.Fatalf("graph kinds=%#v", kinds)
+	}
+}
+
+func TestGraphBuildKeepsJournalProjectionEquivalent(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "graph replay")
+	execute(t, root, "sprint", "create", "--title", "Graph replay")
+	execute(t, root, "graph", "build")
+	store := state.New(root)
+	live, err := store.Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	replayed, err := store.Replay()
+	if err != nil {
+		t.Fatal(err)
+	}
+	a, _ := json.MarshalIndent(live, "", "  ")
+	b, _ := json.MarshalIndent(replayed, "", "  ")
+	if !bytes.Equal(a, b) {
+		t.Fatalf("live/replay mismatch\nlive=%s\nreplayed=%s", a, b)
+	}
+}
+
 func TestQAPlanVariantContract(t *testing.T) {
 	want := []string{"happy", "alternate", "empty", "validation", "permission", "failure", "recovery"}
 	if got := qaVariants(); !slices.Equal(got, want) {
@@ -454,7 +516,7 @@ func TestCLIApprovalLoopAndGapLifecycle(t *testing.T) {
 	taskID := taskEnv.Result.(map[string]any)["task_id"].(string)
 	execute(t, root, "phase", "transition", "design")
 	completeDocument(t, root, filepath.ToSlash(filepath.Join(sprint["document_root"].(string), "02-design", "00-design.md")))
-	if code, env := execute(t, root, "phase", "transition", "do", "--dry-run"); code != 3 || env.OK {
+	if code, env := execute(t, root, "phase", "transition", "do", "--dry-run"); code != 3 || env.OK || env.Errors[0].Details == nil || env.Revision == 0 || env.Errors[0].Retryable {
 		t.Fatalf("approval boundary passed: %#v", env)
 	}
 	expires := time.Now().UTC().Add(time.Hour).Format(time.RFC3339)

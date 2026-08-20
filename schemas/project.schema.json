@@ -9,6 +9,7 @@
     "project_id",
     "name",
     "profile",
+    "master_plan",
     "revision",
     "sprints",
     "tasks",
@@ -26,6 +27,7 @@
     "project_id": {"type": "string", "pattern": "^project_[0-9a-z]+$"},
     "name": {"type": "string", "minLength": 1},
     "profile": {"enum": ["strict", "standard", "light", "off"]},
+    "master_plan": {"$ref": "#/$defs/master_plan"},
     "active_sprint_id": {"type": "string"},
     "revision": {"type": "integer", "minimum": 0},
     "updated_at": {"type": "string", "format": "date-time"},
@@ -42,6 +44,17 @@
     "request_results": {"type": "object"}
   },
   "$defs": {
+    "master_plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["objective", "milestones", "releases", "common_risks", "cross_sprint_invariants"],
+      "properties": {
+        "objective": {"type": "string", "minLength": 1},
+        "milestones": {"type": "array", "items": {"type": "string"}},
+        "releases": {"type": "array", "items": {"type": "string"}},
+        "common_risks": {"type": "array", "items": {"type": "string"}},
+        "cross_sprint_invariants": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
     "approval": {
       "type": "object",
       "additionalProperties": false,
@@ -73,6 +86,8 @@
         "sprint_id": {"type": "string", "pattern": "^sprint_[0-9a-z]+$"},
         "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
         "title": {"type": "string", "minLength": 1},
+        "milestone": {"type": "string"},
+        "release": {"type": "string"},
         "phase": {"enum": ["draft", "prd", "plan", "design", "do", "loop-check", "qa", "report", "archived"]},
         "document_root": {"type": "string"},
         "loop_iteration": {"type": "integer", "minimum": 0},

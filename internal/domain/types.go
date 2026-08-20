@@ -34,6 +34,7 @@ type Project struct {
 	ProjectID      string                   `json:"project_id"`
 	Name           string                   `json:"name"`
 	Profile        string                   `json:"profile"`
+	MasterPlan     MasterPlan               `json:"master_plan"`
 	ActiveSprintID string                   `json:"active_sprint_id,omitempty"`
 	Revision       uint64                   `json:"revision"`
 	UpdatedAt      time.Time                `json:"updated_at"`
@@ -50,10 +51,20 @@ type Project struct {
 	RequestResults map[string]RequestResult `json:"request_results,omitempty"`
 }
 
+type MasterPlan struct {
+	Objective             string   `json:"objective"`
+	Milestones            []string `json:"milestones"`
+	Releases              []string `json:"releases"`
+	CommonRisks           []string `json:"common_risks"`
+	CrossSprintInvariants []string `json:"cross_sprint_invariants"`
+}
+
 type Sprint struct {
 	SprintID          string     `json:"sprint_id"`
 	Slug              string     `json:"slug"`
 	Title             string     `json:"title"`
+	Milestone         string     `json:"milestone,omitempty"`
+	Release           string     `json:"release,omitempty"`
 	Phase             Phase      `json:"phase"`
 	Predecessors      []string   `json:"predecessor_ids,omitempty"`
 	IntentIDs         []string   `json:"intent_ids,omitempty"`
@@ -95,7 +106,15 @@ type Intent struct {
 	Actors          []string   `json:"actors,omitempty"`
 	DesiredOutcomes []string   `json:"desired_outcomes,omitempty"`
 	NonGoals        []string   `json:"non_goals,omitempty"`
+	Policies        []string   `json:"policies,omitempty"`
+	BusinessRules   []string   `json:"business_rules,omitempty"`
+	UXStates        []string   `json:"ux_states,omitempty"`
+	DataInvariants  []string   `json:"data_invariants,omitempty"`
+	Constraints     []string   `json:"constraints,omitempty"`
+	Assumptions     []string   `json:"assumptions,omitempty"`
+	OpenQuestions   []string   `json:"open_questions,omitempty"`
 	Source          string     `json:"source"`
+	SourceLocator   string     `json:"source_locator,omitempty"`
 	ConfirmedBy     string     `json:"confirmed_by,omitempty"`
 	ConfirmedAt     *time.Time `json:"confirmed_at,omitempty"`
 	Supersedes      string     `json:"supersedes,omitempty"`
@@ -289,7 +308,7 @@ type Finding struct {
 func NewProject(id, name, profile string, now time.Time) *Project {
 	return &Project{
 		SchemaVersion: SchemaVersion, ProjectID: id, Name: name, Profile: profile,
-		UpdatedAt: now.UTC(), Sprints: map[string]*Sprint{}, Tasks: map[string]*Task{},
+		UpdatedAt: now.UTC(), MasterPlan: MasterPlan{Objective: name, Milestones: []string{}, Releases: []string{}, CommonRisks: []string{}, CrossSprintInvariants: []string{"blocking acceptance criteria require valid evidence"}}, Sprints: map[string]*Sprint{}, Tasks: map[string]*Task{},
 		Intents: map[string]*Intent{}, Criteria: map[string]*Criterion{}, Gaps: map[string]*Gap{},
 		Waivers: map[string]*Waiver{}, Approvals: map[string]*Approval{},
 		Evidence: map[string]*Evidence{}, QARuns: map[string]*QARun{},

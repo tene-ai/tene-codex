@@ -1,7 +1,27 @@
 {
   "active_sprint_id": "",
+  "plan": {
+    "objective": "Deliver portable spec-driven Codex workflows with evidence-backed QA",
+    "milestones": [
+      "MVP semantic completeness",
+      "public marketplace release"
+    ],
+    "releases": [
+      "v0.1.0"
+    ],
+    "common_risks": [
+      "false-pass evidence",
+      "workflow fatigue",
+      "secret leakage"
+    ],
+    "cross_sprint_invariants": [
+      "blocking AC requires content-valid evidence",
+      "secrets only cross the tene run child boundary",
+      "all implementation follows the fixed Sprint lifecycle"
+    ]
+  },
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 807,
+  "revision": 874,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -129,6 +149,14 @@
       "phase": "archived",
       "predecessor_ids": [
         "sprint_0000380wyd2xm0eey9n6e31px0"
+      ]
+    },
+    {
+      "sprint_id": "sprint_0000380x2dmqv18kkk1fr627v0",
+      "title": "Semantic Contract Completion Audit",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380x0n1akqny1ty6y9kt8g"
       ]
     }
   ]

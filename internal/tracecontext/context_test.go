@@ -41,6 +41,9 @@ func TestContextBudgetPhaseAndFreshness(t *testing.T) {
 	if pack.BudgetUnit != "utf8-bytes" || pack.ContentHash == "" {
 		t.Fatalf("%#v", pack)
 	}
+	if pack.BudgetAllocation["policy"] != 4096*15/100 || pack.BudgetAllocation["reserve"] != 4096*5/100 {
+		t.Fatalf("allocations=%#v", pack.BudgetAllocation)
+	}
 	if fresh := ValidateContextPack(root, p, pack); !fresh.Fresh {
 		t.Fatalf("%#v", fresh)
 	}

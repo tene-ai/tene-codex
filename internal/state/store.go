@@ -250,15 +250,17 @@ func masterPlan(p *domain.Project) map[string]any {
 	type item struct {
 		SprintID     string       `json:"sprint_id"`
 		Title        string       `json:"title"`
+		Milestone    string       `json:"milestone,omitempty"`
+		Release      string       `json:"release,omitempty"`
 		Phase        domain.Phase `json:"phase"`
 		Predecessors []string     `json:"predecessor_ids,omitempty"`
 	}
 	items := make([]item, 0, len(p.Sprints))
 	for _, sprint := range p.Sprints {
-		items = append(items, item{SprintID: sprint.SprintID, Title: sprint.Title, Phase: sprint.Phase, Predecessors: sprint.Predecessors})
+		items = append(items, item{SprintID: sprint.SprintID, Title: sprint.Title, Milestone: sprint.Milestone, Release: sprint.Release, Phase: sprint.Phase, Predecessors: sprint.Predecessors})
 	}
 	sort.Slice(items, func(i, j int) bool { return items[i].SprintID < items[j].SprintID })
-	return map[string]any{"schema_version": domain.SchemaVersion, "project_id": p.ProjectID, "revision": p.Revision, "active_sprint_id": p.ActiveSprintID, "sprints": items}
+	return map[string]any{"schema_version": domain.SchemaVersion, "project_id": p.ProjectID, "revision": p.Revision, "active_sprint_id": p.ActiveSprintID, "plan": p.MasterPlan, "sprints": items}
 }
 
 func (s *Store) VerifyJournal() ([]domain.Event, error) {
