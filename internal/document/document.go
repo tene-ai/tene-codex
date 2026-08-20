@@ -4,6 +4,9 @@
 package document
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,6 +15,87 @@ import (
 
 	"github.com/tene-ai/tene-codex/internal/domain"
 )
+
+type SyncResult struct {
+	Path       string `json:"path"`
+	Changed    bool   `json:"changed"`
+	Applied    bool   `json:"applied"`
+	BeforeHash string `json:"before_hash"`
+	AfterHash  string `json:"after_hash"`
+}
+
+func Sync(root string, project *domain.Project, sprint *domain.Sprint, phase domain.Phase, apply bool) (SyncResult, error) {
+	path := Path(root, sprint, phase)
+	before, err := os.ReadFile(path)
+	if err != nil {
+		return SyncResult{}, err
+	}
+	after := append([]byte(nil), before...)
+	status := "draft"
+	if phase == sprint.Phase {
+		status = "active"
+	} else if phaseIndex(phase) < phaseIndex(sprint.Phase) {
+		status = "complete"
+	}
+	updates := map[string]string{"revision": fmt.Sprint(project.Revision), "status": status, "intent_ids": "[" + strings.Join(sprint.IntentIDs, ", ") + "]"}
+	for key, value := range updates {
+		after = replaceFrontmatter(after, key, value)
+	}
+	var summary strings.Builder
+	summary.WriteString("<!-- tene:generated:traceability:start -->\n### Generated Traceability\n\n")
+	fmt.Fprintf(&summary, "- State revision: `%d`\n- Sprint: `%s`\n- Intents: `%s`\n- Tasks: `%s`\n", project.Revision, sprint.SprintID, strings.Join(sprint.IntentIDs, "`, `"), strings.Join(sprint.TaskIDs, "`, `"))
+	summary.WriteString("\n<!-- tene:generated:traceability:end -->")
+	after = replaceGenerated(after, "traceability", []byte(summary.String()))
+	result := SyncResult{Path: path, Changed: !bytes.Equal(before, after), Applied: apply, BeforeHash: shortHash(before), AfterHash: shortHash(after)}
+	if apply && result.Changed {
+		if err := os.WriteFile(path, after, 0644); err != nil {
+			return result, err
+		}
+	}
+	return result, nil
+}
+
+func replaceFrontmatter(input []byte, key, value string) []byte {
+	lines := strings.Split(string(input), "\n")
+	in := false
+	for i, line := range lines {
+		if line == "---" {
+			if !in {
+				in = true
+				continue
+			}
+			break
+		}
+		if in && strings.HasPrefix(line, key+":") {
+			lines[i] = key + ": " + value
+			return []byte(strings.Join(lines, "\n"))
+		}
+	}
+	return input
+}
+func replaceGenerated(input []byte, id string, block []byte) []byte {
+	start := []byte("<!-- tene:generated:" + id + ":start -->")
+	end := []byte("<!-- tene:generated:" + id + ":end -->")
+	a := bytes.Index(input, start)
+	b := bytes.Index(input, end)
+	if a >= 0 && b >= a {
+		return append(append(append([]byte(nil), input[:a]...), block...), input[b+len(end):]...)
+	}
+	out := append([]byte(nil), input...)
+	if len(out) > 0 && out[len(out)-1] != '\n' {
+		out = append(out, '\n')
+	}
+	return append(append(out, '\n'), append(block, '\n')...)
+}
+func shortHash(b []byte) string { s := sha256.Sum256(b); return hex.EncodeToString(s[:]) }
+func phaseIndex(p domain.Phase) int {
+	for i, x := range domain.PhaseOrder {
+		if x == p {
+			return i
+		}
+	}
+	return -1
+}
 
 type Spec struct {
 	Dir, File, Type string

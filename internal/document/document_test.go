@@ -59,3 +59,44 @@ func TestValidationFindsEmptySections(t *testing.T) {
 		t.Fatal("expected empty-section findings")
 	}
 }
+
+func TestSyncPreviewsThenUpdatesOnlyManagedRegions(t *testing.T) {
+	root := t.TempDir()
+	p := domain.NewProject("project_test", "test", "standard", time.Now())
+	p.Revision = 42
+	sp := &domain.Sprint{SprintID: "sprint_test", Title: "Feature", Phase: domain.PhaseDesign, IntentIDs: []string{"intent_a"}, TaskIDs: []string{"task_a"}, DocumentRoot: "docs/sprints/sprint_test-feature"}
+	path, _, err := Scaffold(root, p, sp, domain.PhasePRD)
+	if err != nil {
+		t.Fatal(err)
+	}
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, _ = f.WriteString("\nUser authored prose must survive.\n")
+	_ = f.Close()
+	before, _ := os.ReadFile(path)
+	preview, err := Sync(root, p, sp, domain.PhasePRD, false)
+	if err != nil || !preview.Changed || preview.Applied {
+		t.Fatalf("preview %#v %v", preview, err)
+	}
+	still, _ := os.ReadFile(path)
+	if string(still) != string(before) {
+		t.Fatal("preview mutated document")
+	}
+	applied, err := Sync(root, p, sp, domain.PhasePRD, true)
+	if err != nil || !applied.Applied {
+		t.Fatalf("apply %#v %v", applied, err)
+	}
+	after, _ := os.ReadFile(path)
+	text := string(after)
+	for _, want := range []string{"status: complete", "revision: 42", "intent_ids: [intent_a]", "User authored prose must survive.", "tene:generated:traceability:start", "task_a"} {
+		if !strings.Contains(text, want) {
+			t.Fatalf("missing %q in %s", want, text)
+		}
+	}
+	again, err := Sync(root, p, sp, domain.PhasePRD, true)
+	if err != nil || again.Changed {
+		t.Fatalf("sync not idempotent: %#v %v", again, err)
+	}
+}

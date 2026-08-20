@@ -203,9 +203,20 @@ func (s *Store) Mutate(expected *uint64, actor domain.Actor, eventType, aggregat
 		if expected != nil && p.Revision != *expected {
 			return fmt.Errorf("%w: expected %d, current %d", ErrConflict, *expected, p.Revision)
 		}
+		if actor.SessionID != "" {
+			if cached, ok := p.RequestResults[actor.SessionID]; ok {
+				if cached.CommandHash != actor.ID {
+					return fmt.Errorf("%w: request ID reused for a different command", ErrConflict)
+				}
+				return fmt.Errorf("%w: request mutation already committed", ErrConflict)
+			}
+		}
 		before := jsonTree(p)
 		if err := fn(p); err != nil {
 			return err
+		}
+		if actor.SessionID != "" {
+			p.RequestResults[actor.SessionID] = domain.RequestResult{Revision: p.Revision + 1, CommandHash: actor.ID, Completed: false}
 		}
 		previousHash, sequence, err := s.lastEvent()
 		if err != nil {

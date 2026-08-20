@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "codex-deterministic-test-observer",
+  "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+  "case_id": "case_0000380wzhdvxrnbasyaakyge4",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T03:00:00Z",
+  "finished_at": "2026-08-20T03:01:00Z",
+  "checkpoints": [
+    {
+      "name": "cli-contract-matrix",
+      "kind": "command-state",
+      "before": {
+        "variant": "alternate"
+      },
+      "after": {
+        "sync": "preserved",
+        "retry": "deduplicated",
+        "waiver": "approved-only"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "Schemas and commands compile",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "layer:L1"
+      ],
+      "actual": "passed",
+      "expected": "passed"
+    },
+    {
+      "statement": "Golden and unit contracts pass",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "layer:L2"
+      ],
+      "actual": "passed",
+      "expected": "passed"
+    },
+    {
+      "statement": "CLI contract journey passes",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "layer:L3",
+        "observable",
+        "variant:alternate"
+      ],
+      "actual": "preview apply retry and approval verified",
+      "expected": "contract preserved"
+    },
+    {
+      "statement": "Conflict and unauthorized activation fail closed",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "layer:L6"
+      ],
+      "actual": "rejected",
+      "expected": "rejected"
+    },
+    {
+      "statement": "Full regression passes",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "layer:L7"
+      ],
+      "actual": "passed",
+      "expected": "passed"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+  "state_revision": 648,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "go1.25.0 + tene-workflow-dev"
+}

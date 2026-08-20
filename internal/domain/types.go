@@ -148,16 +148,20 @@ type Approval struct {
 }
 
 type Waiver struct {
-	WaiverID  string     `json:"waiver_id"`
-	SprintID  string     `json:"sprint_id"`
-	GapID     string     `json:"gap_id"`
-	Reason    string     `json:"reason"`
-	Scope     string     `json:"scope"`
-	Approver  string     `json:"approver"`
-	Status    string     `json:"status"`
-	CreatedAt time.Time  `json:"created_at"`
-	ExpiresAt time.Time  `json:"expires_at"`
-	RevokedAt *time.Time `json:"revoked_at,omitempty"`
+	WaiverID    string     `json:"waiver_id"`
+	SprintID    string     `json:"sprint_id"`
+	GapID       string     `json:"gap_id"`
+	Reason      string     `json:"reason"`
+	Scope       string     `json:"scope"`
+	Approver    string     `json:"approver"`
+	Status      string     `json:"status"`
+	CreatedAt   time.Time  `json:"created_at"`
+	ExpiresAt   time.Time  `json:"expires_at"`
+	RevokedAt   *time.Time `json:"revoked_at,omitempty"`
+	Requester   string     `json:"requester,omitempty"`
+	RequestedAt *time.Time `json:"requested_at,omitempty"`
+	ApprovedAt  *time.Time `json:"approved_at,omitempty"`
+	ExpiredAt   *time.Time `json:"expired_at,omitempty"`
 }
 
 type Evidence struct {
@@ -266,8 +270,10 @@ type Event struct {
 }
 
 type RequestResult struct {
-	Revision uint64 `json:"revision"`
-	Result   any    `json:"result"`
+	Revision    uint64 `json:"revision"`
+	CommandHash string `json:"command_hash"`
+	Result      any    `json:"result"`
+	Completed   bool   `json:"completed"`
 }
 
 type Finding struct {

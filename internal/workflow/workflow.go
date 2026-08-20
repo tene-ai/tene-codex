@@ -47,7 +47,7 @@ func CanTransitionWithApproval(p *domain.Project, sprint *domain.Sprint, target 
 		domain.PhaseDo:        {domain.PhaseLoopCheck},
 		domain.PhaseLoopCheck: {domain.PhaseDo, domain.PhaseQA},
 		domain.PhaseQA:        {domain.PhaseDo, domain.PhaseLoopCheck, domain.PhaseReport},
-		domain.PhaseReport:    {domain.PhaseArchived},
+		domain.PhaseReport:    {domain.PhaseLoopCheck, domain.PhaseArchived},
 	}
 	if !slices.Contains(allowed[sprint.Phase], target) {
 		return []domain.Finding{finding("WF_INVALID_TRANSITION", "blocker", sprint.SprintID, fmt.Sprintf("cannot transition from %s to %s", sprint.Phase, target), "Follow the fixed sprint lifecycle.", false)}

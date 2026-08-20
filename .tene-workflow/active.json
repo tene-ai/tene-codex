@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 620,
-  "updated_at": "2026-08-20T02:14:14.5697Z",
+  "revision": 722,
+  "updated_at": "2026-08-20T02:33:40.395896Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -414,6 +414,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Automatic analyzer detected 6 of 6 seeded drift classes, self-analysis returned zero gaps, and reconciliation converged without duplicates.",
       "last_loop_at": "2026-08-20T02:09:58.420472Z"
+    },
+    "sprint_0000380wyd2xm0eey9n6e31px0": {
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "slug": "document-cli-contracts",
+      "title": "Document Sync and CLI Contract Completion",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wx6xt073n63as8wkzyw"
+      ],
+      "intent_ids": [
+        "intent_0000380wyd7d99vkcqmwbmz158"
+      ],
+      "task_ids": [
+        "task_0000380wz9ygjx9rs8dkgkrtf0",
+        "task_0000380wza05c2zmfcjch8s92m"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts",
+      "archived_at": "2026-08-20T02:33:40.153252Z",
+      "approval_refs": [
+        "approval_0000380wzbz6j9eehvqzc7tpc4",
+        "approval_0000380x0haaymkw70dyq2v2x0"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/05-report/00-report.md",
+      "loop_iteration": 2,
+      "max_loop_iterations": 8,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Late request crash-window hardening is task-linked, fails closed without duplicate mutation, and automatic analysis reconverged at zero gaps.",
+      "last_loop_at": "2026-08-20T02:29:59.803595Z"
     }
   },
   "tasks": {
@@ -843,6 +873,40 @@
         "skills/tene-loop-check/SKILL.md",
         "references/cli.md"
       ]
+    },
+    "task_0000380wz9ygjx9rs8dkgkrtf0": {
+      "task_id": "task_0000380wz9ygjx9rs8dkgkrtf0",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "title": "Implement managed document sync and public CLI aliases flags",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "layer": "Interface",
+      "artifacts": [
+        "internal/document/document.go",
+        "internal/document/document_test.go",
+        "references/cli.md"
+      ]
+    },
+    "task_0000380wza05c2zmfcjch8s92m": {
+      "task_id": "task_0000380wza05c2zmfcjch8s92m",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "title": "Implement request evidence dedup and waiver approval lifecycle",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "layer": "Business Logic",
+      "artifacts": [
+        "internal/app/app.go",
+        "internal/app/app_test.go",
+        "internal/domain/types.go",
+        "schemas/project.schema.json",
+        "references/workflow.md",
+        "internal/state/store.go",
+        "internal/workflow/workflow.go"
+      ]
     }
   },
   "intents": {
@@ -1008,6 +1072,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T02:07:36.799027Z"
+    },
+    "intent_0000380wyd7d99vkcqmwbmz158": {
+      "intent_id": "intent_0000380wyd7d99vkcqmwbmz158",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "The public CLI must implement its documented commands, flags, idempotency and document synchronization contracts without overwriting user-authored Markdown.",
+      "rationale": "Independent audit found absent document sync and mismatched command/flag contracts.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T02:22:50.47364Z"
     }
   },
   "acceptance_criteria": {
@@ -1283,6 +1358,13 @@
       "statement": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs.",
       "priority": "blocking",
       "observable": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records."
+    },
+    "ac_0000380wyd7d8zhc4mwqd86wkm": {
+      "ac_id": "ac_0000380wyd7d8zhc4mwqd86wkm",
+      "intent_id": "intent_0000380wyd7d99vkcqmwbmz158",
+      "statement": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified.",
+      "priority": "blocking",
+      "observable": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior."
     }
   },
   "gaps": {
@@ -1573,6 +1655,34 @@
       "approved_at": "2026-08-20T02:14:13.28415Z",
       "expires_at": "2026-08-21T02:14:11Z",
       "consumed_at": "2026-08-20T02:14:14.386927Z"
+    },
+    "approval_0000380wzbz6j9eehvqzc7tpc4": {
+      "approval_id": "approval_0000380wzbz6j9eehvqzc7tpc4",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed continuous implementation of CLI contract gaps.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:23:26.313454Z",
+      "approved_at": "2026-08-20T02:23:27.053531Z",
+      "expires_at": "2026-08-21T02:23:25Z",
+      "consumed_at": "2026-08-20T02:23:27.889924Z"
+    },
+    "approval_0000380x0haaymkw70dyq2v2x0": {
+      "approval_id": "approval_0000380x0haaymkw70dyq2v2x0",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "from": "report",
+      "to": "archived",
+      "reason": "Document and CLI contract Sprint passed repeated loop analysis, final QA, race, E2E, release and report gates.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:33:38.223674Z",
+      "approved_at": "2026-08-20T02:33:39.185617Z",
+      "expires_at": "2026-08-21T02:33:37Z",
+      "consumed_at": "2026-08-20T02:33:40.153252Z"
     }
   },
   "evidence": {
@@ -3865,6 +3975,1994 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T02:11:28.193902Z",
       "finished_at": "2026-08-20T02:11:29.191054Z"
+    },
+    "evidence_0000380wzmakpnrtmnt22xnghm": {
+      "evidence_id": "evidence_0000380wzmakpnrtmnt22xnghm",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvxmae2yn4dsxth8.json",
+      "sha256": "1d0b2b4cdd00fa264921635e8482c86ea4d99efaaf67b1c9b129ff32aee5d143",
+      "size": 2052,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:43.227151Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvxmae2yn4dsxth8",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wzmc163b52nbkd5b97w": {
+      "evidence_id": "evidence_0000380wzmc163b52nbkd5b97w",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvxrnbasyaakyge4.json",
+      "sha256": "f7c87db0652942dda7d5f03954a72832491967755112592bae3d8ce04c52069e",
+      "size": 2060,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:43.955951Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvxrnbasyaakyge4",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wzmdedgr2kg0ax36mg8": {
+      "evidence_id": "evidence_0000380wzmdedgr2kg0ax36mg8",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvw39t0xwfn3qf4c.json",
+      "sha256": "19bc2ae0e9e73264294b3b08d74515edcacc8ecc700435a1207259a0695ad070",
+      "size": 2052,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:44.678565Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvw39t0xwfn3qf4c",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wzmey8ysj44xgcxx3ew": {
+      "evidence_id": "evidence_0000380wzmey8ysj44xgcxx3ew",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvwn9x2pyrs78qvw.json",
+      "sha256": "bca1fa510c1248fbb9c4e0981fb18186c273e7f96e22ea2d192546cd94b5fefb",
+      "size": 2062,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:45.444397Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvwn9x2pyrs78qvw",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wzmge38g568vdv4zbc4": {
+      "evidence_id": "evidence_0000380wzmge38g568vdv4zbc4",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvzxkc8pqsanfnhc.json",
+      "sha256": "96352f7d640db6752de45136ff5dc6e092889f359e28d976801ed5a47db4bba1",
+      "size": 2062,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:46.209837Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvzxkc8pqsanfnhc",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wzmhybbbds3bnmyphtg": {
+      "evidence_id": "evidence_0000380wzmhybbbds3bnmyphtg",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvzjct1d6hgczxw8.json",
+      "sha256": "02989dfc8e75a3ae048be5f66e0a6fe8724f328abbc400dd7c4f459d7c6a45ed",
+      "size": 2056,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:46.981471Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvzjct1d6hgczxw8",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wzmkg6316be5cck8g6m": {
+      "evidence_id": "evidence_0000380wzmkg6316be5cck8g6m",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvzxv6anppzf8e4r.json",
+      "sha256": "be6ddb80f318d89f5079e5e965dc04888a03034efe20d2ec1d573b856fb28382",
+      "size": 2058,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:25:47.779554Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvzxv6anppzf8e4r",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Schemas and commands compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Golden and unit contracts pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI contract journey passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "preview apply retry and approval verified",
+          "expected": "contract preserved"
+        },
+        {
+          "statement": "Conflict and unauthorized activation fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected",
+          "expected": "rejected"
+        },
+        {
+          "statement": "Full regression passes",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:00:00Z",
+      "finished_at": "2026-08-20T03:01:00Z"
+    },
+    "evidence_0000380wznrvrb4se3eg3r4kzg": {
+      "evidence_id": "evidence_0000380wznrvrb4se3eg3r4kzg",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvxmae2yn4dsxth8-go-test.json",
+      "sha256": "bc3b02fa930a2d78dd4932353cd23182659b05ef7a246efa4749cc2abc1a6279",
+      "size": 1141,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:06.909142Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvxmae2yn4dsxth8",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:25:48.539019Z",
+      "finished_at": "2026-08-20T02:26:06.907038Z"
+    },
+    "evidence_0000380wznvwv0mt2736z4r32m": {
+      "evidence_id": "evidence_0000380wznvwv0mt2736z4r32m",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvxrnbasyaakyge4-go-test.json",
+      "sha256": "6eceb2d289fbbe408ea59d2472f33ec4e73af1dfea9dc43d571f7dd24510c3b9",
+      "size": 1141,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:08.46207Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvxrnbasyaakyge4",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:26:07.68995Z",
+      "finished_at": "2026-08-20T02:26:08.459712Z"
+    },
+    "evidence_0000380wznzdmqr3gc1fv6wez0": {
+      "evidence_id": "evidence_0000380wznzdmqr3gc1fv6wez0",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvw39t0xwfn3qf4c-go-test.json",
+      "sha256": "b9bf7878284188e8a850e5a9074427281b3497de4a5e598c62f90969dd9632bc",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:10.26711Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvw39t0xwfn3qf4c",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:26:09.226222Z",
+      "finished_at": "2026-08-20T02:26:10.265073Z"
+    },
+    "evidence_0000380wzp30np66kvn6f8etac": {
+      "evidence_id": "evidence_0000380wzp30np66kvn6f8etac",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvwn9x2pyrs78qvw-go-test.json",
+      "sha256": "a75bfec3e6ca66f9e9cc9db7772df590bbcf3013e710c0237b57c6b631ef3355",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:12.107057Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvwn9x2pyrs78qvw",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:26:11.090834Z",
+      "finished_at": "2026-08-20T02:26:12.104287Z"
+    },
+    "evidence_0000380wzp6gdegkc5yefesq7c": {
+      "evidence_id": "evidence_0000380wzp6gdegkc5yefesq7c",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvzxkc8pqsanfnhc-go-test.json",
+      "sha256": "cb91378d09b08db360b4f47775e886a037954b666f0bb781ea65a73ceb5526a5",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:13.895634Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvzxkc8pqsanfnhc",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:26:12.881494Z",
+      "finished_at": "2026-08-20T02:26:13.893432Z"
+    },
+    "evidence_0000380wzpa20n3gv7c5bvyb18": {
+      "evidence_id": "evidence_0000380wzpa20n3gv7c5bvyb18",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvzjct1d6hgczxw8-go-test.json",
+      "sha256": "dc15dbe58d0f495e27118911ae758db98b33a31975b7f6554327f0c9427586fb",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:15.713724Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvzjct1d6hgczxw8",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:26:14.700484Z",
+      "finished_at": "2026-08-20T02:26:15.710811Z"
+    },
+    "evidence_0000380wzpdseqzxzxcdwb7cwg": {
+      "evidence_id": "evidence_0000380wzpdseqzxzxcdwb7cwg",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380wzhdvzxv6anppzf8e4r-go-test.json",
+      "sha256": "b74373e85c424f9c2bda6f02b51e625fa490adda4dfbcfb5c9a2ce2753d6ba53",
+      "size": 1141,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:26:17.624704Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wzhdvzxv6anppzf8e4r",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 648,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:26:16.621633Z",
+      "finished_at": "2026-08-20T02:26:17.62227Z"
+    },
+    "evidence_0000380x07f2td7kq2bhtq4pw0": {
+      "evidence_id": "evidence_0000380x07f2td7kq2bhtq4pw0",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446jvzzevgzgstv0m.json",
+      "sha256": "43e4da2835813a0070db027fc1a1ed8f2230f5188d0c8ce50d2e0365b303d963",
+      "size": 2034,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:30:56.813575Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446jvzzevgzgstv0m",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x08sk4desk7861tv7g8": {
+      "evidence_id": "evidence_0000380x08sk4desk7861tv7g8",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446jvzzevgzgstv0m-go-test.json",
+      "sha256": "f305fa78a08b0a86fd9580495fd25079ff559f823378f5ae8d8ad2846962bff5",
+      "size": 1133,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:18.579194Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446jvzzevgzgstv0m",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:30:57.652897Z",
+      "finished_at": "2026-08-20T02:31:18.577135Z"
+    },
+    "evidence_0000380x08v7k38dbw290ktv1m": {
+      "evidence_id": "evidence_0000380x08v7k38dbw290ktv1m",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446ky7vt6qs69g310.json",
+      "sha256": "e4b803337e8cff4a5adb1e5cc2f1969254b4291fd810f90558adc1ebe16651f8",
+      "size": 2042,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:19.418021Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446ky7vt6qs69g310",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x08ynbpts4k9t6kyctr": {
+      "evidence_id": "evidence_0000380x08ynbpts4k9t6kyctr",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446ky7vt6qs69g310-go-test.json",
+      "sha256": "0e5b3c66e7ea52514bb74516d971333d8adcdbb3f7ebc9dd9e81c0156d004c66",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:21.174373Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446ky7vt6qs69g310",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:31:20.256885Z",
+      "finished_at": "2026-08-20T02:31:21.171687Z"
+    },
+    "evidence_0000380x0909hnepp9z606nx9c": {
+      "evidence_id": "evidence_0000380x0909hnepp9z606nx9c",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446j8xby3bpndhng0.json",
+      "sha256": "2b56a068bf72d7122e65b696a001fe1f48f5f9bb3d6577877fe8a7ae23338253",
+      "size": 2034,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:22.00864Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446j8xby3bpndhng0",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x093vrwfff159erh7dg": {
+      "evidence_id": "evidence_0000380x093vrwfff159erh7dg",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446j8xby3bpndhng0-go-test.json",
+      "sha256": "584c5699f99a4b599662fc7765619f29838b5eeb83df96a2513d77cf32050f40",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:23.837154Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446j8xby3bpndhng0",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:31:22.870701Z",
+      "finished_at": "2026-08-20T02:31:23.835067Z"
+    },
+    "evidence_0000380x095htv8yrm5ashgxx8": {
+      "evidence_id": "evidence_0000380x095htv8yrm5ashgxx8",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446jvt92pbqa355kc.json",
+      "sha256": "9d8842ba26320d04ccbef8a95561ae3c7e0d0fe8278696ecb0990026d4e9cb59",
+      "size": 2044,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:24.701382Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446jvt92pbqa355kc",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x098zpmxpe604ptwjag": {
+      "evidence_id": "evidence_0000380x098zpmxpe604ptwjag",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446jvt92pbqa355kc-go-test.json",
+      "sha256": "54c774e3c6bba309490a275495adc25b3273d7ddb444a79a72464c4ddfe2b870",
+      "size": 1141,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:26.459821Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446jvt92pbqa355kc",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:31:25.530075Z",
+      "finished_at": "2026-08-20T02:31:26.45749Z"
+    },
+    "evidence_0000380x09am0dasfzrts2y688": {
+      "evidence_id": "evidence_0000380x09am0dasfzrts2y688",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446kch5t08j5zp000.json",
+      "sha256": "c380946fb70f02df5c33f3dc2d335d0ecaf5701674e8e84319ca2dedc7ba3f37",
+      "size": 2044,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:27.296379Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446kch5t08j5zp000",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x09dydthvsq3j8by4fc": {
+      "evidence_id": "evidence_0000380x09dydthvsq3j8by4fc",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446kch5t08j5zp000-go-test.json",
+      "sha256": "5007addee72c8d15ecc5a3b66ca70b8bb9f80575788fb282644c85cb2a4aaf4f",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:28.999349Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446kch5t08j5zp000",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:31:28.092496Z",
+      "finished_at": "2026-08-20T02:31:28.997063Z"
+    },
+    "evidence_0000380x09fhepab3rdtc23r7w": {
+      "evidence_id": "evidence_0000380x09fhepab3rdtc23r7w",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446kvn73jrpz3d3sr.json",
+      "sha256": "9e9e9ac20539386648325ee0a4fcbb546dfad9646cf870c19d05a0cf83183a04",
+      "size": 2038,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:29.815384Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446kvn73jrpz3d3sr",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x09jvppg5c5qhrae14w": {
+      "evidence_id": "evidence_0000380x09jvppg5c5qhrae14w",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446kvn73jrpz3d3sr-go-test.json",
+      "sha256": "ebddd0afbfb71f771a7994965cf1cc0201528191b8b173563e6c65467ce7c1b2",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:31.515644Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446kvn73jrpz3d3sr",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:31:30.627558Z",
+      "finished_at": "2026-08-20T02:31:31.513675Z"
+    },
+    "evidence_0000380x09mfs6jqy5gdhwh9gm": {
+      "evidence_id": "evidence_0000380x09mfs6jqy5gdhwh9gm",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446jad84h1xyj61pm.json",
+      "sha256": "0207420e97fac0fd946500cac1efd35e7cc5d765621865ee240a1131827e58a9",
+      "size": 2040,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:32.348642Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446jad84h1xyj61pm",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Contract and crash tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "CLI journey and retry semantics pass",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "verified",
+          "expected": "verified"
+        },
+        {
+          "statement": "Conflicts and crash retry fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "rejected without duplicate",
+          "expected": "rejected without duplicate"
+        },
+        {
+          "statement": "Regression passes after late hardening",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:10:00Z",
+      "finished_at": "2026-08-20T03:11:00Z"
+    },
+    "evidence_0000380x09qkdwfztqay1wk07g": {
+      "evidence_id": "evidence_0000380x09qkdwfztqay1wk07g",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wyd2xm0eey9n6e31px0-document-cli-contracts/04-qa/evidence/case_0000380x0446jad84h1xyj61pm-go-test.json",
+      "sha256": "000c2073641e869ccc0e529d8e4786361c4e940d94ef1ac3ae7661a31179c50e",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wyd7d8zhc4mwqd86wkm"
+      ],
+      "created_at": "2026-08-20T02:31:33.943069Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x0446jad84h1xyj61pm",
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51",
+      "state_revision": 686,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:31:33.133278Z",
+      "finished_at": "2026-08-20T02:31:33.941096Z"
     }
   },
   "qa_runs": {
@@ -8968,6 +11066,646 @@
       "finished_at": "2026-08-20T02:11:50.379201Z",
       "state_revision": 582,
       "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c"
+    },
+    "run_0000380wzhdvw5j25ddv1eg1g0": {
+      "run_id": "run_0000380wzhdvw5j25ddv1eg1g0",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380wzhdvxmae2yn4dsxth8",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmakpnrtmnt22xnghm",
+            "evidence_0000380wznrvrb4se3eg3r4kzg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wzhdvxrnbasyaakyge4",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmc163b52nbkd5b97w",
+            "evidence_0000380wznvwv0mt2736z4r32m"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wzhdvw39t0xwfn3qf4c",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmdedgr2kg0ax36mg8",
+            "evidence_0000380wznzdmqr3gc1fv6wez0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wzhdvwn9x2pyrs78qvw",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmey8ysj44xgcxx3ew",
+            "evidence_0000380wzp30np66kvn6f8etac"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wzhdvzxkc8pqsanfnhc",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmge38g568vdv4zbc4",
+            "evidence_0000380wzp6gdegkc5yefesq7c"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wzhdvzjct1d6hgczxw8",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmhybbbds3bnmyphtg",
+            "evidence_0000380wzpa20n3gv7c5bvyb18"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wzhdvzxv6anppzf8e4r",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wzmkg6316be5cck8g6m",
+            "evidence_0000380wzpdseqzxzxcdwb7cwg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T02:24:55.742828Z",
+      "finished_at": "2026-08-20T02:26:41.42234Z",
+      "state_revision": 648,
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51"
+    },
+    "run_0000380x0446gnmd4c3gbf6xhg": {
+      "run_id": "run_0000380x0446gnmd4c3gbf6xhg",
+      "sprint_id": "sprint_0000380wyd2xm0eey9n6e31px0",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380x0446jvzzevgzgstv0m",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x07f2td7kq2bhtq4pw0",
+            "evidence_0000380x08sk4desk7861tv7g8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x0446ky7vt6qs69g310",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x08v7k38dbw290ktv1m",
+            "evidence_0000380x08ynbpts4k9t6kyctr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x0446j8xby3bpndhng0",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x0909hnepp9z606nx9c",
+            "evidence_0000380x093vrwfff159erh7dg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x0446jvt92pbqa355kc",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x095htv8yrm5ashgxx8",
+            "evidence_0000380x098zpmxpe604ptwjag"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x0446kch5t08j5zp000",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x09am0dasfzrts2y688",
+            "evidence_0000380x09dydthvsq3j8by4fc"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x0446kvn73jrpz3d3sr",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x09fhepab3rdtc23r7w",
+            "evidence_0000380x09jvppg5c5qhrae14w"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x0446jad84h1xyj61pm",
+          "ac_ids": [
+            "ac_0000380wyd7d8zhc4mwqd86wkm"
+          ],
+          "title": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x09mfs6jqy5gdhwh9gm",
+            "evidence_0000380x09qkdwfztqay1wk07g"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local CLI contract has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):CLI contract Sprint has no end-user graphical interface.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T02:30:02.088825Z",
+      "finished_at": "2026-08-20T02:32:01.422728Z",
+      "state_revision": 686,
+      "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51"
     }
   },
   "graph": {

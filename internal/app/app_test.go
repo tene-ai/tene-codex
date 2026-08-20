@@ -13,7 +13,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/tene-ai/tene-codex/internal/domain"
 	"github.com/tene-ai/tene-codex/internal/state"
+	"github.com/tene-ai/tene-codex/internal/workflow"
 )
 
 func execute(t *testing.T, root string, args ...string) (int, envelope) {
@@ -58,6 +60,29 @@ func TestEvidenceRejectsCredentialAndCanaryPatternsBeforeMutation(t *testing.T) 
 	}
 }
 
+func TestEvidenceRegistrationDeduplicatesContentContract(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "evidence")
+	execute(t, root, "sprint", "create", "--title", "Evidence")
+	path := filepath.Join(root, "result.txt")
+	if err := os.WriteFile(path, []byte("deterministic result"), 0644); err != nil {
+		t.Fatal(err)
+	}
+	code, first := execute(t, root, "evidence", "register", "--path", path, "--kind", "test-output")
+	if code != 0 {
+		t.Fatal(first)
+	}
+	code, second := execute(t, root, "evidence", "register", "--path", path, "--kind", "test-output")
+	if code != 0 {
+		t.Fatal(second)
+	}
+	a := first.Result.(map[string]any)["evidence_id"]
+	b := second.Result.(map[string]any)["evidence_id"]
+	if a != b || first.Revision != second.Revision {
+		t.Fatalf("not deduplicated: %#v %#v", first, second)
+	}
+}
+
 func TestMasterPlanStatusAndDependencyValidation(t *testing.T) {
 	root := t.TempDir()
 	if c, _ := execute(t, root, "init", "--name", "master"); c != 0 {
@@ -83,6 +108,101 @@ func TestQAPlanVariantContract(t *testing.T) {
 		if qaVariantAction(v) == "" {
 			t.Fatalf("missing action for %s", v)
 		}
+	}
+}
+
+func TestRequestIDDeduplicatesAndRejectsReuse(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "dedup")
+	code, first := execute(t, root, "sprint", "create", "--title", "Once", "--request-id", "req-once")
+	if code != 0 {
+		t.Fatal(first)
+	}
+	code, second := execute(t, root, "sprint", "create", "--title", "Once", "--request-id", "req-once")
+	if code != 0 || first.Revision != second.Revision {
+		t.Fatalf("not deduplicated: %#v %#v", first, second)
+	}
+	p, err := state.New(root).Load()
+	if err != nil || len(p.Sprints) != 1 {
+		t.Fatalf("duplicate mutation: %v %#v", err, p)
+	}
+	code, conflict := execute(t, root, "sprint", "create", "--title", "Different", "--request-id", "req-once")
+	if code != 4 || len(conflict.Errors) == 0 || conflict.Errors[0].Code != "REQUEST_ID_CONFLICT" {
+		t.Fatalf("reuse accepted: %d %#v", code, conflict)
+	}
+}
+
+func TestRequestCrashWindowFailsClosedWithoutReexecution(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "crash")
+	args := []string{"sprint", "create", "--title", "Crash"}
+	hash := hashStrings(args)
+	s := state.New(root)
+	if _, err := s.Mutate(nil, domain.Actor{Kind: "codex", ID: hash, SessionID: "req-crash"}, "SyntheticCommittedMutation", "project", nil, func(*domain.Project) error { return nil }); err != nil {
+		t.Fatal(err)
+	}
+	code, env := execute(t, root, "sprint", "create", "--title", "Crash", "--request-id", "req-crash")
+	if code != 4 || len(env.Errors) == 0 || env.Errors[0].Code != "REQUEST_RECOVERY_PENDING" {
+		t.Fatalf("crash retry did not fail closed: %d %#v", code, env)
+	}
+	p, _ := s.Load()
+	if len(p.Sprints) != 0 {
+		t.Fatal("handler re-executed after committed placeholder")
+	}
+}
+
+func TestDocumentSyncAliasesFlagsAndPreservesAuthoredText(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "docs")
+	_, created := execute(t, root, "sprint", "create", "--title", "Sync")
+	sp := created.Result.(map[string]any)["sprint"].(map[string]any)
+	path := filepath.Join(root, filepath.FromSlash(sp["document_root"].(string)), "00-prd", "00-prd.md")
+	f, _ := os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
+	_, _ = f.WriteString("\nAUTHORED-SENTINEL\n")
+	_ = f.Close()
+	code, preview := execute(t, root, "docs", "sync", "--phase", "prd", "--no-color", "--verbose")
+	if code != 0 || preview.Result.(map[string]any)["applied"].(bool) {
+		t.Fatalf("preview failed %#v", preview)
+	}
+	before, _ := os.ReadFile(path)
+	if !strings.Contains(string(before), "AUTHORED-SENTINEL") || strings.Contains(string(before), "tene:generated:traceability:start") {
+		t.Fatal("preview mutated")
+	}
+	if code, _ := execute(t, root, "document", "sync", "--phase", "prd", "--apply"); code != 0 {
+		t.Fatal(code)
+	}
+	after, _ := os.ReadFile(path)
+	if !strings.Contains(string(after), "AUTHORED-SENTINEL") || !strings.Contains(string(after), "tene:generated:traceability:start") {
+		t.Fatal("sync contract failed")
+	}
+	var out, errOut bytes.Buffer
+	if code := Run([]string{"--root", root, "--quiet", "status"}, &out, &errOut, "test"); code != 0 || out.Len() != 0 {
+		t.Fatalf("quiet output %d %q", code, out.String())
+	}
+}
+
+func TestWaiverRequestRequiresApproval(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "waiver")
+	execute(t, root, "sprint", "create", "--title", "Waiver")
+	_, gapEnv := execute(t, root, "loop", "record-gap", "--description", "accepted risk", "--category", "debt", "--severity", "blocker")
+	gapID := gapEnv.Result.(map[string]any)["gap_id"].(string)
+	expiry := time.Now().UTC().Add(time.Hour).Format(time.RFC3339)
+	code, requested := execute(t, root, "waiver", "request", "--gap", gapID, "--reason", "bounded", "--requester", "owner", "--expires", expiry)
+	if code != 0 {
+		t.Fatal(requested)
+	}
+	id := requested.Result.(map[string]any)["waiver_id"].(string)
+	p, _ := state.New(root).Load()
+	if p.Waivers[id].Status != "requested" || workflow.ActiveWaiver(p, p.Gaps[gapID], time.Now()) {
+		t.Fatal("request became active")
+	}
+	if code, _ := execute(t, root, "waiver", "approve", id, "--approver", "reviewer"); code != 0 {
+		t.Fatal(code)
+	}
+	p, _ = state.New(root).Load()
+	if !workflow.ActiveWaiver(p, p.Gaps[gapID], time.Now()) {
+		t.Fatal("approved waiver inactive")
 	}
 }
 
@@ -185,7 +305,9 @@ func TestCLICompleteSprintArchivesDocuments(t *testing.T) {
 	plannedRun := planned.Result.(map[string]any)
 	cases := plannedRun["cases"].([]any)
 	firstCaseID := cases[0].(map[string]any)["case_id"].(string)
-	if code, env := execute(t, root, "qa", "case", firstCaseID, "passed", "--evidence", "anything"); code != 3 || len(env.Errors) == 0 || env.Errors[0].Code != "QA_MANUAL_PASS_FORBIDDEN" { t.Fatalf("manual pass was not rejected: code=%d env=%#v",code,env) }
+	if code, env := execute(t, root, "qa", "case", firstCaseID, "passed", "--evidence", "anything"); code != 3 || len(env.Errors) == 0 || env.Errors[0].Code != "QA_MANUAL_PASS_FORBIDDEN" {
+		t.Fatalf("manual pass was not rejected: code=%d env=%#v", code, env)
+	}
 	evidenceDir := filepath.Join(originalRoot, "04-qa", "evidence")
 	if err := os.MkdirAll(evidenceDir, 0o755); err != nil {
 		t.Fatal(err)

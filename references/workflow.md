@@ -6,6 +6,8 @@ The lifecycle is fixed:
 
 `draft → prd → plan → design → do ↔ loop-check → qa → report → archived`
 
+If report review discovers a late code or harness change, `report → loop-check` reopens verification; it must pass Loop Check and a new QA run before returning to report.
+
 Before any phase work:
 
 1. Run `status --json`.
@@ -16,7 +18,7 @@ Before any phase work:
 
 Never edit `.tene-workflow/*.json` or `events.ndjson` directly. Markdown under `docs/sprints/` is user-editable, but validate it through the CLI.
 
-Blocking non-security gaps may cross a phase gate only through an active waiver created with an explicit reason, approver, scope, and future expiry. Security and evidence-integrity gaps are never waivable. Revocation or expiry restores the block immediately.
+Blocking non-security gaps may cross a phase gate only through a separately requested and approved active waiver with explicit reason, requester, approver, scope, and future expiry. Security and evidence-integrity gaps are never waivable. Revocation or expiry restores the block immediately.
 
 Before upgrading persisted state, use `migrate dry-run`. Apply accepts only declared source versions, preserves the original projection under `.tene-workflow/backups`, and records a migration event. `doctor --repair` verifies the journal and project, then repairs only derived `active.json` and `master-plan.json`; it does not rewrite history.
 

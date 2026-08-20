@@ -34,12 +34,14 @@ import (
 )
 
 type runtime struct {
-	root      string
-	json      bool
-	expected  *uint64
-	requestID string
-	out, err  io.Writer
-	version   string
+	root        string
+	json        bool
+	expected    *uint64
+	requestID   string
+	quiet       bool
+	commandHash string
+	out, err    io.Writer
+	version     string
 }
 type envelope struct {
 	OK            bool       `json:"ok"`
@@ -71,6 +73,15 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 	if len(args) == 0 {
 		return rt.fail(&commandError{"CLI_USAGE", usage(), "Run tene-workflow help.", 2})
 	}
+	commandHash := hashStrings(args)
+	rt.commandHash = commandHash
+	if rt.requestID != "" && isMutationCommand(args) {
+		if cached, found, cacheErr := rt.cachedRequest(commandHash); cacheErr != nil {
+			return rt.fail(cacheErr)
+		} else if found {
+			return rt.success(cached.Result, cached.Revision)
+		}
+	}
 	var result any
 	var revision uint64
 	var err error
@@ -98,7 +109,7 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		result, revision, err = rt.task(args[1:])
 	case "intent":
 		result, revision, err = rt.intent(args[1:])
-	case "document":
+	case "document", "docs":
 		result, revision, err = rt.documents(args[1:])
 	case "graph":
 		result, revision, err = rt.graph(args[1:])
@@ -130,7 +141,70 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 	if err != nil {
 		return rt.fail(err)
 	}
+	if rt.requestID != "" && isMutationCommand(args) {
+		cached, rememberErr := rt.rememberRequest(commandHash, result, revision)
+		if rememberErr != nil {
+			return rt.fail(rememberErr)
+		}
+		result, revision = cached.Result, cached.Revision
+	}
 	return rt.success(result, revision)
+}
+
+func hashStrings(values []string) string {
+	b, _ := json.Marshal(values)
+	sum := sha256.Sum256(b)
+	return hex.EncodeToString(sum[:])
+}
+func isMutationCommand(args []string) bool {
+	if len(args) == 0 {
+		return false
+	}
+	if slices.Contains([]string{"init", "compact", "clear"}, args[0]) {
+		return true
+	}
+	if len(args) < 2 {
+		return false
+	}
+	reads := map[string][]string{"sprint": {"list", "show", "master-plan"}, "master": {"status", "validate", "create"}, "phase": {"show"}, "approval": {"list"}, "task": {"list"}, "intent": {"list"}, "document": {"validate"}, "graph": {"providers", "understand", "trace", "impact", "validate"}, "context": {"validate"}, "loop": {}, "waiver": {"list"}, "evidence": {"list", "verify"}, "qa": {"capabilities", "status"}, "report": {"validate"}, "secret": {"check", "list"}, "migrate": {"status", "dry-run"}, "doctor": {}}
+	for _, x := range reads[args[0]] {
+		if args[1] == x {
+			return false
+		}
+	}
+	return args[0] != "status" && args[0] != "route" && args[0] != "version"
+}
+func (rt *runtime) cachedRequest(commandHash string) (domain.RequestResult, bool, error) {
+	p, err := state.New(rt.root).Load()
+	if err != nil {
+		if errors.Is(err, state.ErrNotInitialized) {
+			return domain.RequestResult{}, false, nil
+		}
+		return domain.RequestResult{}, false, err
+	}
+	cached, ok := p.RequestResults[rt.requestID]
+	if !ok {
+		return domain.RequestResult{}, false, nil
+	}
+	if cached.CommandHash != commandHash {
+		return cached, false, &commandError{"REQUEST_ID_CONFLICT", "request ID was already used for a different command", "Use a new request ID.", 4}
+	}
+	if !cached.Completed {
+		return cached, false, &commandError{"REQUEST_RECOVERY_PENDING", "the original mutation committed but its response record is incomplete", "Run doctor/request recovery; the command will not be executed twice.", 4}
+	}
+	return cached, true, nil
+}
+func (rt *runtime) rememberRequest(commandHash string, result any, revision uint64) (domain.RequestResult, error) {
+	s := state.New(rt.root)
+	expected := revision
+	r, err := s.Mutate(&expected, domain.Actor{Kind: "codex"}, "RequestCompleted", rt.requestID, map[string]string{"command_hash": commandHash}, func(p *domain.Project) error {
+		p.RequestResults[rt.requestID] = domain.RequestResult{Revision: p.Revision + 1, CommandHash: commandHash, Result: result, Completed: true}
+		return nil
+	})
+	if err != nil {
+		return domain.RequestResult{}, err
+	}
+	return r.RequestResults[rt.requestID], nil
 }
 
 func (rt *runtime) master(args []string) (any, uint64, error) {
@@ -270,6 +344,11 @@ func (rt *runtime) global(args []string) []string {
 				i++
 				rt.requestID = args[i]
 			}
+		case "--quiet":
+			rt.quiet = true
+		case "--no-color", "--verbose":
+			// Accepted for a stable cross-environment CLI contract. Output is currently color-free;
+			// verbose diagnostics remain bounded to structured command results.
 		default:
 			out = append(out, args[i])
 		}
@@ -278,6 +357,9 @@ func (rt *runtime) global(args []string) []string {
 }
 
 func (rt *runtime) success(result any, revision uint64) int {
+	if rt.quiet && !rt.json {
+		return 0
+	}
 	if rt.json {
 		_ = json.NewEncoder(rt.out).Encode(envelope{OK: true, SchemaVersion: domain.SchemaVersion, RequestID: rt.requestID, Revision: revision, Result: result, Warnings: []string{}, Errors: []apiError{}})
 	} else {
@@ -400,7 +482,7 @@ func (rt *runtime) sprint(args []string) (any, uint64, error) {
 		}
 		id := domain.NewID("sprint")
 		sp := &domain.Sprint{SprintID: id, Slug: *slug, Title: *title, Phase: domain.PhaseDraft, Predecessors: csv(*pred), DocumentRoot: filepath.ToSlash(filepath.Join("docs", "sprints", id+"-"+*slug)), MaxLoopIterations: *maxIterations}
-		result, err := s.Mutate(rt.expected, actor(), "SprintCreated", id, sp, func(p *domain.Project) error { p.Sprints[id] = sp; p.ActiveSprintID = id; return nil })
+		result, err := s.Mutate(rt.expected, rt.actor(), "SprintCreated", id, sp, func(p *domain.Project) error { p.Sprints[id] = sp; p.ActiveSprintID = id; return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -424,7 +506,7 @@ func (rt *runtime) sprint(args []string) (any, uint64, error) {
 			return nil, 0, err
 		}
 		now := time.Now().UTC()
-		result, err := s.Mutate(rt.expected, actor(), "SprintStarted", sp.SprintID, map[string]string{"sprint_id": sp.SprintID}, func(p *domain.Project) error {
+		result, err := s.Mutate(rt.expected, rt.actor(), "SprintStarted", sp.SprintID, map[string]string{"sprint_id": sp.SprintID}, func(p *domain.Project) error {
 			p.ActiveSprintID = sp.SprintID
 			if p.Sprints[sp.SprintID].StartedAt == nil {
 				p.Sprints[sp.SprintID].StartedAt = &now
@@ -540,7 +622,7 @@ func (rt *runtime) transition(target domain.Phase, dry bool, approvalID string) 
 			return nil, 0, err
 		}
 	}
-	result, err := s.Mutate(rt.expected, actor(), "PhaseTransitioned", sp.SprintID, map[string]any{"from": from, "to": target}, func(p *domain.Project) error {
+	result, err := s.Mutate(rt.expected, rt.actor(), "PhaseTransitioned", sp.SprintID, map[string]any{"from": from, "to": target}, func(p *domain.Project) error {
 		x := p.Sprints[sp.SprintID]
 		x.Phase = target
 		if approvalID != "" && workflow.RequiredApproval(p.Profile, from, target) {
@@ -636,7 +718,7 @@ func (rt *runtime) approval(args []string) (any, uint64, error) {
 		}
 		id := domain.NewID("approval")
 		a := &domain.Approval{ApprovalID: id, SprintID: sp.SprintID, From: from, To: to, Reason: *reason, Requester: *requester, Status: "requested", RequestedAt: time.Now().UTC(), ExpiresAt: expiry.UTC()}
-		r, err := s.Mutate(rt.expected, actor(), "ApprovalRequested", id, a, func(p *domain.Project) error { p.Approvals[id] = a; return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "ApprovalRequested", id, a, func(p *domain.Project) error { p.Approvals[id] = a; return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -666,7 +748,7 @@ func (rt *runtime) approval(args []string) (any, uint64, error) {
 		if !a.ExpiresAt.After(now) {
 			return nil, p.Revision, &commandError{"WF_APPROVAL_EXPIRED", "approval request has expired", "Create a new bounded approval request.", 3}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "ApprovalGranted", id, map[string]string{"approver": *approver}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "ApprovalGranted", id, map[string]string{"approver": *approver}, func(p *domain.Project) error {
 			x := p.Approvals[id]
 			x.Status = "approved"
 			x.Approver = *approver
@@ -729,7 +811,7 @@ func (rt *runtime) task(args []string) (any, uint64, error) {
 				return nil, 0, notFound("task dependency", dep)
 			}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "TaskChanged", id, t, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "TaskChanged", id, t, func(p *domain.Project) error {
 			p.Tasks[id] = t
 			p.Sprints[sp.SprintID].TaskIDs = append(p.Sprints[sp.SprintID].TaskIDs, id)
 			return nil
@@ -747,7 +829,7 @@ func (rt *runtime) task(args []string) (any, uint64, error) {
 			return nil, 0, notFound("task", id)
 		}
 		status := map[string]string{"start": "doing", "complete": "done", "block": "blocked", "defer": "deferred"}[args[0]]
-		r, err := s.Mutate(rt.expected, actor(), "TaskChanged", id, map[string]string{"status": status}, func(p *domain.Project) error { p.Tasks[id].Status = status; return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "TaskChanged", id, map[string]string{"status": status}, func(p *domain.Project) error { p.Tasks[id].Status = status; return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -781,7 +863,7 @@ func (rt *runtime) task(args []string) (any, uint64, error) {
 				return nil, 0, notFound("intent", intent)
 			}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "TaskLinked", id, map[string]any{"ac_ids": csv(*acs), "intent_ids": csv(*intents)}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "TaskLinked", id, map[string]any{"ac_ids": csv(*acs), "intent_ids": csv(*intents)}, func(p *domain.Project) error {
 			task := p.Tasks[id]
 			if *replace {
 				task.CriterionIDs = csv(*acs)
@@ -820,7 +902,7 @@ func (rt *runtime) task(args []string) (any, uint64, error) {
 		if _, err := os.Stat(filepath.Join(rt.root, filepath.FromSlash(clean))); err != nil {
 			return nil, 0, notFound("artifact", clean)
 		}
-		r, err := s.Mutate(rt.expected, actor(), "TaskArtifactLinked", id, map[string]string{"path": clean}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "TaskArtifactLinked", id, map[string]string{"path": clean}, func(p *domain.Project) error {
 			p.Tasks[id].Artifacts = unique(append(p.Tasks[id].Artifacts, clean))
 			return nil
 		})
@@ -875,7 +957,7 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 		if *acText != "" {
 			ac = &domain.Criterion{CriterionID: domain.NewID("ac"), IntentID: id, Statement: *acText, Observable: *observable, Priority: *priority}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "IntentCaptured", id, map[string]any{"intent": in, "criterion": ac}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "IntentCaptured", id, map[string]any{"intent": in, "criterion": ac}, func(p *domain.Project) error {
 			p.Intents[id] = in
 			p.Sprints[sp.SprintID].IntentIDs = append(p.Sprints[sp.SprintID].IntentIDs, id)
 			if ac != nil {
@@ -897,7 +979,7 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 		}
 		status := map[string]string{"confirm": "confirmed", "deprecate": "deprecated"}[args[0]]
 		now := time.Now().UTC()
-		r, err := s.Mutate(rt.expected, actor(), "IntentChanged", id, map[string]string{"status": status}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "IntentChanged", id, map[string]string{"status": status}, func(p *domain.Project) error {
 			in := p.Intents[id]
 			in.Status = status
 			in.Revision++
@@ -929,7 +1011,7 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 		if *statement == "" && *rationale == "" {
 			return nil, 0, usageErr("--statement or --rationale is required")
 		}
-		r, err := s.Mutate(rt.expected, actor(), "IntentRevised", id, map[string]string{"statement": *statement, "rationale": *rationale}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "IntentRevised", id, map[string]string{"statement": *statement, "rationale": *rationale}, func(p *domain.Project) error {
 			in := p.Intents[id]
 			if *statement != "" {
 				in.Statement = *statement
@@ -970,7 +1052,7 @@ func (rt *runtime) intent(args []string) (any, uint64, error) {
 			return nil, 0, usageErr("priority must be blocking or non-blocking")
 		}
 		ac := &domain.Criterion{CriterionID: domain.NewID("ac"), IntentID: id, Statement: *statement, Observable: *observable, Priority: *priority}
-		r, err := s.Mutate(rt.expected, actor(), "CriterionAdded", ac.CriterionID, ac, func(p *domain.Project) error { p.Criteria[ac.CriterionID] = ac; return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "CriterionAdded", ac.CriterionID, ac, func(p *domain.Project) error { p.Criteria[ac.CriterionID] = ac; return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -1013,6 +1095,44 @@ func (rt *runtime) documents(args []string) (any, uint64, error) {
 			return map[string]any{"valid": false, "findings": findings}, p.Revision, &commandError{"DOC_VALIDATION_FAILED", "one or more documents are invalid", "Repair the listed sections.", 3}
 		}
 		return map[string]any{"valid": true, "findings": findings}, p.Revision, nil
+	case "sync":
+		fs := flag.NewFlagSet("document sync", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		phaseText := fs.String("phase", "", "")
+		apply := fs.Bool("apply", false, "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		phases := []domain.Phase{domain.PhasePRD, domain.PhasePlan, domain.PhaseDesign, domain.PhaseLoopCheck, domain.PhaseQA, domain.PhaseReport}
+		if *phaseText != "" {
+			phase, err := workflow.ParsePhase(*phaseText)
+			if err != nil {
+				return nil, 0, err
+			}
+			phases = []domain.Phase{phase}
+		}
+		results := []document.SyncResult{}
+		syncProject := p
+		if *apply {
+			clone := *p
+			clone.Revision = p.Revision + 1
+			syncProject = &clone
+		}
+		for _, phase := range phases {
+			result, err := document.Sync(rt.root, syncProject, sp, phase, *apply)
+			if err != nil {
+				return nil, p.Revision, err
+			}
+			results = append(results, result)
+		}
+		if *apply {
+			r, err := state.New(rt.root).Mutate(rt.expected, rt.actor(), "DocumentsSynced", sp.SprintID, map[string]any{"phases": phases, "documents": results}, func(*domain.Project) error { return nil })
+			if err != nil {
+				return nil, 0, err
+			}
+			return map[string]any{"applied": true, "documents": results}, r.Revision, nil
+		}
+		return map[string]any{"applied": false, "documents": results}, p.Revision, nil
 	default:
 		return nil, 0, usageErr("unknown document action")
 	}
@@ -1035,7 +1155,7 @@ func (rt *runtime) graph(args []string) (any, uint64, error) {
 		if analyzeErr != nil {
 			return nil, 0, analyzeErr
 		}
-		r, err := s.Mutate(rt.expected, actor(), "GraphRebuilt", p.ProjectID, map[string]string{"provider": "workflow-state+codeintel"}, func(p *domain.Project) error { p.Graph = buildGraph(p); mergeCodeGraph(&p.Graph, report); return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "GraphRebuilt", p.ProjectID, map[string]string{"provider": "workflow-state+codeintel"}, func(p *domain.Project) error { p.Graph = buildGraph(p); mergeCodeGraph(&p.Graph, report); return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -1177,7 +1297,7 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 			return nil, p.Revision, analyzeErr
 		}
 		stats := loopcheck.ReconcileStats{}
-		r, err := s.Mutate(rt.expected, actor(), "LoopAnalyzed", sp.SprintID, map[string]any{"candidate_count": len(candidates)}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "LoopAnalyzed", sp.SprintID, map[string]any{"candidate_count": len(candidates)}, func(p *domain.Project) error {
 			stats = loopcheck.Reconcile(p, p.Sprints[sp.SprintID], candidates)
 			return nil
 		})
@@ -1210,7 +1330,7 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 			return nil, p.Revision, &commandError{"WF_LOOP_EXHAUSTED", "loop iteration budget is exhausted", "Leave unresolved gaps visible and request a policy decision.", 3}
 		}
 		now := time.Now().UTC()
-		r, err := s.Mutate(rt.expected, actor(), "LoopIterated", sp.SprintID, map[string]any{"outcome": *outcome, "summary": *summary, "iteration": sp.LoopIteration + 1}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "LoopIterated", sp.SprintID, map[string]any{"outcome": *outcome, "summary": *summary, "iteration": sp.LoopIteration + 1}, func(p *domain.Project) error {
 			x := p.Sprints[sp.SprintID]
 			x.LoopIteration++
 			x.LastLoopOutcome = *outcome
@@ -1244,7 +1364,7 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 		}
 		id := domain.NewID("gap")
 		g := &domain.Gap{GapID: id, SprintID: sp.SprintID, Category: *category, Severity: *severity, Status: "open", Description: *desc, SubjectRefs: csv(*subjects)}
-		r, err := s.Mutate(rt.expected, actor(), "GapRecorded", id, g, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "GapRecorded", id, g, func(p *domain.Project) error {
 			p.Gaps[id] = g
 			p.Sprints[sp.SprintID].OpenGapIDs = append(p.Sprints[sp.SprintID].OpenGapIDs, id)
 			return nil
@@ -1283,7 +1403,7 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 				return nil, 0, notFound("evidence", evidenceID)
 			}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "GapResolved", id, map[string]any{"resolution": *resolution, "evidence_ids": csv(*evidenceIDs)}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "GapResolved", id, map[string]any{"resolution": *resolution, "evidence_ids": csv(*evidenceIDs)}, func(p *domain.Project) error {
 			p.Gaps[id].Status = "resolved"
 			p.Gaps[id].Resolution = *resolution
 			p.Gaps[id].ResolutionEvidenceIDs = csv(*evidenceIDs)
@@ -1321,7 +1441,7 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 			return nil, 0, usageErr("--reason --owner --target-sprint are required")
 		}
 		now := time.Now().UTC()
-		r, err := s.Mutate(rt.expected, actor(), "GapDeferred", id, map[string]string{"reason": *reason, "owner": *owner, "target_sprint": *target}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "GapDeferred", id, map[string]string{"reason": *reason, "owner": *owner, "target_sprint": *target}, func(p *domain.Project) error {
 			x := p.Gaps[id]
 			x.Status = "deferred"
 			x.DeferredReason = *reason
@@ -1390,11 +1510,100 @@ func (rt *runtime) waiver(args []string) (any, uint64, error) {
 		}
 		id := domain.NewID("waiver")
 		w := &domain.Waiver{WaiverID: id, SprintID: sp.SprintID, GapID: *gapID, Reason: *reason, Scope: *scope, Approver: *approver, Status: "active", CreatedAt: time.Now().UTC(), ExpiresAt: expiry.UTC()}
-		r, err := s.Mutate(rt.expected, actor(), "WaiverCreated", id, w, func(p *domain.Project) error { p.Waivers[id] = w; return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "WaiverCreated", id, w, func(p *domain.Project) error { p.Waivers[id] = w; return nil })
 		if err != nil {
 			return nil, 0, err
 		}
 		return r.Waivers[id], r.Revision, nil
+	case "request":
+		fs := flag.NewFlagSet("waiver request", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		gapID := fs.String("gap", "", "")
+		reason := fs.String("reason", "", "")
+		requester := fs.String("requester", "", "")
+		expires := fs.String("expires", "", "")
+		scope := fs.String("scope", "phase-transition", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		if *gapID == "" || *reason == "" || *requester == "" || *expires == "" {
+			return nil, 0, usageErr("--gap --reason --requester --expires are required")
+		}
+		gap := p.Gaps[*gapID]
+		if gap == nil || gap.SprintID != sp.SprintID {
+			return nil, 0, notFound("gap", *gapID)
+		}
+		if gap.Category == "security" || gap.Category == "evidence-integrity" {
+			return nil, p.Revision, &commandError{"WAIVER_FORBIDDEN", "security and evidence-integrity gaps cannot be waived", "Resolve the gap with valid evidence.", 3}
+		}
+		expiry, parseErr := time.Parse(time.RFC3339, *expires)
+		if parseErr != nil || !expiry.After(time.Now().UTC()) {
+			return nil, 0, &commandError{"WAIVER_EXPIRY_INVALID", "expiry must be a future RFC3339 timestamp", "Provide a bounded future expiry.", 2}
+		}
+		now := time.Now().UTC()
+		id := domain.NewID("waiver")
+		w := &domain.Waiver{WaiverID: id, SprintID: sp.SprintID, GapID: *gapID, Reason: *reason, Scope: *scope, Requester: *requester, Status: "requested", RequestedAt: &now, CreatedAt: now, ExpiresAt: expiry.UTC()}
+		r, err := s.Mutate(rt.expected, rt.actor(), "WaiverRequested", id, w, func(p *domain.Project) error { p.Waivers[id] = w; return nil })
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Waivers[id], r.Revision, nil
+	case "approve":
+		if len(args) < 2 {
+			return nil, 0, usageErr("waiver id required")
+		}
+		id := args[1]
+		w := p.Waivers[id]
+		if w == nil || w.SprintID != sp.SprintID {
+			return nil, 0, notFound("waiver", id)
+		}
+		fs := flag.NewFlagSet("waiver approve", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		approver := fs.String("approver", "", "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		if *approver == "" {
+			return nil, 0, usageErr("--approver is required")
+		}
+		now := time.Now().UTC()
+		if w.Status != "requested" || !w.ExpiresAt.After(now) {
+			return nil, p.Revision, &commandError{"WAIVER_APPROVAL_INVALID", "waiver is not a live request", "Create a new waiver request.", 3}
+		}
+		r, err := s.Mutate(rt.expected, rt.actor(), "WaiverApproved", id, map[string]string{"approver": *approver}, func(p *domain.Project) error {
+			x := p.Waivers[id]
+			x.Status = "active"
+			x.Approver = *approver
+			x.ApprovedAt = &now
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Waivers[id], r.Revision, nil
+	case "expire":
+		now := time.Now().UTC()
+		target := arg(args, 1)
+		expired := []string{}
+		for id, w := range p.Waivers {
+			if w.SprintID == sp.SprintID && (target == "" || target == id) && (w.Status == "requested" || w.Status == "active") && !w.ExpiresAt.After(now) {
+				expired = append(expired, id)
+			}
+		}
+		if target != "" && len(expired) == 0 {
+			return nil, p.Revision, &commandError{"WAIVER_NOT_EXPIRED", "waiver is absent, terminal, or not yet expired", "Wait for expiry or revoke it explicitly.", 3}
+		}
+		r, err := s.Mutate(rt.expected, rt.actor(), "WaiversExpired", sp.SprintID, expired, func(p *domain.Project) error {
+			for _, id := range expired {
+				p.Waivers[id].Status = "expired"
+				p.Waivers[id].ExpiredAt = &now
+			}
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return map[string]any{"expired": expired, "waivers": r.Waivers}, r.Revision, nil
 	case "revoke":
 		if len(args) < 2 {
 			return nil, 0, usageErr("waiver id required")
@@ -1404,7 +1613,7 @@ func (rt *runtime) waiver(args []string) (any, uint64, error) {
 			return nil, 0, notFound("waiver", id)
 		}
 		now := time.Now().UTC()
-		r, err := s.Mutate(rt.expected, actor(), "WaiverRevoked", id, nil, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "WaiverRevoked", id, nil, func(p *domain.Project) error {
 			p.Waivers[id].Status = "revoked"
 			p.Waivers[id].RevokedAt = &now
 			return nil
@@ -1465,13 +1674,20 @@ func (rt *runtime) evidence(args []string) (any, uint64, error) {
 			return nil, 0, err
 		}
 		sum := sha256.Sum256(b)
+		hashValue := hex.EncodeToString(sum[:])
+		criterionIDs := csv(*acs)
+		for _, existing := range p.Evidence {
+			if existing.SprintID == sp.SprintID && existing.SHA256 == hashValue && existing.Kind == *kind && slices.Equal(existing.CriterionIDs, criterionIDs) {
+				return existing, p.Revision, nil
+			}
+		}
 		id := domain.NewID("evidence")
-		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, Kind: *kind, URI: relative(rt.root, abs), SHA256: hex.EncodeToString(sum[:]), Size: int64(len(b)), CriterionIDs: csv(*acs), CreatedAt: time.Now().UTC(), RedactionStatus: "passed"}
+		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, Kind: *kind, URI: relative(rt.root, abs), SHA256: hashValue, Size: int64(len(b)), CriterionIDs: criterionIDs, CreatedAt: time.Now().UTC(), RedactionStatus: "passed"}
 		if looksSecret(b) {
 			ev.RedactionStatus = "failed"
 			return nil, 0, &commandError{"SEC_EVIDENCE_LEAK", "potential secret detected in evidence", "Remove or rotate the secret and create sanitized evidence.", 6}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "EvidenceRegistered", id, ev, func(p *domain.Project) error { p.Evidence[id] = ev; return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "EvidenceRegistered", id, ev, func(p *domain.Project) error { p.Evidence[id] = ev; return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -1490,6 +1706,9 @@ func (rt *runtime) evidence(args []string) (any, uint64, error) {
 func (rt *runtime) qa(args []string) (any, uint64, error) {
 	if len(args) == 0 {
 		return nil, 0, usageErr("qa action required")
+	}
+	if args[0] == "run" {
+		args = append([]string{"execute"}, args[1:]...)
 	}
 	s := state.New(rt.root)
 	p, err := s.Load()
@@ -1513,7 +1732,7 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 				}
 			}
 		}
-		r, err := s.Mutate(rt.expected, actor(), "QAPlanned", run.RunID, run, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "QAPlanned", run.RunID, run, func(p *domain.Project) error {
 			p.QARuns[run.RunID] = run
 			p.Sprints[sp.SprintID].LastQAID = run.RunID
 			p.Sprints[sp.SprintID].LastQAStatus = "planned"
@@ -1575,7 +1794,7 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 			assertions = append(assertions, domain.EvidenceAssertion{Statement: assertion.Statement, Passed: assertion.Passed, Layer: assertion.Layer, RequirementRefs: append([]string(nil), assertion.RequirementRefs...), Actual: assertion.Actual, Expected: assertion.Expected})
 		}
 		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, RunID: run.RunID, CaseID: caseID, SpecHash: run.SpecHash, StateRevision: run.StateRevision, Kind: "journey-observation", URI: relative(rt.root, abs), SHA256: hex.EncodeToString(sum[:]), Size: int64(len(b)), CriterionIDs: append([]string(nil), target.CriterionIDs...), CreatedAt: time.Now().UTC(), RedactionStatus: "passed", Layers: append([]string(nil), obs.Layers...), Assertions: assertions, Tool: obs.Adapter, ToolVersion: obs.ToolVersion, Environment: obs.Environment, StartedAt: &obs.StartedAt, FinishedAt: &obs.FinishedAt}
-		r, err := s.Mutate(rt.expected, actor(), "QAObservationImported", id, obs, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "QAObservationImported", id, obs, func(p *domain.Project) error {
 			p.Evidence[id] = ev
 			rr := p.QARuns[sp.LastQAID]
 			for i := range rr.Cases {
@@ -1649,7 +1868,7 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		if executeErr != nil {
 			statusValue = "failed"
 		}
-		r, err := s.Mutate(rt.expected, actor(), "QAAdapterExecuted", id, execution, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "QAAdapterExecuted", id, execution, func(p *domain.Project) error {
 			p.Evidence[id] = ev
 			rr := p.QARuns[sp.LastQAID]
 			for i := range rr.Cases {
@@ -1698,7 +1917,7 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		if !found {
 			return nil, 0, notFound("qa case", caseID)
 		}
-		r, err := s.Mutate(rt.expected, actor(), "QACaseRecorded", caseID, map[string]any{"status": statusValue, "evidence": csv(evs)}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "QACaseRecorded", caseID, map[string]any{"status": statusValue, "evidence": csv(evs)}, func(p *domain.Project) error {
 			run := p.QARuns[sp.LastQAID]
 			for i := range run.Cases {
 				if run.Cases[i].CaseID == caseID {
@@ -1751,7 +1970,7 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		if *statusValue != "required" {
 			disposition = *statusValue + ":" + *approver + ":" + *reason
 		}
-		r, err := s.Mutate(rt.expected, actor(), "QALayerDispositionChanged", caseID, map[string]string{"layer": layer, "disposition": disposition}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "QALayerDispositionChanged", caseID, map[string]string{"layer": layer, "disposition": disposition}, func(p *domain.Project) error {
 			for i := range p.QARuns[sp.LastQAID].Cases {
 				c := &p.QARuns[sp.LastQAID].Cases[i]
 				if c.CaseID == caseID {
@@ -1775,7 +1994,7 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 			statusValue = "failed"
 		}
 		now := time.Now().UTC()
-		r, err := s.Mutate(rt.expected, actor(), "QAEvaluated", sp.LastQAID, map[string]any{"status": statusValue, "findings": findings}, func(p *domain.Project) error {
+		r, err := s.Mutate(rt.expected, rt.actor(), "QAEvaluated", sp.LastQAID, map[string]any{"status": statusValue, "findings": findings}, func(p *domain.Project) error {
 			run := p.QARuns[sp.LastQAID]
 			for i := range run.Cases {
 				run.Cases[i].Status = "failed"
@@ -1836,7 +2055,7 @@ func (rt *runtime) report(args []string) (any, uint64, error) {
 		}
 		fmt.Fprintf(f, "\n<!-- tene:generated:summary:start -->\n### Generated Sprint Summary\n\n- Sprint: `%s`\n- Previous sprints: `%s`\n- Intent IDs: `%s`\n- Tasks: %d\n- QA verdict: `%s`\n- Open gaps: %d\n- State revision: %d\n\n<!-- tene:generated:summary:end -->\n", sp.SprintID, strings.Join(sp.Predecessors, ", "), strings.Join(sp.IntentIDs, ", "), len(sp.TaskIDs), sp.LastQAStatus, len(sp.OpenGapIDs), p.Revision)
 		_ = f.Close()
-		r, err := s.Mutate(rt.expected, actor(), "ReportGenerated", sp.SprintID, map[string]string{"path": relative(rt.root, path)}, func(p *domain.Project) error { p.Sprints[sp.SprintID].ReportPath = relative(rt.root, path); return nil })
+		r, err := s.Mutate(rt.expected, rt.actor(), "ReportGenerated", sp.SprintID, map[string]string{"path": relative(rt.root, path)}, func(p *domain.Project) error { p.Sprints[sp.SprintID].ReportPath = relative(rt.root, path); return nil })
 		if err != nil {
 			return nil, 0, err
 		}
@@ -2211,7 +2430,9 @@ func activeWaiverCount(p *domain.Project, sp *domain.Sprint) int {
 	}
 	return n
 }
-func actor() domain.Actor { return domain.Actor{Kind: "codex"} }
+func (rt *runtime) actor() domain.Actor {
+	return domain.Actor{Kind: "codex", ID: rt.commandHash, SessionID: rt.requestID}
+}
 func arg(a []string, i int) string {
 	if i < len(a) {
 		return a[i]

@@ -63,7 +63,7 @@
       "properties": {
         "waiver_id": {"type": "string", "pattern": "^waiver_[0-9a-z]+$"}, "sprint_id": {"type": "string"}, "gap_id": {"type": "string"},
         "reason": {"type": "string", "minLength": 1}, "scope": {"type": "string", "minLength": 1}, "approver": {"type": "string", "minLength": 1},
-        "status": {"enum": ["active", "revoked"]}, "created_at": {"type": "string", "format": "date-time"}, "expires_at": {"type": "string", "format": "date-time"}, "revoked_at": {"type": "string", "format": "date-time"}
+        "status": {"enum": ["requested", "active", "revoked", "expired"]}, "requester": {"type": "string"}, "created_at": {"type": "string", "format": "date-time"}, "requested_at": {"type": "string", "format": "date-time"}, "approved_at": {"type": "string", "format": "date-time"}, "expires_at": {"type": "string", "format": "date-time"}, "revoked_at": {"type": "string", "format": "date-time"}, "expired_at": {"type": "string", "format": "date-time"}
       }
     },
     "sprint": {
