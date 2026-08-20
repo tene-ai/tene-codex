@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 339,
-  "updated_at": "2026-08-20T00:55:21.602899Z",
+  "revision": 376,
+  "updated_at": "2026-08-20T01:06:42.855521Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -212,6 +212,31 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Checkpoint replay, projection drift, repair, concurrency, and deterministic graph contracts pass focused tests",
       "last_loop_at": "2026-08-20T00:52:40.382224Z"
+    },
+    "sprint_0000380wney2n4hv4wct0skz4w": {
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "slug": "skill-routing-evals",
+      "title": "Skill Routing and Eval Completion",
+      "phase": "archived",
+      "intent_ids": [
+        "intent_0000380wp1g79k7a136ay9wx00"
+      ],
+      "task_ids": [
+        "task_0000380wp7q4t8mjxdp4ysr78r",
+        "task_0000380wp7rdq0awdk0amq65fm"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wney2n4hv4wct0skz4w-skill-routing-evals",
+      "started_at": "2026-08-20T00:56:58.083553Z",
+      "archived_at": "2026-08-20T01:06:42.75073Z",
+      "approval_refs": [
+        "approval_0000380wp7w1jc404y781w8ajr",
+        "approval_0000380wpjjcafgywctmwxyab0"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wpc76mrbdegm10wvyj4",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wney2n4hv4wct0skz4w-skill-routing-evals/05-report/00-report.md",
+      "loop_iteration": 0,
+      "max_loop_iterations": 5
     }
   },
   "tasks": {
@@ -499,6 +524,28 @@
         "ac_0000380wmf1t7bkcenjjv8r2d0"
       ],
       "layer": "business"
+    },
+    "task_0000380wp7q4t8mjxdp4ysr78r": {
+      "task_id": "task_0000380wp7q4t8mjxdp4ysr78r",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "title": "Implement deterministic routing engine and CLI",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wp1g78fnzykfkpq2f2r",
+        "ac_0000380wp235a561m2wv2004vw"
+      ],
+      "layer": "Interface,Business Logic"
+    },
+    "task_0000380wp7rdq0awdk0amq65fm": {
+      "task_id": "task_0000380wp7rdq0awdk0amq65fm",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "title": "Implement bilingual routing corpus and release gate",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wp1g78fnzykfkpq2f2r",
+        "ac_0000380wp24y32a4qxf3tt687w"
+      ],
+      "layer": "Persistence,Infrastructure"
     }
   },
   "intents": {
@@ -587,6 +634,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T00:48:10.553553Z"
+    },
+    "intent_0000380wp1g79k7a136ay9wx00": {
+      "intent_id": "intent_0000380wp1g79k7a136ay9wx00",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Codex users can explicitly or implicitly select the correct tene skill without unsafe workflow mutation.",
+      "rationale": "Portable spec-driven workflow requires observable, deterministic routing behavior in addition to model discovery.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T01:02:08.062676Z"
     }
   },
   "acceptance_criteria": {
@@ -785,6 +843,27 @@
       "statement": "Concurrent writers and graph rebuilds are deterministic",
       "priority": "blocking",
       "observable": "one stale writer commits and repeated graph build is stable"
+    },
+    "ac_0000380wp1g78fnzykfkpq2f2r": {
+      "ac_id": "ac_0000380wp1g78fnzykfkpq2f2r",
+      "intent_id": "intent_0000380wp1g79k7a136ay9wx00",
+      "statement": "Explicit invocations always select the named skill and implicit Korean/English routing meets quality thresholds.",
+      "priority": "blocking",
+      "observable": "The versioned routing corpus reports explicit success 100%, precision and recall \u003e=90%, wrong-phase and unnecessary trigger rates \u003c=10% for all nine skills."
+    },
+    "ac_0000380wp235a561m2wv2004vw": {
+      "ac_id": "ac_0000380wp235a561m2wv2004vw",
+      "intent_id": "intent_0000380wp1g79k7a136ay9wx00",
+      "statement": "Ambiguous, multi-intent, wrong-phase, and hard-negative requests cannot silently mutate or skip the workflow.",
+      "priority": "blocking",
+      "observable": "Router outcomes are selected/proposed/none; ambiguous and multi-intent outcomes require confirmation, wrong-phase never auto-selects, and forbidden actions include phase skip or workflow mutation."
+    },
+    "ac_0000380wp24y32a4qxf3tt687w": {
+      "ac_id": "ac_0000380wp24y32a4qxf3tt687w",
+      "intent_id": "intent_0000380wp1g79k7a136ay9wx00",
+      "statement": "Routing evaluation is a versioned release gate using the same engine as the public CLI.",
+      "priority": "blocking",
+      "observable": "make check runs the routing corpus and tene-workflow route emits structured JSON with reasons, candidates, required actions and forbidden actions."
     }
   },
   "gaps": {
@@ -874,6 +953,34 @@
       "approved_at": "2026-08-20T00:55:20.585267Z",
       "expires_at": "2026-08-21T00:00:00Z",
       "consumed_at": "2026-08-20T00:55:21.484875Z"
+    },
+    "approval_0000380wp7w1jc404y781w8ajr": {
+      "approval_id": "approval_0000380wp7w1jc404y781w8ajr",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed continuous implementation of all PRD plan and design requirements.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:03:40.569526Z",
+      "approved_at": "2026-08-20T01:03:55.9522Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:03:56.531661Z"
+    },
+    "approval_0000380wpjjcafgywctmwxyab0": {
+      "approval_id": "approval_0000380wpjjcafgywctmwxyab0",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "from": "report",
+      "to": "archived",
+      "reason": "Routing implementation and all blocking QA criteria passed; user directed continuous completion.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:06:35.845525Z",
+      "approved_at": "2026-08-20T01:06:42.048608Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:06:42.75073Z"
     }
   },
   "evidence": {
@@ -1108,6 +1215,21 @@
         "ac_0000380wmf1t7bkcenjjv8r2d0"
       ],
       "created_at": "2026-08-20T00:54:30.928469Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380wpecf38gdhhq2cvsbw8": {
+      "evidence_id": "evidence_0000380wpecf38gdhhq2cvsbw8",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "kind": "routing-eval",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wney2n4hv4wct0skz4w-skill-routing-evals/04-qa/evidence/routing-eval-summary.json",
+      "sha256": "2a3733b6fc510036408a084bd337242da757ce4446cba84a107cd6c2a8c33ec7",
+      "size": 576,
+      "ac_ids": [
+        "ac_0000380wp1g78fnzykfkpq2f2r",
+        "ac_0000380wp235a561m2wv2004vw",
+        "ac_0000380wp24y32a4qxf3tt687w"
+      ],
+      "created_at": "2026-08-20T01:05:27.281211Z",
       "redaction_status": "passed"
     }
   },
@@ -4194,6 +4316,394 @@
       ],
       "started_at": "2026-08-20T00:53:07.034824Z",
       "finished_at": "2026-08-20T00:54:50.595054Z"
+    },
+    "run_0000380wpc76mrbdegm10wvyj4": {
+      "run_id": "run_0000380wpc76mrbdegm10wvyj4",
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380wpc76m1ehmqmp2pr8g0",
+          "ac_ids": [
+            "ac_0000380wp235a561m2wv2004vw"
+          ],
+          "title": "Ambiguous, multi-intent, wrong-phase, and hard-negative requests cannot silently mutate or skip the workflow. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Router outcomes are selected/proposed/none; ambiguous and multi-intent outcomes require confirmation, wrong-phase never auto-selects, and forbidden actions include phase skip or workflow mutation.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76mad40nzw2kjs9g",
+          "ac_ids": [
+            "ac_0000380wp235a561m2wv2004vw"
+          ],
+          "title": "Ambiguous, multi-intent, wrong-phase, and hard-negative requests cannot silently mutate or skip the workflow. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Router outcomes are selected/proposed/none; ambiguous and multi-intent outcomes require confirmation, wrong-phase never auto-selects, and forbidden actions include phase skip or workflow mutation.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76ne3263wa2g18dc",
+          "ac_ids": [
+            "ac_0000380wp235a561m2wv2004vw"
+          ],
+          "title": "Ambiguous, multi-intent, wrong-phase, and hard-negative requests cannot silently mutate or skip the workflow. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Router outcomes are selected/proposed/none; ambiguous and multi-intent outcomes require confirmation, wrong-phase never auto-selects, and forbidden actions include phase skip or workflow mutation.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76mvvjepfk576a68",
+          "ac_ids": [
+            "ac_0000380wp24y32a4qxf3tt687w"
+          ],
+          "title": "Routing evaluation is a versioned release gate using the same engine as the public CLI. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "make check runs the routing corpus and tene-workflow route emits structured JSON with reasons, candidates, required actions and forbidden actions.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76mwb2371rm9870g",
+          "ac_ids": [
+            "ac_0000380wp24y32a4qxf3tt687w"
+          ],
+          "title": "Routing evaluation is a versioned release gate using the same engine as the public CLI. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "make check runs the routing corpus and tene-workflow route emits structured JSON with reasons, candidates, required actions and forbidden actions.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76nnary1118wedym",
+          "ac_ids": [
+            "ac_0000380wp24y32a4qxf3tt687w"
+          ],
+          "title": "Routing evaluation is a versioned release gate using the same engine as the public CLI. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "make check runs the routing corpus and tene-workflow route emits structured JSON with reasons, candidates, required actions and forbidden actions.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76myq813xrq9028m",
+          "ac_ids": [
+            "ac_0000380wp1g78fnzykfkpq2f2r"
+          ],
+          "title": "Explicit invocations always select the named skill and implicit Korean/English routing meets quality thresholds. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "The versioned routing corpus reports explicit success 100%, precision and recall \u003e=90%, wrong-phase and unnecessary trigger rates \u003c=10% for all nine skills.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76m4fwrvd656wzz0",
+          "ac_ids": [
+            "ac_0000380wp1g78fnzykfkpq2f2r"
+          ],
+          "title": "Explicit invocations always select the named skill and implicit Korean/English routing meets quality thresholds. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "The versioned routing corpus reports explicit success 100%, precision and recall \u003e=90%, wrong-phase and unnecessary trigger rates \u003c=10% for all nine skills.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wpc76ncme4cpvy4tq8c",
+          "ac_ids": [
+            "ac_0000380wp1g78fnzykfkpq2f2r"
+          ],
+          "title": "Explicit invocations always select the named skill and implicit Korean/English routing meets quality thresholds. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wpecf38gdhhq2cvsbw8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "The versioned routing corpus reports explicit success 100%, precision and recall \u003e=90%, wrong-phase and unnecessary trigger rates \u003c=10% for all nine skills.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T01:04:51.818601Z",
+      "finished_at": "2026-08-20T01:05:43.098669Z"
     }
   },
   "graph": {

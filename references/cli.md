@@ -5,6 +5,7 @@ tene-workflow init --name NAME --profile standard
 tene-workflow sprint create --title TITLE [--slug SLUG] [--max-iterations N]
 tene-workflow sprint start ID
 tene-workflow status --json
+tene-workflow route --text TEXT [--phase PHASE] [--active auto|true|false]
 tene-workflow phase transition PHASE [--dry-run] [--approval ID]
 tene-workflow approval request|approve|list
 tene-workflow intent capture --statement TEXT --ac TEXT --observable TEXT

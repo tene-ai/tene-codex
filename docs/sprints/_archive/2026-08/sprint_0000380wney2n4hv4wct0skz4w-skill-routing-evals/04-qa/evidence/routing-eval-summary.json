@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "run": "go run ./cmd/tene-routing-eval evals/routing-corpus.json",
+  "overall_passed": true,
+  "skills": 9,
+  "explicit_total": 45,
+  "explicit_passed": 45,
+  "positive_cases_per_skill": 20,
+  "negative_cases_per_skill": 20,
+  "multi_intent_cases_per_skill": 10,
+  "minimum_precision": 1.0,
+  "minimum_recall": 0.95,
+  "minimum_multi_intent_rate": 0.90,
+  "maximum_wrong_phase_rate": 0.0,
+  "maximum_unnecessary_trigger_rate": 0.0,
+  "additional_checks": ["make check", "go test -race ./...", "go vet ./..."],
+  "redaction_status": "passed"
+}

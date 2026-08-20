@@ -25,6 +25,7 @@ import (
 	"github.com/tene-ai/tene-codex/internal/domain"
 	"github.com/tene-ai/tene-codex/internal/projectconfig"
 	"github.com/tene-ai/tene-codex/internal/qaadapter"
+	"github.com/tene-ai/tene-codex/internal/router"
 	"github.com/tene-ai/tene-codex/internal/secret"
 	"github.com/tene-ai/tene-codex/internal/state"
 	"github.com/tene-ai/tene-codex/internal/tracecontext"
@@ -82,6 +83,8 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		result, revision, err = rt.init(args[1:])
 	case "status":
 		result, revision, err = rt.status()
+	case "route":
+		result, revision, err = rt.route(args[1:])
 	case "sprint":
 		result, revision, err = rt.sprint(args[1:])
 	case "phase":
@@ -125,6 +128,19 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		return rt.fail(err)
 	}
 	return rt.success(result, revision)
+}
+
+func (rt *runtime) route(args []string) (any, uint64, error) {
+	fs := flag.NewFlagSet("route", flag.ContinueOnError); fs.SetOutput(io.Discard)
+	input := fs.String("text", "", "")
+	phase := fs.String("phase", "", "")
+	activeFlag := fs.String("active", "auto", "")
+	if err := fs.Parse(args); err != nil { return nil,0,err }
+	if *input=="" { *input=strings.Join(fs.Args()," ") }; if strings.TrimSpace(*input)=="" { return nil,0,usageErr("route --text is required") }
+	active:=false; ph:=domain.Phase(*phase); rev:=uint64(0)
+	if p,err:=state.New(rt.root).Load(); err==nil { rev=p.Revision; if p.ActiveSprintID!="" {active=true; if sp:=p.Sprints[p.ActiveSprintID];sp!=nil&&ph==""{ph=sp.Phase}} }
+	if *activeFlag=="true" {active=true}; if *activeFlag=="false" {active=false}
+	return router.Route(*input,active,ph),rev,nil
 }
 
 func (rt *runtime) global(args []string) []string {
@@ -2054,6 +2070,6 @@ Usage:
   tene-workflow [--root PATH] [--json] <command>
 
 Commands:
-  init, status, sprint, phase, approval, task, intent, document, graph, context,
+  init, status, route, sprint, phase, approval, task, intent, document, graph, context,
   loop, waiver, evidence, qa, report, secret, migrate, doctor, compact, clear, version`
 }

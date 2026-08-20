@@ -1,7 +1,7 @@
 {
   "active_sprint_id": "",
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 339,
+  "revision": 376,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -61,6 +61,11 @@
       "predecessor_ids": [
         "sprint_0000380wjfxtbq8sgcngq0tmz4"
       ]
+    },
+    {
+      "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
+      "title": "Skill Routing and Eval Completion",
+      "phase": "archived"
     }
   ]
 }
