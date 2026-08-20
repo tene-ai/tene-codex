@@ -13,6 +13,7 @@ tene-workflow intent capture --statement TEXT --ac TEXT --observable TEXT
 tene-workflow intent confirm ID
 tene-workflow task add --title TEXT --layer LAYER [--ac IDS]
 tene-workflow task link ID [--ac IDS] [--intent IDS] [--replace]
+tene-workflow task artifact ID --path FILE
 tene-workflow document scaffold|validate
 tene-workflow graph providers|build|understand [--changed|--path CSV]|trace ID|impact ID [--depth N] [--call-depth N]|validate
 tene-workflow context build [--phase PHASE] [--budget BYTES] [--output PATH]

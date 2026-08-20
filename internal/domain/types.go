@@ -127,6 +127,9 @@ type Gap struct {
 	DeferredOwner         string     `json:"deferred_owner,omitempty"`
 	DeferredTargetSprint  string     `json:"deferred_target_sprint,omitempty"`
 	DeferredAt            *time.Time `json:"deferred_at,omitempty"`
+	Fingerprint           string     `json:"fingerprint,omitempty"`
+	DetectedBy            string     `json:"detected_by,omitempty"`
+	DetectedAtRevision    uint64     `json:"detected_at_revision,omitempty"`
 }
 
 type Approval struct {

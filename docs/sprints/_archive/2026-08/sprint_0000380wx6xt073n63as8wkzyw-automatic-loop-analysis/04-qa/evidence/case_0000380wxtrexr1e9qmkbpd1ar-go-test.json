@@ -1,0 +1,12 @@
+{
+  "adapter": "go-test",
+  "command": [
+    "go",
+    "test",
+    "./..."
+  ],
+  "started_at": "2026-08-20T02:11:26.3173Z",
+  "finished_at": "2026-08-20T02:11:27.224129Z",
+  "passed": true,
+  "output": "?   \tgithub.com/tene-ai/tene-codex/cmd/tene-routing-eval\t[no test files]\n?   \tgithub.com/tene-ai/tene-codex/cmd/tene-workflow\t[no test files]\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/codeintel\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/document\t(cached)\n?   \tgithub.com/tene-ai/tene-codex/internal/domain\t[no test files]\nok  \tgithub.com/tene-ai/tene-codex/internal/loopcheck\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/projectconfig\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/qaadapter\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/router\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/secret\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/state\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/tracecontext\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/workflow\t(cached)\n"
+}

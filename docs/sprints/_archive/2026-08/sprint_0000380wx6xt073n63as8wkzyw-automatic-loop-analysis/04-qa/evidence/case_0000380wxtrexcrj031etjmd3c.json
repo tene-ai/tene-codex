@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "codex-deterministic-test-observer",
+  "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+  "case_id": "case_0000380wxtrexcrj031etjmd3c",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T02:10:00Z",
+  "finished_at": "2026-08-20T02:11:00Z",
+  "checkpoints": [
+    {
+      "name": "loop-analysis-mutation-matrix",
+      "kind": "spec-code-gap",
+      "before": {
+        "seed": "happy"
+      },
+      "after": {
+        "detected": true,
+        "converged": true
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "Analyzer compiles and design contracts validate",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "layer:L1"
+      ],
+      "actual": "passed",
+      "expected": "passed"
+    },
+    {
+      "statement": "Mutation fixture is detected",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "layer:L2"
+      ],
+      "actual": "6/6 detected",
+      "expected": ">=90 percent"
+    },
+    {
+      "statement": "CLI loop reconciliation converges",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "layer:L3",
+        "observable",
+        "variant:happy"
+      ],
+      "actual": "zero self gaps and stable lifecycle",
+      "expected": "detected and convergent"
+    },
+    {
+      "statement": "Adversarial drift fails closed",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "layer:L6"
+      ],
+      "actual": "missing links paths symbols and forbidden dependencies block",
+      "expected": "all block"
+    },
+    {
+      "statement": "Regression suite remains green",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "layer:L7"
+      ],
+      "actual": "focused and full suites passed",
+      "expected": "passed"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+  "state_revision": 582,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "go1.25.0 + tene-workflow-dev"
+}

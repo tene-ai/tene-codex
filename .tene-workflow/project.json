@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 559,
-  "updated_at": "2026-08-20T02:03:28.548017Z",
+  "revision": 620,
+  "updated_at": "2026-08-20T02:14:14.5697Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -384,6 +384,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "All identified QA false-pass mutations are rejected and complete structured evidence remains accepted.",
       "last_loop_at": "2026-08-20T02:00:09.143356Z"
+    },
+    "sprint_0000380wx6xt073n63as8wkzyw": {
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "slug": "automatic-loop-analysis",
+      "title": "Automatic Bidirectional Loop Analysis",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wvj5zg3avxfejqj4wj0"
+      ],
+      "intent_ids": [
+        "intent_0000380wx710enjk9h81emvgf8"
+      ],
+      "task_ids": [
+        "task_0000380wxj3hep0x4eaqm3bkdm",
+        "task_0000380wxj4kryss8dx8k5wdrm"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis",
+      "archived_at": "2026-08-20T02:14:14.386927Z",
+      "approval_refs": [
+        "approval_0000380wxmbf2gsxvenv7cmrmr",
+        "approval_0000380wya4y3qhv64x24vgwaw"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 8,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Automatic analyzer detected 6 of 6 seeded drift classes, self-analysis returned zero gaps, and reconciliation converged without duplicates.",
+      "last_loop_at": "2026-08-20T02:09:58.420472Z"
     }
   },
   "tasks": {
@@ -783,6 +813,36 @@
         "ac_0000380wvk7q5mkdwqj2q1c1gc"
       ],
       "layer": "Infrastructure"
+    },
+    "task_0000380wxj3hep0x4eaqm3bkdm": {
+      "task_id": "task_0000380wxj3hep0x4eaqm3bkdm",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "title": "Implement automatic loop analyzer and stable gap reconciliation",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "layer": "Business Logic",
+      "artifacts": [
+        "internal/app/app.go",
+        "internal/domain/types.go",
+        "internal/loopcheck/analyzer.go"
+      ]
+    },
+    "task_0000380wxj4kryss8dx8k5wdrm": {
+      "task_id": "task_0000380wxj4kryss8dx8k5wdrm",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "title": "Add artifact linking design contracts and mutation convergence tests",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "layer": "Infrastructure",
+      "artifacts": [
+        "internal/loopcheck/analyzer_test.go",
+        "skills/tene-loop-check/SKILL.md",
+        "references/cli.md"
+      ]
     }
   },
   "intents": {
@@ -937,6 +997,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T01:55:49.636468Z"
+    },
+    "intent_0000380wx710enjk9h81emvgf8": {
+      "intent_id": "intent_0000380wx710enjk9h81emvgf8",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Loop Check must independently compare confirmed specification, plan, design contracts, changed code and verification mappings, automatically creating deterministic gaps and resolving them only when a rerun proves the mismatch is gone.",
+      "rationale": "The former loop check only listed manually recorded gaps.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T02:07:36.799027Z"
     }
   },
   "acceptance_criteria": {
@@ -1205,6 +1276,13 @@
       "statement": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity.",
       "priority": "blocking",
       "observable": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected."
+    },
+    "ac_0000380wx710e3a7bw0g1kd6dc": {
+      "ac_id": "ac_0000380wx710e3a7bw0g1kd6dc",
+      "intent_id": "intent_0000380wx710enjk9h81emvgf8",
+      "statement": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs.",
+      "priority": "blocking",
+      "observable": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records."
     }
   },
   "gaps": {
@@ -1467,6 +1545,34 @@
       "approved_at": "2026-08-20T02:03:27.763815Z",
       "expires_at": "2026-08-21T02:03:22Z",
       "consumed_at": "2026-08-20T02:03:28.439816Z"
+    },
+    "approval_0000380wxmbf2gsxvenv7cmrmr": {
+      "approval_id": "approval_0000380wxmbf2gsxvenv7cmrmr",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed continuous implementation of automatic loop analysis.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:08:15.089174Z",
+      "approved_at": "2026-08-20T02:08:15.716973Z",
+      "expires_at": "2026-08-21T02:08:14Z",
+      "consumed_at": "2026-08-20T02:08:16.296769Z"
+    },
+    "approval_0000380wya4y3qhv64x24vgwaw": {
+      "approval_id": "approval_0000380wya4y3qhv64x24vgwaw",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "from": "report",
+      "to": "archived",
+      "reason": "Automatic loop analyzer passed six-class mutation, convergence, self-analysis, QA, race and report gates.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:14:12.193738Z",
+      "approved_at": "2026-08-20T02:14:13.28415Z",
+      "expires_at": "2026-08-21T02:14:11Z",
+      "consumed_at": "2026-08-20T02:14:14.386927Z"
     }
   },
   "evidence": {
@@ -2765,6 +2871,1000 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T02:01:57.626257Z",
       "finished_at": "2026-08-20T02:01:58.58767Z"
+    },
+    "evidence_0000380wxxz46674azy0ws31dr": {
+      "evidence_id": "evidence_0000380wxxz46674azy0ws31dr",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrexcrj031etjmd3c.json",
+      "sha256": "9b5f465a2f9578b5985c79440527b568b9b7368541cf3e01dea8d46528a2398a",
+      "size": 2116,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:52.611995Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrexcrj031etjmd3c",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxy0hz3rw1xys2rm60g": {
+      "evidence_id": "evidence_0000380wxy0hz3rw1xys2rm60g",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrewtxk7dgs4wmgd4.json",
+      "sha256": "33a3ace87d9c43fba6d200c72f71107701fcbacd088c628627ff932c9b7a485f",
+      "size": 2124,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:53.343058Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrewtxk7dgs4wmgd4",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxy1we1ssq75zyprk7r": {
+      "evidence_id": "evidence_0000380wxy1we1ssq75zyprk7r",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrex0gjf48jmmtyeg.json",
+      "sha256": "d79f299b75a2c8a44f96afe1d3b8971cceffc6ef4723a757dd7983b8f2dbce8c",
+      "size": 2116,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:54.023543Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrex0gjf48jmmtyeg",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxy38n3ex32gmfs3bnr": {
+      "evidence_id": "evidence_0000380wxy38n3ex32gmfs3bnr",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrew3rej1shn1r35c.json",
+      "sha256": "ffa15da206f5dd1d3a8adf0563c27535e6febf558677cfd6bf9fb6d5227ac089",
+      "size": 2126,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:54.730109Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrew3rej1shn1r35c",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxy4nw8a8zegm2hdf2g": {
+      "evidence_id": "evidence_0000380wxy4nw8a8zegm2hdf2g",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrexcx1nyy14yrkx0.json",
+      "sha256": "b278aad43bb1568ae11bfffe673db8451b9fac19595db73da2043a0da9cf0c30",
+      "size": 2126,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:55.454614Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrexcx1nyy14yrkx0",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxy68whdtsv9t7dpwyg": {
+      "evidence_id": "evidence_0000380wxy68whdtsv9t7dpwyg",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrexr1e9qmkbpd1ar.json",
+      "sha256": "4dcd6a317fcaffc70c894b15fdd2b84e1a406955af145bd1ef8d425c89dce734",
+      "size": 2120,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:56.270534Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrexr1e9qmkbpd1ar",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxy870xw94pdb43vfrw": {
+      "evidence_id": "evidence_0000380wxy870xw94pdb43vfrw",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrew0t7mbtpb2qe3r.json",
+      "sha256": "91d89ad0f75649330d3b5d111739f81260719941a5c5edb109ef52a90f952beb",
+      "size": 2122,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:10:57.264559Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrew0t7mbtpb2qe3r",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Analyzer compiles and design contracts validate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Mutation fixture is detected",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "6/6 detected",
+          "expected": "\u003e=90 percent"
+        },
+        {
+          "statement": "CLI loop reconciliation converges",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "zero self gaps and stable lifecycle",
+          "expected": "detected and convergent"
+        },
+        {
+          "statement": "Adversarial drift fails closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "missing links paths symbols and forbidden dependencies block",
+          "expected": "all block"
+        },
+        {
+          "statement": "Regression suite remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "focused and full suites passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:00Z",
+      "finished_at": "2026-08-20T02:11:00Z"
+    },
+    "evidence_0000380wxzhqtwf1vp88388x4w": {
+      "evidence_id": "evidence_0000380wxzhqtwf1vp88388x4w",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrexcrj031etjmd3c-go-test.json",
+      "sha256": "be7393fcc5ce254efaf014be4f3b37dbed9523e4e521346492c98ced746a489a",
+      "size": 1135,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:18.526363Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrexcrj031etjmd3c",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:10:58.220263Z",
+      "finished_at": "2026-08-20T02:11:18.524219Z"
+    },
+    "evidence_0000380wxzn4t1ky6dscvmft7w": {
+      "evidence_id": "evidence_0000380wxzn4t1ky6dscvmft7w",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrewtxk7dgs4wmgd4-go-test.json",
+      "sha256": "f8d592b985c079fa92b3e64cd93950387da0857073e84ff1aace55388bdbd474",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:20.27069Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrewtxk7dgs4wmgd4",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:11:19.382809Z",
+      "finished_at": "2026-08-20T02:11:20.268326Z"
+    },
+    "evidence_0000380wxzr9rwympde6bw0y8r": {
+      "evidence_id": "evidence_0000380wxzr9rwympde6bw0y8r",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrex0gjf48jmmtyeg-go-test.json",
+      "sha256": "c7bf68166cbc13c3683a7bce56cac4bc0520fe15d82c84a3d1d64fbf66c34f82",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:21.885385Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrex0gjf48jmmtyeg",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:11:21.077442Z",
+      "finished_at": "2026-08-20T02:11:21.883461Z"
+    },
+    "evidence_0000380wxzvtawmeqxee8q5h38": {
+      "evidence_id": "evidence_0000380wxzvtawmeqxee8q5h38",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrew3rej1shn1r35c-go-test.json",
+      "sha256": "92205d61b6a3a99d14b3f14e30e00a90015ae3bae9bef580fb37d52d2742c9e7",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:23.686296Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrew3rej1shn1r35c",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:11:22.744296Z",
+      "finished_at": "2026-08-20T02:11:23.683193Z"
+    },
+    "evidence_0000380wxzz5nhc476ps1jzv4g": {
+      "evidence_id": "evidence_0000380wxzz5nhc476ps1jzv4g",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrexcx1nyy14yrkx0-go-test.json",
+      "sha256": "cdab637aaed33052cdfe0f85575cdec9a5177d4195af2443fa112601550d7166",
+      "size": 1141,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:25.403733Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrexcx1nyy14yrkx0",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:11:24.590821Z",
+      "finished_at": "2026-08-20T02:11:25.40039Z"
+    },
+    "evidence_0000380wy02qjwnpxqm2cyjdkc": {
+      "evidence_id": "evidence_0000380wy02qjwnpxqm2cyjdkc",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrexr1e9qmkbpd1ar-go-test.json",
+      "sha256": "5567604b56399ad3d7fd25f45983d3dfb9f72c989fe13e5d5bb0b64db2181eef",
+      "size": 1140,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:27.226422Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrexr1e9qmkbpd1ar",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:11:26.3173Z",
+      "finished_at": "2026-08-20T02:11:27.224129Z"
+    },
+    "evidence_0000380wy06jnz6h30wjhv5qyg": {
+      "evidence_id": "evidence_0000380wy06jnz6h30wjhv5qyg",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wx6xt073n63as8wkzyw-automatic-loop-analysis/04-qa/evidence/case_0000380wxtrew0t7mbtpb2qe3r-go-test.json",
+      "sha256": "7cccc8fb887477be1b1ee37f3979b599c3d76196fa0e4a4c1f0f8b75a069f604",
+      "size": 1142,
+      "ac_ids": [
+        "ac_0000380wx710e3a7bw0g1kd6dc"
+      ],
+      "created_at": "2026-08-20T02:11:29.19612Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wxtrew0t7mbtpb2qe3r",
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c",
+      "state_revision": 582,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:11:28.193902Z",
+      "finished_at": "2026-08-20T02:11:29.191054Z"
     }
   },
   "qa_runs": {
@@ -7548,6 +8648,326 @@
       "finished_at": "2026-08-20T02:02:33.457228Z",
       "state_revision": 522,
       "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c"
+    },
+    "run_0000380wxtrexn4d1f6wqcte4w": {
+      "run_id": "run_0000380wxtrexn4d1f6wqcte4w",
+      "sprint_id": "sprint_0000380wx6xt073n63as8wkzyw",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380wxtrexcrj031etjmd3c",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxxz46674azy0ws31dr",
+            "evidence_0000380wxzhqtwf1vp88388x4w"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wxtrewtxk7dgs4wmgd4",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxy0hz3rw1xys2rm60g",
+            "evidence_0000380wxzn4t1ky6dscvmft7w"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wxtrex0gjf48jmmtyeg",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxy1we1ssq75zyprk7r",
+            "evidence_0000380wxzr9rwympde6bw0y8r"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wxtrew3rej1shn1r35c",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxy38n3ex32gmfs3bnr",
+            "evidence_0000380wxzvtawmeqxee8q5h38"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wxtrexcx1nyy14yrkx0",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxy4nw8a8zegm2hdf2g",
+            "evidence_0000380wxzz5nhc476ps1jzv4g"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wxtrexr1e9qmkbpd1ar",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxy68whdtsv9t7dpwyg",
+            "evidence_0000380wy02qjwnpxqm2cyjdkc"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wxtrew0t7mbtpb2qe3r",
+          "ac_ids": [
+            "ac_0000380wx710e3a7bw0g1kd6dc"
+          ],
+          "title": "Automatic loop analysis detects seeded missing traceability, untracked changes, absent symbols and forbidden dependencies, synchronizes stable gaps without duplicates, and passes only after repairs. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wxy870xw94pdb43vfrw",
+            "evidence_0000380wy06jnz6h30wjhv5qyg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Mutation fixtures achieve at least 90 percent detection and rerun convergence with zero manually seeded gap records.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):Local analyzer has no deployed system boundary.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):Analyzer Sprint has CLI observables and no end-user UI.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T02:10:00.046291Z",
+      "finished_at": "2026-08-20T02:11:50.379201Z",
+      "state_revision": 582,
+      "spec_hash": "baa51dbc8861f16a8ba81c73f06972a4260b7220771aa92145ca4cc3fa63920c"
     }
   },
   "graph": {

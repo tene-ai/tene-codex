@@ -23,6 +23,7 @@ import (
 	"github.com/tene-ai/tene-codex/internal/codeintel"
 	"github.com/tene-ai/tene-codex/internal/document"
 	"github.com/tene-ai/tene-codex/internal/domain"
+	"github.com/tene-ai/tene-codex/internal/loopcheck"
 	"github.com/tene-ai/tene-codex/internal/projectconfig"
 	"github.com/tene-ai/tene-codex/internal/qaadapter"
 	"github.com/tene-ai/tene-codex/internal/router"
@@ -795,6 +796,38 @@ func (rt *runtime) task(args []string) (any, uint64, error) {
 			return nil, 0, err
 		}
 		return r.Tasks[id], r.Revision, nil
+	case "artifact":
+		if len(args) < 2 {
+			return nil, 0, usageErr("task id is required")
+		}
+		id := args[1]
+		if p.Tasks[id] == nil || p.Tasks[id].SprintID != sp.SprintID {
+			return nil, 0, notFound("task", id)
+		}
+		fs := flag.NewFlagSet("task artifact", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		path := fs.String("path", "", "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		if *path == "" {
+			return nil, 0, usageErr("--path is required")
+		}
+		clean := filepath.ToSlash(filepath.Clean(*path))
+		if clean == ".." || strings.HasPrefix(clean, "../") || filepath.IsAbs(clean) {
+			return nil, 0, usageErr("artifact path must be repository-relative")
+		}
+		if _, err := os.Stat(filepath.Join(rt.root, filepath.FromSlash(clean))); err != nil {
+			return nil, 0, notFound("artifact", clean)
+		}
+		r, err := s.Mutate(rt.expected, actor(), "TaskArtifactLinked", id, map[string]string{"path": clean}, func(p *domain.Project) error {
+			p.Tasks[id].Artifacts = unique(append(p.Tasks[id].Artifacts, clean))
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Tasks[id], r.Revision, nil
 	default:
 		return nil, 0, usageErr("unknown task action")
 	}
@@ -1136,13 +1169,29 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 	}
 	switch args[0] {
 	case "check":
+		if sp.Phase != domain.PhaseLoopCheck {
+			return nil, p.Revision, &commandError{"WF_LOOP_PHASE_REQUIRED", "automatic loop analysis can only run in loop-check", "Transition to loop-check first.", 3}
+		}
+		candidates, analyzeErr := loopcheck.Analyze(context.Background(), rt.root, p, sp, loopcheck.Options{DiscoverChanges: true})
+		if analyzeErr != nil {
+			return nil, p.Revision, analyzeErr
+		}
+		stats := loopcheck.ReconcileStats{}
+		r, err := s.Mutate(rt.expected, actor(), "LoopAnalyzed", sp.SprintID, map[string]any{"candidate_count": len(candidates)}, func(p *domain.Project) error {
+			stats = loopcheck.Reconcile(p, p.Sprints[sp.SprintID], candidates)
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
 		var gaps []*domain.Gap
-		for _, id := range sp.OpenGapIDs {
-			if g := p.Gaps[id]; g != nil && g.Status == "open" {
+		for _, id := range r.Sprints[sp.SprintID].OpenGapIDs {
+			if g := r.Gaps[id]; g != nil && g.Status == "open" {
 				gaps = append(gaps, g)
 			}
 		}
-		return map[string]any{"passed": len(gaps) == 0, "open_gaps": gaps, "iteration": sp.LoopIteration, "max_iterations": sp.MaxLoopIterations, "remaining": max(0, sp.MaxLoopIterations-sp.LoopIteration), "exhausted": sp.LoopIteration >= sp.MaxLoopIterations}, p.Revision, nil
+		sort.Slice(gaps, func(i, j int) bool { return gaps[i].GapID < gaps[j].GapID })
+		return map[string]any{"passed": len(gaps) == 0, "open_gaps": gaps, "detected": len(candidates), "created": stats.Created, "resolved": stats.Resolved, "reopened": stats.Reopened, "iteration": sp.LoopIteration, "max_iterations": sp.MaxLoopIterations, "remaining": max(0, sp.MaxLoopIterations-sp.LoopIteration), "exhausted": sp.LoopIteration >= sp.MaxLoopIterations}, r.Revision, nil
 	case "iterate":
 		if sp.Phase != domain.PhaseLoopCheck {
 			return nil, p.Revision, &commandError{"WF_LOOP_PHASE_REQUIRED", "loop iterations can only be recorded in loop-check", "Transition to loop-check first.", 3}
