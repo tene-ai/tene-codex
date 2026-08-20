@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "reference-journey-runner",
+  "run_id": "run_0000380x1yqavwqc338z6t1thr",
+  "case_id": "case_0000380x1yqaxvtxmnsc2kg2yg",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T02:46:03.006566Z",
+  "finished_at": "2026-08-20T02:46:15.647264Z",
+  "checkpoints": [
+    {
+      "name": "cross-stack-full-flow",
+      "kind": "ui-api-data",
+      "before": {
+        "state": "retry-order"
+      },
+      "after": {
+        "state": "confirmed",
+        "observed": "retry succeeds with exactly one write"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L2 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L3 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L4 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L5 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L6 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L7 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+  "state_revision": 791,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "node+python-reference-runner/1.0.0"
+}

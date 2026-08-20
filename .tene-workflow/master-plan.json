@@ -1,7 +1,7 @@
 {
   "active_sprint_id": "",
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 722,
+  "revision": 807,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -121,6 +121,14 @@
       "phase": "archived",
       "predecessor_ids": [
         "sprint_0000380wx6xt073n63as8wkzyw"
+      ]
+    },
+    {
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "title": "Multi-stack Intelligence and Full-flow References",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wyd2xm0eey9n6e31px0"
       ]
     }
   ]

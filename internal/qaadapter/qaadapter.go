@@ -110,6 +110,13 @@ func Discover(root string) []Capability {
 	if !npm.Available {
 		npm.Reason = "npm or package.json test script is unavailable"
 	}
+	python := Capability{Adapter: "python-test", Kind: "native-test", Layers: []string{"L1", "L2", "L3", "L4"}}
+	if py, err := exec.LookPath("python3"); err == nil && exists(filepath.Join(root, "tests")) {
+		python.Available = true
+		python.Command = []string{py, "-m", "unittest", "discover", "-s", "tests", "-p", "*_test.py"}
+	} else {
+		python.Reason = "python3 or tests directory is unavailable"
+	}
 	pw := Capability{Adapter: "playwright", Kind: "browser-e2e", Layers: []string{"L4", "L5", "L6", "L7"}}
 	if _, err := exec.LookPath("npx"); err == nil && (exists(filepath.Join(root, "playwright.config.ts")) || exists(filepath.Join(root, "playwright.config.js")) || packageContains(filepath.Join(root, "package.json"), "@playwright/test")) {
 		pw.Available = true
@@ -118,7 +125,7 @@ func Discover(root string) []Capability {
 		pw.Reason = "Playwright configuration/dependency is unavailable"
 	}
 	browser := Capability{Adapter: "external-browser-observation", Available: true, Kind: "observation-import", Layers: []string{"L3", "L4", "L5", "L6", "L7"}, Reason: "execution is provided by Codex browser/Chrome/Playwright capability; CLI validates and hashes the observation"}
-	return []Capability{goCap, npm, pw, browser}
+	return []Capability{goCap, npm, python, pw, browser}
 }
 
 func CapabilityByName(root, name string) (Capability, bool) {

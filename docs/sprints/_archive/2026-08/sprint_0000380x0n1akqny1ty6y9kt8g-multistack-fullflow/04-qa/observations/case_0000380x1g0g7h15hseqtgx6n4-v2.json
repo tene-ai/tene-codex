@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "reference-journey-runner",
+  "run_id": "run_0000380x1g0g53a694cr56a30m",
+  "case_id": "case_0000380x1g0g7h15hseqtgx6n4",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T02:44:58.096589Z",
+  "finished_at": "2026-08-20T02:45:07.081927Z",
+  "checkpoints": [
+    {
+      "name": "cross-stack-full-flow",
+      "kind": "ui-api-data",
+      "before": {
+        "orders": 0,
+        "queue": 0,
+        "screen": "checkout"
+      },
+      "after": {
+        "orders": 1,
+        "queue": 0,
+        "screen": "confirmed",
+        "api_status": 200
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L2 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L3 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L4 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L5 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L6 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    },
+    {
+      "statement": "L7 reference journey contract is satisfied",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:failure"
+      ],
+      "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+      "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+  "state_revision": 770,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "node+python-reference-runner/1.0.0"
+}

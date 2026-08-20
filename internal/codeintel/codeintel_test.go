@@ -39,7 +39,7 @@ func TestRejectsOutsidePath(t *testing.T) {
 	}
 }
 
-func TestPolyglotFallbackKeepsUnknownSixQuestions(t *testing.T) {
+func TestPolyglotProvidersKeepBoundedUncertainty(t *testing.T) {
 	root := t.TempDir()
 	for path, body := range map[string]string{"web/ui.ts": "export const submit = () => fetch('/api')", "worker/job.py": "def consume(message): pass", ".tene/vault.py": "SECRET='never index'"} {
 		full := filepath.Join(root, filepath.FromSlash(path))
@@ -58,7 +58,7 @@ func TestPolyglotFallbackKeepsUnknownSixQuestions(t *testing.T) {
 		t.Fatalf("files=%+v components=%+v", r.Files, r.Components)
 	}
 	for _, c := range r.Components {
-		if c.Provider != "filesystem" || len(c.Unknown) < 5 || len(c.Inputs) == 0 || len(c.Outputs) == 0 || len(c.Effects) == 0 {
+		if (c.Provider != "typescript-static" && c.Provider != "python-static") || len(c.Unknown) == 0 || len(c.Inputs) == 0 || len(c.Outputs) == 0 || len(c.Effects) == 0 {
 			t.Fatalf("not uncertainty-honest: %+v", c)
 		}
 		if strings.Contains(c.File, ".tene") {

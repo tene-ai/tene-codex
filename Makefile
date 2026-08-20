@@ -1,4 +1,4 @@
-.PHONY: build test vet check routing-eval plugin-validate clean
+.PHONY: build test test-references vet check routing-eval plugin-validate clean
 
 build:
 	go build -trimpath -o dist/tene-workflow ./cmd/tene-workflow
@@ -6,10 +6,13 @@ build:
 test:
 	go test ./...
 
+test-references:
+	npm run test:references
+
 vet:
 	go vet ./...
 
-check: test vet routing-eval
+check: test test-references vet routing-eval
 	python3 -m json.tool .codex-plugin/plugin.json >/dev/null
 	python3 -m json.tool hooks/hooks.json >/dev/null
 	python3 -m json.tool .agents/plugins/marketplace.json >/dev/null

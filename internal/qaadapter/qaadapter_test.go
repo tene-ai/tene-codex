@@ -13,8 +13,9 @@ func TestDiscoverGoAndPlaywright(t *testing.T) {
 	r := t.TempDir()
 	os.WriteFile(filepath.Join(r, "go.mod"), []byte("module x\n"), 0644)
 	os.WriteFile(filepath.Join(r, "package.json"), []byte(`{"scripts":{"test":"vitest"},"devDependencies":{"@playwright/test":"1"}}`), 0644)
+	os.Mkdir(filepath.Join(r, "tests"), 0755)
 	c := Discover(r)
-	if !c[0].Available || !c[1].Available || !c[2].Available || !c[3].Available {
+	if !c[0].Available || !c[1].Available || !c[2].Available || !c[3].Available || !c[4].Available {
 		t.Fatalf("%#v", c)
 	}
 }

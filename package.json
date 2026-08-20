@@ -1,6 +1,6 @@
 {
   "name": "tene-codex-verification",
   "private": true,
-  "scripts": {"test:e2e": "playwright test"},
+  "scripts": {"test": "npm run test:references", "test:e2e": "playwright test", "test:references": "node testdata/reference-nextjs/runtime/journey.mjs && PYTHONPATH=testdata/reference-python python3 -m unittest discover -s testdata/reference-python/tests -p '*_test.py'"},
   "devDependencies": {"@playwright/test": "1.62.1"}
 }

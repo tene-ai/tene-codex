@@ -13,6 +13,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 )
@@ -112,7 +113,7 @@ func Discover(root string) []Capability {
 			return "go executable is unavailable"
 		}
 		return ""
-	}()}, {Provider: "filesystem", Available: true, Confidence: .4}}
+	}()}, {Provider: "typescript-static", Available: true, Languages: []string{"javascript", "typescript", "jsx", "tsx"}, Calls: true, Imports: true, DataFlow: true, Confidence: .7, Reason: "bounded syntax analysis; runtime dispatch remains observational"}, {Provider: "python-static", Available: true, Languages: []string{"python"}, Calls: true, Imports: true, DataFlow: true, Confidence: .7, Reason: "bounded syntax analysis; dynamic dispatch remains observational"}, {Provider: "filesystem", Available: true, Confidence: .4}}
 }
 
 func Analyze(ctx context.Context, root string, requested []string, changed bool) (Report, error) {
@@ -132,7 +133,15 @@ func Analyze(ctx context.Context, root string, requested []string, changed bool)
 		}
 		layer, reason, confidence := classify(path)
 		report.Files = append(report.Files, File{ID: "file:" + path, Path: path, Layer: layer, LayerReason: reason, Confidence: confidence})
-		if filepath.Ext(path) != ".go" {
+		ext := strings.ToLower(filepath.Ext(path))
+		if ext == ".js" || ext == ".jsx" || ext == ".ts" || ext == ".tsx" || ext == ".py" {
+			components, edges, diagnostics := analyzeBoundedLanguage(filepath.Join(root, filepath.FromSlash(path)), path, layer, reason, confidence, ext)
+			report.Components = append(report.Components, components...)
+			report.Edges = append(report.Edges, edges...)
+			report.Diagnostics = append(report.Diagnostics, diagnostics...)
+			continue
+		}
+		if ext != ".go" {
 			report.Components = append(report.Components, Component{ID: "file-component:" + path, Name: filepath.Base(path), Kind: "file", Locator: path, File: path, PrimaryLayer: layer, LayerReason: reason, Imports: []string{}, References: []string{}, Calls: []string{}, Inputs: []string{"unknown: language semantic provider unavailable"}, Outputs: []string{"unknown: language semantic provider unavailable"}, Effects: []string{"unknown: runtime observation required"}, Unknown: []string{"declarations", "imports and references", "callers and callees", "input and output shapes", "side effects"}, Provider: "filesystem", Confidence: .4})
 			report.Diagnostics = append(report.Diagnostics, "degraded filesystem analysis for "+path+": semantic provider unavailable; Six Questions remain explicit unknowns")
 			continue
@@ -190,6 +199,150 @@ func Analyze(ctx context.Context, root string, requested []string, changed bool)
 	sort.Slice(report.Files, func(i, j int) bool { return report.Files[i].Path < report.Files[j].Path })
 	sort.Slice(report.Components, func(i, j int) bool { return report.Components[i].ID < report.Components[j].ID })
 	return report, nil
+}
+
+var (
+	tsImportPattern   = regexp.MustCompile(`(?:import\s+.*?\s+from\s+|require\s*\()?["']([^"']+)["']`)
+	tsFunctionPattern = regexp.MustCompile(`(?:export\s+)?(?:default\s+)?(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(([^)]*)\)|(?:export\s+)?(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:async\s*)?\(([^)]*)\)\s*=>`)
+	pyImportPattern   = regexp.MustCompile(`^\s*(?:from\s+([\w.]+)\s+import|import\s+([\w.]+))`)
+	pyFunctionPattern = regexp.MustCompile(`^\s*(?:async\s+)?def\s+([A-Za-z_]\w*)\s*\(([^)]*)\)\s*(?:->\s*([^:]+))?:`)
+	callPattern       = regexp.MustCompile(`([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*\(`)
+)
+
+// analyzeBoundedLanguage intentionally extracts only stable, reviewable syntax. It never
+// claims dynamic dispatch; runtime QA supplies that missing edge.
+func analyzeBoundedLanguage(abs, path, layer, reason string, confidence float64, ext string) ([]Component, []Edge, []string) {
+	b, err := os.ReadFile(abs)
+	if err != nil {
+		return nil, nil, []string{"read " + path + ": " + err.Error()}
+	}
+	provider := "typescript-static"
+	imports := []string{}
+	if ext == ".py" {
+		provider = "python-static"
+	}
+	lines := strings.Split(string(b), "\n")
+	for _, line := range lines {
+		if ext == ".py" {
+			if m := pyImportPattern.FindStringSubmatch(line); len(m) > 0 {
+				imports = append(imports, firstNonEmpty(m[1:]...))
+			}
+		} else if strings.Contains(line, "import") || strings.Contains(line, "require") {
+			if m := tsImportPattern.FindStringSubmatch(line); len(m) > 1 {
+				imports = append(imports, m[1])
+			}
+		}
+	}
+	imports = clean(imports)
+	var components []Component
+	var edges []Edge
+	for lineNo, line := range lines {
+		var name, params, output string
+		if ext == ".py" {
+			m := pyFunctionPattern.FindStringSubmatch(line)
+			if len(m) == 0 {
+				continue
+			}
+			name, params, output = m[1], m[2], strings.TrimSpace(m[3])
+		} else {
+			m := tsFunctionPattern.FindStringSubmatch(line)
+			if len(m) == 0 {
+				continue
+			}
+			name, params = firstNonEmpty(m[1], m[3]), firstNonEmpty(m[2], m[4])
+			output = tsReturnShape(line)
+		}
+		inputs := parameterShapes(params)
+		if len(inputs) == 0 {
+			inputs = []string{"none"}
+		}
+		if output == "" {
+			output = "runtime value or none"
+		}
+		body := line
+		if ext == ".py" {
+			indent := len(line) - len(strings.TrimLeft(line, " \t"))
+			for i := lineNo + 1; i < len(lines); i++ {
+				next := lines[i]
+				if strings.TrimSpace(next) == "" {
+					continue
+				}
+				nextIndent := len(next) - len(strings.TrimLeft(next, " \t"))
+				if nextIndent <= indent {
+					break
+				}
+				body += "\n" + next
+			}
+		}
+		calls := []string{}
+		for _, m := range callPattern.FindAllStringSubmatch(body, -1) {
+			if m[1] != name && !isControlCall(m[1]) {
+				calls = append(calls, m[1])
+			}
+		}
+		effects := boundedEffects(body)
+		component := Component{ID: "symbol:" + path + ":" + name, Name: name, Kind: "function", Locator: fmt.Sprintf("%s:%d", path, lineNo+1), File: path, PrimaryLayer: layer, LayerReason: reason, Imports: imports, References: []string{}, Calls: clean(calls), Inputs: inputs, Outputs: []string{output}, Effects: effects, Unknown: []string{"incoming references and dynamic dispatch require semantic index or runtime observation"}, Provider: provider, Confidence: min(confidence+.1, .75)}
+		components = append(components, component)
+		edges = append(edges, Edge{From: "file:" + path, To: component.ID, Kind: "declares", Locator: component.Locator, Provider: provider, Confidence: .85})
+		for _, call := range component.Calls {
+			edges = append(edges, Edge{From: component.ID, To: "call:" + call, Kind: "calls", Locator: component.Locator, Provider: provider, Confidence: .6})
+		}
+	}
+	if len(components) == 0 {
+		return nil, nil, []string{"bounded " + provider + " analysis found no function declarations in " + path}
+	}
+	return components, edges, nil
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, v := range values {
+		if strings.TrimSpace(v) != "" {
+			return strings.TrimSpace(v)
+		}
+	}
+	return ""
+}
+func parameterShapes(raw string) []string {
+	var out []string
+	for _, p := range strings.Split(raw, ",") {
+		p = strings.TrimSpace(p)
+		if p != "" && p != "self" && p != "cls" {
+			out = append(out, p)
+		}
+	}
+	return clean(out)
+}
+func tsReturnShape(line string) string {
+	if i := strings.Index(line, "): "); i >= 0 {
+		tail := line[i+3:]
+		if j := strings.Index(tail, "{"); j >= 0 {
+			return strings.TrimSpace(tail[:j])
+		}
+	}
+	if strings.Contains(line, "=>") {
+		return "inferred expression or declared return"
+	}
+	return ""
+}
+func isControlCall(name string) bool {
+	switch name {
+	case "if", "for", "while", "switch", "catch", "function", "def":
+		return true
+	}
+	return false
+}
+func boundedEffects(body string) []string {
+	var out []string
+	lower := strings.ToLower(body)
+	for needle, effect := range map[string]string{"write": "writes persistence or response data", "save": "persists data", "insert": "persists data", "publish": "publishes queued data", "append": "mutates a collection", "fetch": "performs external or HTTP I/O", "request": "performs external or HTTP I/O"} {
+		if strings.Contains(lower, needle) {
+			out = append(out, effect)
+		}
+	}
+	if len(out) == 0 {
+		out = []string{"no bounded static side effect detected"}
+	}
+	return clean(out)
 }
 
 func sourcePaths(ctx context.Context, root string, requested []string, changed bool) ([]string, error) {

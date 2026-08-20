@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 722,
-  "updated_at": "2026-08-20T02:33:40.395896Z",
+  "revision": 807,
+  "updated_at": "2026-08-20T02:48:55.89127Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -444,6 +444,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Late request crash-window hardening is task-linked, fails closed without duplicate mutation, and automatic analysis reconverged at zero gaps.",
       "last_loop_at": "2026-08-20T02:29:59.803595Z"
+    },
+    "sprint_0000380x0n1akqny1ty6y9kt8g": {
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "slug": "multistack-fullflow",
+      "title": "Multi-stack Intelligence and Full-flow References",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wyd2xm0eey9n6e31px0"
+      ],
+      "intent_ids": [
+        "intent_0000380x0n5an517gpwmw7rrcg"
+      ],
+      "task_ids": [
+        "task_0000380x15tjkzr77rj40s62wm",
+        "task_0000380x15wqs0j3kqh8k7zps4"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow",
+      "archived_at": "2026-08-20T02:48:55.720926Z",
+      "approval_refs": [
+        "approval_0000380x19y4rd15d9zght6sfm",
+        "approval_0000380x28xddnm39nh3r4vas8"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380x1yqavwqc338z6t1thr",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 8,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Automatic gap analysis found zero intent, criterion, task, document-contract or changed-file ownership gaps after semantic provider and executable journey verification.",
+      "last_loop_at": "2026-08-20T02:41:59.499156Z"
     }
   },
   "tasks": {
@@ -907,6 +937,60 @@
         "internal/state/store.go",
         "internal/workflow/workflow.go"
       ]
+    },
+    "task_0000380x15tjkzr77rj40s62wm": {
+      "task_id": "task_0000380x15tjkzr77rj40s62wm",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "title": "Implement bounded TypeScript and Python semantic providers",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "layer": "business",
+      "artifacts": [
+        "internal/codeintel/codeintel.go",
+        "internal/codeintel/codeintel_test.go",
+        "internal/codeintel/reference_matrix_test.go"
+      ]
+    },
+    "task_0000380x15wqs0j3kqh8k7zps4": {
+      "task_id": "task_0000380x15wqs0j3kqh8k7zps4",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "title": "Build runnable Next.js and Python full-flow references and QA adapters",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "layer": "interface",
+      "artifacts": [
+        "internal/qaadapter/qaadapter.go",
+        "internal/qaadapter/qaadapter_test.go",
+        "package.json",
+        "Makefile",
+        "testdata/reference-nextjs/app/api/orders/route.ts",
+        "testdata/reference-nextjs/app/page.tsx",
+        "testdata/reference-nextjs/infra/runtime.ts",
+        "testdata/reference-nextjs/runtime/journey.mjs",
+        "testdata/reference-nextjs/src/order-client.ts",
+        "testdata/reference-nextjs/src/order-repository.ts",
+        "testdata/reference-nextjs/src/order-service.ts",
+        "testdata/reference-python/app/__init__.py",
+        "testdata/reference-python/app/__pycache__/__init__.cpython-314.pyc",
+        "testdata/reference-python/app/__pycache__/api.cpython-314.pyc",
+        "testdata/reference-python/app/__pycache__/queue.cpython-314.pyc",
+        "testdata/reference-python/app/__pycache__/repository.cpython-314.pyc",
+        "testdata/reference-python/app/__pycache__/service.cpython-314.pyc",
+        "testdata/reference-python/app/__pycache__/worker.cpython-314.pyc",
+        "testdata/reference-python/app/api.py",
+        "testdata/reference-python/app/queue.py",
+        "testdata/reference-python/app/repository.py",
+        "testdata/reference-python/app/service.py",
+        "testdata/reference-python/app/worker.py",
+        "testdata/reference-python/infra/runtime.py",
+        "testdata/reference-python/tests/__pycache__/journey_test.cpython-314.pyc",
+        "testdata/reference-python/tests/journey_test.py",
+        "scripts/qa-reference-observations.py"
+      ]
     }
   },
   "intents": {
@@ -1083,6 +1167,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T02:22:50.47364Z"
+    },
+    "intent_0000380x0n5an517gpwmw7rrcg": {
+      "intent_id": "intent_0000380x0n5an517gpwmw7rrcg",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "The same tene workflow, Understanding Layers, Six Questions and intent-driven QA must work with meaningful bounded semantics across Go, TypeScript/Next.js and Python API-worker repositories.",
+      "rationale": "The former polyglot provider returned file-level unknowns and reference fixtures did not prove the requested stacks and full data journeys.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T02:39:07.270588Z"
     }
   },
   "acceptance_criteria": {
@@ -1365,6 +1460,13 @@
       "statement": "Document sync previews and applies only managed metadata/generated regions while preserving freeform content; documented flags and waiver/QA aliases behave consistently; retry deduplication and evidence content deduplication are verified.",
       "priority": "blocking",
       "observable": "Golden document tests and CLI contract matrix pass, including manual edits, dry-run, idempotent retry and alias behavior."
+    },
+    "ac_0000380x0n5anrn57q3bhyrjj8": {
+      "ac_id": "ac_0000380x0n5anrn57q3bhyrjj8",
+      "intent_id": "intent_0000380x0n5an517gpwmw7rrcg",
+      "statement": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter.",
+      "priority": "blocking",
+      "observable": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass."
     }
   },
   "gaps": {
@@ -1683,6 +1785,34 @@
       "approved_at": "2026-08-20T02:33:39.185617Z",
       "expires_at": "2026-08-21T02:33:37Z",
       "consumed_at": "2026-08-20T02:33:40.153252Z"
+    },
+    "approval_0000380x19y4rd15d9zght6sfm": {
+      "approval_id": "approval_0000380x19y4rd15d9zght6sfm",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "from": "design",
+      "to": "do",
+      "reason": "Design contracts bound static uncertainty and require runtime evidence",
+      "requester": "codex",
+      "approver": "codex-reviewer",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:40:21.580442Z",
+      "approved_at": "2026-08-20T02:40:28.213794Z",
+      "expires_at": "2026-08-20T04:40:21Z",
+      "consumed_at": "2026-08-20T02:40:38.008486Z"
+    },
+    "approval_0000380x28xddnm39nh3r4vas8": {
+      "approval_id": "approval_0000380x28xddnm39nh3r4vas8",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "from": "report",
+      "to": "archived",
+      "reason": "Multi-stack semantic and executable full-flow criterion passed complete traceability and authoritative QA",
+      "requester": "codex",
+      "approver": "codex-reviewer",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:48:49.110163Z",
+      "approved_at": "2026-08-20T02:48:54.869939Z",
+      "expires_at": "2026-08-20T04:48:48Z",
+      "consumed_at": "2026-08-20T02:48:55.720926Z"
     }
   },
   "evidence": {
@@ -5963,6 +6093,2267 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T02:31:33.133278Z",
       "finished_at": "2026-08-20T02:31:33.941096Z"
+    },
+    "evidence_0000380x1r0rtvffx3wnavm6pw": {
+      "evidence_id": "evidence_0000380x1r0rtvffx3wnavm6pw",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g72238df4gyyhrm.json",
+      "sha256": "8ff856e3b2314f47a52481b72310a6b67d155b4d060dd7bc4bedcb56a519d279",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:12.301974Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g72238df4gyyhrm",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1r3d2zztq8pzh2yjar": {
+      "evidence_id": "evidence_0000380x1r3d2zztq8pzh2yjar",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7h15hseqtgx6n4.json",
+      "sha256": "7398bb6443d8822e8a8e04493478e4e87c17320620e4d5e90ed084d013e41a07",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:13.649438Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7h15hseqtgx6n4",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1r6ptgd56yxdrewskr": {
+      "evidence_id": "evidence_0000380x1r6ptgd56yxdrewskr",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7jp8wq7da2gbnr.json",
+      "sha256": "01c5afdd385b04a87e3ebe123885e81b7c3dab1998c48101c3b2e32101252f76",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:15.34163Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7jp8wq7da2gbnr",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1ra0mfsmc9kj2h3wv8": {
+      "evidence_id": "evidence_0000380x1ra0mfsmc9kj2h3wv8",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7kmrytr3z2esb4.json",
+      "sha256": "f248f3333801c777f095a8d28ef6877eb7a52301b903fd872128ee9fb09feef6",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:17.034256Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7kmrytr3z2esb4",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1rddxmskfhaf31nq7g": {
+      "evidence_id": "evidence_0000380x1rddxmskfhaf31nq7g",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7wgv7t5ggcwytr.json",
+      "sha256": "724f135877446d4e21dc55a9f4d732fb50797cf192f6caf766733b7b28a7a09c",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:18.782445Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7wgv7t5ggcwytr",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1rh7jmcqs6y8a206a8": {
+      "evidence_id": "evidence_0000380x1rh7jmcqs6y8a206a8",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7y5gmsr07r7ze4.json",
+      "sha256": "d28c1f4784e1161a4159b7dca68e952b9680a1762fb644d539ef40fc5487addc",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:20.729668Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7y5gmsr07r7ze4",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1rm154hrgvypetwwg4": {
+      "evidence_id": "evidence_0000380x1rm154hrgvypetwwg4",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7y6q49epmjxtdg.json",
+      "sha256": "18fd761e5276c24e4e0d9e101d36520451bc9779bce96d8194d122c070350753",
+      "size": 4085,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:44:22.162848Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7y6q49epmjxtdg",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:43:47.865381Z",
+      "finished_at": "2026-08-20T02:44:06.209259Z"
+    },
+    "evidence_0000380x1vcekm68w0apscc60w": {
+      "evidence_id": "evidence_0000380x1vcekm68w0apscc60w",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g72238df4gyyhrm-v2.json",
+      "sha256": "863adc29dd7e6594d0b240ae68ee36e9dc6440606dfad4a026d1773c3d395d30",
+      "size": 4162,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:07.433159Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g72238df4gyyhrm",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1vdwm9cfrtdf7bqcwg": {
+      "evidence_id": "evidence_0000380x1vdwm9cfrtdf7bqcwg",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7h15hseqtgx6n4-v2.json",
+      "sha256": "d86ca76661f2ba0ee485cb10a4e71ab80fe8ef93f1f592d9af86ccf19ec33a47",
+      "size": 4141,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:08.170448Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7h15hseqtgx6n4",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1vfaercv89scmab9kw": {
+      "evidence_id": "evidence_0000380x1vfaercv89scmab9kw",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7jp8wq7da2gbnr-v2.json",
+      "sha256": "96a16fbd74935ad9250363a87b6b578992125cfa355653e70012f516843917df",
+      "size": 4155,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:08.903494Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7jp8wq7da2gbnr",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1vgsfmwy9rqb80081m": {
+      "evidence_id": "evidence_0000380x1vgsfmwy9rqb80081m",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7kmrytr3z2esb4-v2.json",
+      "sha256": "8748a55549e3edf3db5ea3d9cad1d8540017e5d5418357cb6ebdf2aecaa0562b",
+      "size": 4148,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:09.655927Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7kmrytr3z2esb4",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1vj7nn2egaaedbtpp0": {
+      "evidence_id": "evidence_0000380x1vj7nn2egaaedbtpp0",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7wgv7t5ggcwytr-v2.json",
+      "sha256": "722ef00d582814160e74e18ef2837fd6f1ab9361683e95e05e2169f9efc77921",
+      "size": 4127,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:10.394063Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7wgv7t5ggcwytr",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1vkrf0vkpeqxkcx0sw": {
+      "evidence_id": "evidence_0000380x1vkrf0vkpeqxkcx0sw",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7y5gmsr07r7ze4-v2.json",
+      "sha256": "bcfa3f57128f1f2540ee862b4255602be3cec440b6afb10a889f39f04bbeb10f",
+      "size": 4162,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:11.175315Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7y5gmsr07r7ze4",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1vn5k4f59xyv95xwk8": {
+      "evidence_id": "evidence_0000380x1vn5k4f59xyv95xwk8",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1g0g7y6q49epmjxtdg-v2.json",
+      "sha256": "388a18468285222a97de88a710e87e444030a3f00561c101d96ff2148c2d21e9",
+      "size": 4127,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:45:11.897979Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1g0g7y6q49epmjxtdg",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 770,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "Next.js confirmation/API/persisted order and Python API/queue/worker/persisted order agree; semantic matrix passes",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:44:58.096589Z",
+      "finished_at": "2026-08-20T02:45:07.081927Z"
+    },
+    "evidence_0000380x1zje2b5a05bf1wdqwg": {
+      "evidence_id": "evidence_0000380x1zje2b5a05bf1wdqwg",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqaw9x311rn8cen6r-v3.json",
+      "sha256": "0558bcbd6cdb10f82ef3fd3aa99f8cac0ec2a0004d9a690c720c2522bbd1ca40",
+      "size": 3923,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:16.033416Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqaw9x311rn8cen6r",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "403 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
+    },
+    "evidence_0000380x1zkzqda802de6z4b5w": {
+      "evidence_id": "evidence_0000380x1zkzqda802de6z4b5w",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqawwv74qjhwh8xxg-v3.json",
+      "sha256": "379b46b028b8349ad04248b60ad720af1e750e2c3480822be19a82135c03cf9b",
+      "size": 3881,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:16.827564Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqawwv74qjhwh8xxg",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "400 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
+    },
+    "evidence_0000380x1znkjfggak55bd1zxr": {
+      "evidence_id": "evidence_0000380x1znkjfggak55bd1zxr",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqawxy6r0gdcb9xbg-v3.json",
+      "sha256": "3707c4b37e8cd2f54ec229a5c466838623a50f352bfb8a8d6429a9de6b0387e4",
+      "size": 4043,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:17.657647Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqawxy6r0gdcb9xbg",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "200 with alternate persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
+    },
+    "evidence_0000380x1zq7g39v7mce7mkpp8": {
+      "evidence_id": "evidence_0000380x1zq7g39v7mce7mkpp8",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqawzxj8bs30vnvn8-v3.json",
+      "sha256": "a3c4c62c7aff09bfada4b2d0ff92e1639d4f1d4a59ac9221fe7cd64341f9b3dd",
+      "size": 3901,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:18.488459Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqawzxj8bs30vnvn8",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "503 with zero writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
+    },
+    "evidence_0000380x1zrrswmrtqf688ph2c": {
+      "evidence_id": "evidence_0000380x1zrrswmrtqf688ph2c",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqaxj1jcs3amg0fz0-v3.json",
+      "sha256": "1577f41f684f81d04652ee5e65d41c43f0c3c565a4bec992e54455c168149f2a",
+      "size": 3942,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:19.276952Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqaxj1jcs3amg0fz0",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "200 with one persisted order; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
+    },
+    "evidence_0000380x1zt9jnygetx21jg5h8": {
+      "evidence_id": "evidence_0000380x1zt9jnygetx21jg5h8",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqaxrngsmvwgf9k14-v3.json",
+      "sha256": "87a80ed75ff5e2fef34e7bed89c0fa85f502e516927e767f8cc5805922b2af8a",
+      "size": 4047,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:20.057146Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqaxrngsmvwgf9k14",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "zero network and persistence writes; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
+    },
+    "evidence_0000380x1zw37hstb7t5a6b6pc": {
+      "evidence_id": "evidence_0000380x1zw37hstb7t5a6b6pc",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x0n1akqny1ty6y9kt8g-multistack-fullflow/04-qa/observations/case_0000380x1yqaxvtxmnsc2kg2yg-v3.json",
+      "sha256": "19432b608f7c4a03658491a8f60abc9ddb6435f77f37d65957e2884f4daa8ea5",
+      "size": 4038,
+      "ac_ids": [
+        "ac_0000380x0n5anrn57q3bhyrjj8"
+      ],
+      "created_at": "2026-08-20T02:46:20.979915Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x1yqaxvtxmnsc2kg2yg",
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f",
+      "state_revision": 791,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L2 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L3 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L4 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L5 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L6 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        },
+        {
+          "statement": "L7 reference journey contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "retry succeeds with exactly one write; Go semantic matrix, Python worker journey and Playwright flow pass",
+          "expected": "supported stacks expose semantic components and observable interface-to-persistence journeys pass"
+        }
+      ],
+      "tool": "reference-journey-runner",
+      "tool_version": "node+python-reference-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:46:03.006566Z",
+      "finished_at": "2026-08-20T02:46:15.647264Z"
     }
   },
   "qa_runs": {
@@ -11706,6 +14097,639 @@
       "finished_at": "2026-08-20T02:32:01.422728Z",
       "state_revision": 686,
       "spec_hash": "3122cb13dd0f0197bba20c09a33dc5bd9488354841ccbede936cf58bc965cd51"
+    },
+    "run_0000380x1g0g53a694cr56a30m": {
+      "run_id": "run_0000380x1g0g53a694cr56a30m",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380x1g0g7y6q49epmjxtdg",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1rm154hrgvypetwwg4",
+            "evidence_0000380x1vn5k4f59xyv95xwk8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1g0g7jp8wq7da2gbnr",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1r6ptgd56yxdrewskr",
+            "evidence_0000380x1vfaercv89scmab9kw"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1g0g7wgv7t5ggcwytr",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1rddxmskfhaf31nq7g",
+            "evidence_0000380x1vj7nn2egaaedbtpp0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1g0g72238df4gyyhrm",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1r0rtvffx3wnavm6pw",
+            "evidence_0000380x1vcekm68w0apscc60w"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1g0g7y5gmsr07r7ze4",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1rh7jmcqs6y8a206a8",
+            "evidence_0000380x1vkrf0vkpeqxkcx0sw"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1g0g7h15hseqtgx6n4",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1r3d2zztq8pzh2yjar",
+            "evidence_0000380x1vdwm9cfrtdf7bqcwg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1g0g7kmrytr3z2esb4",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1ra0mfsmc9kj2h3wv8",
+            "evidence_0000380x1vgsfmwy9rqb80081m"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T02:42:01.090981Z",
+      "finished_at": "2026-08-20T02:45:12.64923Z",
+      "state_revision": 770,
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f"
+    },
+    "run_0000380x1yqavwqc338z6t1thr": {
+      "run_id": "run_0000380x1yqavwqc338z6t1thr",
+      "sprint_id": "sprint_0000380x0n1akqny1ty6y9kt8g",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380x1yqaxj1jcs3amg0fz0",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1zrrswmrtqf688ph2c"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1yqawxy6r0gdcb9xbg",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1znkjfggak55bd1zxr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1yqawwv74qjhwh8xxg",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1zkzqda802de6z4b5w"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1yqaxrngsmvwgf9k14",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1zt9jnygetx21jg5h8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1yqaw9x311rn8cen6r",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1zje2b5a05bf1wdqwg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1yqawzxj8bs30vnvn8",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1zq7g39v7mce7mkpp8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x1yqaxvtxmnsc2kg2yg",
+          "ac_ids": [
+            "ac_0000380x0n5anrn57q3bhyrjj8"
+          ],
+          "title": "Go CLI, Next.js-style full-stack and Python API-to-queue-to-worker-to-database references expose four-layer and Six-Question analysis; runnable journeys prove interface, business and persistence effects; Python tests are a discovered QA adapter. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x1zw37hstb7t5a6b6pc"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Reference matrix reports semantic components rather than filesystem-only placeholders for all three stacks, and Go/Playwright/Python full-flow tests pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T02:46:02.157922Z",
+      "finished_at": "2026-08-20T02:46:21.768665Z",
+      "state_revision": 791,
+      "spec_hash": "8a1cd3396620bb50148535bdfb720eda53dad13cdcf0ceb962dca444193b2f5f"
     }
   },
   "graph": {
