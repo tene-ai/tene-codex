@@ -158,16 +158,35 @@ type Waiver struct {
 }
 
 type Evidence struct {
-	EvidenceID      string    `json:"evidence_id"`
-	SprintID        string    `json:"sprint_id"`
-	RunID           string    `json:"run_id,omitempty"`
-	Kind            string    `json:"kind"`
-	URI             string    `json:"uri"`
-	SHA256          string    `json:"sha256"`
-	Size            int64     `json:"size"`
-	CriterionIDs    []string  `json:"ac_ids,omitempty"`
-	CreatedAt       time.Time `json:"created_at"`
-	RedactionStatus string    `json:"redaction_status"`
+	EvidenceID      string              `json:"evidence_id"`
+	SprintID        string              `json:"sprint_id"`
+	RunID           string              `json:"run_id,omitempty"`
+	Kind            string              `json:"kind"`
+	URI             string              `json:"uri"`
+	SHA256          string              `json:"sha256"`
+	Size            int64               `json:"size"`
+	CriterionIDs    []string            `json:"ac_ids,omitempty"`
+	CreatedAt       time.Time           `json:"created_at"`
+	RedactionStatus string              `json:"redaction_status"`
+	CaseID          string              `json:"case_id,omitempty"`
+	SpecHash        string              `json:"spec_hash,omitempty"`
+	StateRevision   uint64              `json:"state_revision,omitempty"`
+	Layers          []string            `json:"layers,omitempty"`
+	Assertions      []EvidenceAssertion `json:"assertions,omitempty"`
+	Tool            string              `json:"tool,omitempty"`
+	ToolVersion     string              `json:"tool_version,omitempty"`
+	Environment     string              `json:"environment,omitempty"`
+	StartedAt       *time.Time          `json:"started_at,omitempty"`
+	FinishedAt      *time.Time          `json:"finished_at,omitempty"`
+}
+
+type EvidenceAssertion struct {
+	Statement       string   `json:"statement"`
+	Passed          bool     `json:"passed"`
+	Layer           string   `json:"layer"`
+	RequirementRefs []string `json:"requirement_refs"`
+	Actual          string   `json:"actual,omitempty"`
+	Expected        string   `json:"expected,omitempty"`
 }
 
 type QACase struct {
@@ -194,13 +213,15 @@ type QAStep struct {
 }
 
 type QARun struct {
-	RunID       string     `json:"run_id"`
-	SprintID    string     `json:"sprint_id"`
-	Status      string     `json:"status"`
-	Environment string     `json:"environment"`
-	Cases       []QACase   `json:"cases"`
-	StartedAt   time.Time  `json:"started_at"`
-	FinishedAt  *time.Time `json:"finished_at,omitempty"`
+	RunID         string     `json:"run_id"`
+	SprintID      string     `json:"sprint_id"`
+	Status        string     `json:"status"`
+	Environment   string     `json:"environment"`
+	Cases         []QACase   `json:"cases"`
+	StartedAt     time.Time  `json:"started_at"`
+	FinishedAt    *time.Time `json:"finished_at,omitempty"`
+	StateRevision uint64     `json:"state_revision"`
+	SpecHash      string     `json:"spec_hash"`
 }
 
 type Graph struct {

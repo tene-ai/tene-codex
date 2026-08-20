@@ -4,17 +4,21 @@
   "title": "tene-workflow QA observation",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "adapter", "run_id", "case_id", "environment", "started_at", "finished_at", "checkpoints", "assertions", "redaction_status"],
+  "required": ["schema_version", "adapter", "run_id", "case_id", "environment", "started_at", "finished_at", "assertions", "redaction_status", "spec_hash", "state_revision", "layers", "tool_version"],
   "properties": {
     "schema_version": {"const": "1.0.0"},
     "adapter": {"type": "string", "minLength": 1},
     "run_id": {"type": "string", "minLength": 1},
     "case_id": {"type": "string", "minLength": 1},
+    "spec_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "state_revision": {"type": "integer", "minimum": 1},
+    "layers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["L1", "L2", "L3", "L4", "L5", "L6", "L7"]}},
+    "tool_version": {"type": "string", "minLength": 1},
     "environment": {"type": "string", "minLength": 1},
     "started_at": {"type": "string", "format": "date-time"},
     "finished_at": {"type": "string", "format": "date-time"},
-    "checkpoints": {"type": "array", "items": {"type": "object", "required": ["name", "kind"], "properties": {"name": {"type": "string"}, "kind": {"type": "string"}, "before": {}, "after": {}}}},
-    "assertions": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["statement", "passed"], "properties": {"statement": {"type": "string", "minLength": 1}, "passed": {"type": "boolean"}, "actual": {"type": "string"}, "expected": {"type": "string"}}}},
+    "checkpoints": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["name", "kind", "before", "after"], "properties": {"name": {"type": "string", "minLength": 1}, "kind": {"type": "string", "minLength": 1}, "before": {}, "after": {}}}},
+    "assertions": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["statement", "passed", "layer", "requirement_refs", "actual", "expected"], "properties": {"statement": {"type": "string", "minLength": 1}, "passed": {"type": "boolean"}, "layer": {"enum": ["L1", "L2", "L3", "L4", "L5", "L6", "L7"]}, "requirement_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "actual": {"type": "string", "minLength": 1}, "expected": {"type": "string", "minLength": 1}}}},
     "redaction_status": {"const": "passed"}
   }
 }

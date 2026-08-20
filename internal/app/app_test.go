@@ -182,20 +182,34 @@ func TestCLICompleteSprintArchivesDocuments(t *testing.T) {
 	execute(t, root, "phase", "transition", "qa")
 	completeDocument(t, root, filepath.ToSlash(filepath.Join(sprint["document_root"].(string), "04-qa", "00-qa-plan.md")))
 	_, planned := execute(t, root, "qa", "plan")
-	cases := planned.Result.(map[string]any)["cases"].([]any)
-	evidencePath := filepath.Join(originalRoot, "04-qa", "evidence", "qa-result.txt")
-	if err := os.MkdirAll(filepath.Dir(evidencePath), 0o755); err != nil {
+	plannedRun := planned.Result.(map[string]any)
+	cases := plannedRun["cases"].([]any)
+	firstCaseID := cases[0].(map[string]any)["case_id"].(string)
+	if code, env := execute(t, root, "qa", "case", firstCaseID, "passed", "--evidence", "anything"); code != 3 || len(env.Errors) == 0 || env.Errors[0].Code != "QA_MANUAL_PASS_FORBIDDEN" { t.Fatalf("manual pass was not rejected: code=%d env=%#v",code,env) }
+	evidenceDir := filepath.Join(originalRoot, "04-qa", "evidence")
+	if err := os.MkdirAll(evidenceDir, 0o755); err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(evidencePath, []byte("all assertions passed\n"), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	_, registered := execute(t, root, "evidence", "register", "--path", evidencePath, "--ac", acID)
-	evidenceID := registered.Result.(map[string]any)["evidence_id"].(string)
 	for _, raw := range cases {
-		caseID := raw.(map[string]any)["case_id"].(string)
-		if code, _ := execute(t, root, "qa", "case", caseID, "passed", "--evidence", evidenceID); code != 0 {
-			t.Fatalf("case %s failed", caseID)
+		qaCase := raw.(map[string]any)
+		caseID, variant := qaCase["case_id"].(string), qaCase["variant"].(string)
+		evidencePath := filepath.Join(evidenceDir, caseID+".json")
+		now := time.Now().UTC()
+		assertions := []map[string]any{}
+		for _, layer := range []string{"L1", "L2", "L3", "L4", "L5", "L6", "L7"} {
+			refs := []string{"layer:" + layer}
+			if layer == "L5" {
+				refs = append(refs, "observable", "variant:"+variant)
+			}
+			assertions = append(assertions, map[string]any{"statement": "verified " + layer, "passed": true, "layer": layer, "requirement_refs": refs, "actual": "verified", "expected": "verified"})
+		}
+		observation := map[string]any{"schema_version": "1.0.0", "adapter": "test-observer", "run_id": plannedRun["run_id"], "case_id": caseID, "environment": plannedRun["environment"], "started_at": now, "finished_at": now.Add(time.Second), "redaction_status": "passed", "spec_hash": plannedRun["spec_hash"], "state_revision": plannedRun["state_revision"], "layers": []string{"L1", "L2", "L3", "L4", "L5", "L6", "L7"}, "tool_version": "test-1", "checkpoints": []map[string]any{{"name": "journey", "kind": "ui-api-data", "before": map[string]any{"state": "start"}, "after": map[string]any{"state": "done"}}}, "assertions": assertions}
+		b, _ := json.Marshal(observation)
+		if err := os.WriteFile(evidencePath, b, 0o644); err != nil {
+			t.Fatal(err)
+		}
+		if code, env := execute(t, root, "qa", "observe", caseID, "--input", evidencePath); code != 0 {
+			t.Fatalf("case %s failed: %#v", caseID, env)
 		}
 	}
 	if code, _ := execute(t, root, "qa", "evaluate"); code != 0 {

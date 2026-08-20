@@ -89,14 +89,44 @@ func TestPRDGateRequiresConfirmedIntentAndCriterion(t *testing.T) {
 func TestQAGateRequiresEveryVariantAndMatchingEvidence(t *testing.T) {
 	p, sp := fixture()
 	sp.Phase = domain.PhaseQA
-	p.Evidence["ev"] = &domain.Evidence{EvidenceID: "ev", SHA256: "hash", RedactionStatus: "passed", CriterionIDs: []string{"ac_test"}}
-	run := &domain.QARun{Cases: []domain.QACase{{CaseID: "happy", CriterionIDs: []string{"ac_test"}, Status: "passed", EvidenceIDs: []string{"ev"}}, {CaseID: "recovery", CriterionIDs: []string{"ac_test"}, Status: "pending"}}}
+	now := time.Now().UTC()
+	run := &domain.QARun{RunID: "run", StateRevision: p.Revision, SpecHash: QASpecHash(p, sp), Cases: []domain.QACase{{CaseID: "happy", Variant: "happy", CriterionIDs: []string{"ac_test"}, RequiredLayers: map[string]string{"L5": "required"}, EvidenceIDs: []string{"ev-happy"}}, {CaseID: "recovery", Variant: "recovery", CriterionIDs: []string{"ac_test"}, RequiredLayers: map[string]string{"L5": "required"}}}}
+	p.Evidence["ev-happy"] = validEvidence("ev-happy", run, run.Cases[0], now)
 	if got := EvaluateQAGate(p, sp, run); !Blocking(got) {
 		t.Fatal("pending recovery case must block")
 	}
-	run.Cases[1].Status = "passed"
-	run.Cases[1].EvidenceIDs = []string{"ev"}
+	run.Cases[1].EvidenceIDs = []string{"ev-recovery"}
+	p.Evidence["ev-recovery"] = validEvidence("ev-recovery", run, run.Cases[1], now)
 	if got := EvaluateQAGate(p, sp, run); Blocking(got) {
 		t.Fatalf("unexpected findings: %#v", got)
 	}
+	mutations := []struct {
+		name   string
+		mutate func(*domain.Evidence)
+	}{
+		{"wrong-run", func(e *domain.Evidence) { e.RunID = "other" }},
+		{"wrong-case", func(e *domain.Evidence) { e.CaseID = "other" }},
+		{"stale-spec", func(e *domain.Evidence) { e.SpecHash = "old" }},
+		{"no-layer", func(e *domain.Evidence) { e.Layers = nil }},
+		{"failed-assertion", func(e *domain.Evidence) { e.Assertions[0].Passed = false }},
+		{"no-tool-version", func(e *domain.Evidence) { e.ToolVersion = "" }},
+		{"redaction-failed", func(e *domain.Evidence) { e.RedactionStatus = "failed" }},
+	}
+	for _, tc := range mutations {
+		t.Run(tc.name, func(t *testing.T) {
+			original := *p.Evidence["ev-happy"]
+			original.Layers = append([]string(nil), original.Layers...)
+			original.Assertions = append([]domain.EvidenceAssertion(nil), original.Assertions...)
+			tc.mutate(&original)
+			p.Evidence["ev-happy"] = &original
+			if got := EvaluateQAGate(p, sp, run); !Blocking(got) {
+				t.Fatalf("mutation passed: %#v", original)
+			}
+			p.Evidence["ev-happy"] = validEvidence("ev-happy", run, run.Cases[0], now)
+		})
+	}
+}
+
+func validEvidence(id string, run *domain.QARun, c domain.QACase, now time.Time) *domain.Evidence {
+	return &domain.Evidence{EvidenceID: id, RunID: run.RunID, CaseID: c.CaseID, SpecHash: run.SpecHash, StateRevision: run.StateRevision, SHA256: "hash", Size: 1, RedactionStatus: "passed", CriterionIDs: append([]string(nil), c.CriterionIDs...), Layers: []string{"L5"}, Assertions: []domain.EvidenceAssertion{{Statement: "observed", Passed: true, Layer: "L5", RequirementRefs: []string{"observable", "variant:" + c.Variant}}}, Tool: "observer", ToolVersion: "1", Environment: "local", StartedAt: &now, FinishedAt: &now}
 }

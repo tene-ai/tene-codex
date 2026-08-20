@@ -9,6 +9,16 @@
     "evidence_id": {"type": "string", "pattern": "^evidence_[0-9a-z]+$"},
     "sprint_id": {"type": "string", "pattern": "^sprint_[0-9a-z]+$"},
     "run_id": {"type": "string"},
+    "case_id": {"type": "string"},
+    "spec_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "state_revision": {"type": "integer", "minimum": 1},
+    "layers": {"type": "array", "items": {"enum": ["L1", "L2", "L3", "L4", "L5", "L6", "L7"]}, "uniqueItems": true},
+    "assertions": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["statement", "passed", "layer", "requirement_refs"], "properties": {"statement": {"type": "string", "minLength": 1}, "passed": {"type": "boolean"}, "layer": {"enum": ["L1", "L2", "L3", "L4", "L5", "L6", "L7"]}, "requirement_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "uniqueItems": true}, "actual": {"type": "string"}, "expected": {"type": "string"}}}},
+    "tool": {"type": "string"},
+    "tool_version": {"type": "string"},
+    "environment": {"type": "string"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
     "kind": {"type": "string", "minLength": 1},
     "uri": {"type": "string", "minLength": 1},
     "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
@@ -18,4 +28,3 @@
     "redaction_status": {"enum": ["passed", "failed"]}
   }
 }
-

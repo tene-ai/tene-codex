@@ -27,7 +27,7 @@ func TestExecuteRejectsUnknown(t *testing.T) {
 func TestReadObservation(t *testing.T) {
 	r := t.TempDir()
 	now := time.Now().UTC()
-	o := Observation{SchemaVersion: "1.0.0", Adapter: "chrome", RunID: "run", CaseID: "case", Environment: "local", StartedAt: now, FinishedAt: now.Add(time.Second), Assertions: []Assertion{{Statement: "flow completes", Passed: true}}, RedactionStatus: "passed"}
+	o := Observation{SchemaVersion: "1.0.0", Adapter: "chrome", RunID: "run", CaseID: "case", Environment: "local", StartedAt: now, FinishedAt: now.Add(time.Second), SpecHash: "spec", StateRevision: 1, Layers: []string{"L5"}, ToolVersion: "chrome-test", Checkpoints: []Checkpoint{{Name: "journey", Kind: "ui-data", Before: map[string]any{"state": "start"}, After: map[string]any{"state": "done"}}}, Assertions: []Assertion{{Statement: "flow completes", Passed: true, Layer: "L5", RequirementRefs: []string{"observable"}, Actual: "done", Expected: "done"}}, RedactionStatus: "passed"}
 	b, _ := json.Marshal(o)
 	os.WriteFile(filepath.Join(r, "observation.json"), b, 0644)
 	got, _, err := ReadObservation(r, "observation.json")
@@ -37,7 +37,13 @@ func TestReadObservation(t *testing.T) {
 	o.Assertions[0].Passed = false
 	b, _ = json.Marshal(o)
 	os.WriteFile(filepath.Join(r, "bad.json"), b, 0644)
-	if _, _, err := ReadObservation(r, "bad.json"); err == nil {
-		t.Fatal("expected failure")
+	if got, _, err := ReadObservation(r, "bad.json"); err != nil || got.Assertions[0].Passed {
+		t.Fatal("failed assertions must be preserved as evidence")
+	}
+	o.Assertions[0].Layer = ""
+	b, _ = json.Marshal(o)
+	os.WriteFile(filepath.Join(r, "invalid.json"), b, 0644)
+	if _, _, err := ReadObservation(r, "invalid.json"); err == nil {
+		t.Fatal("expected structural rejection")
 	}
 }

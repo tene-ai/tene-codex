@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "codex-deterministic-test-observer",
+  "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+  "case_id": "case_0000380wwpw1wzk13gsvgqy41r",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T02:00:20Z",
+  "finished_at": "2026-08-20T02:01:00Z",
+  "checkpoints": [
+    {
+      "name": "qa-evaluator-mutation-suite",
+      "kind": "cli-state",
+      "before": {
+        "case_status": "pending",
+        "variant": "permission"
+      },
+      "after": {
+        "go_test": "passed",
+        "race": "passed",
+        "schema": "passed",
+        "manual_pass": "rejected"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "Static and schema contracts compile",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "layer:L1"
+      ],
+      "actual": "go vet and schema validation passed",
+      "expected": "passed"
+    },
+    {
+      "statement": "Evaluator mutation unit tests pass",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "layer:L2"
+      ],
+      "actual": "all mutation cases rejected",
+      "expected": "all rejected"
+    },
+    {
+      "statement": "CLI structured observation flow passes",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "layer:L3",
+        "observable",
+        "variant:permission"
+      ],
+      "actual": "invalid proof rejected and valid proof accepted",
+      "expected": "false-pass impossible"
+    },
+    {
+      "statement": "Adversarial false-pass paths fail closed",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "layer:L6"
+      ],
+      "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+      "expected": "all rejected"
+    },
+    {
+      "statement": "Full regression remains green",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "layer:L7"
+      ],
+      "actual": "go test race and existing Playwright suite passed",
+      "expected": "passed"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+  "state_revision": 522,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "go1.25.0 + tene-workflow-dev"
+}

@@ -19,7 +19,7 @@ tene-workflow context build [--phase PHASE] [--budget BYTES] [--output PATH]
 tene-workflow context validate --input PATH
 tene-workflow loop check|iterate|record-gap|resolve-gap [--cross-sprint for archived debt]|defer-gap
 tene-workflow waiver create --gap ID --reason TEXT --approver ID --expires RFC3339|list|revoke ID
-tene-workflow qa capabilities|plan|execute CASE --adapter NAME|observe CASE --input FILE|case|evaluate|status
+tene-workflow qa capabilities|plan|execute CASE --adapter NAME|observe CASE --input FILE|case CASE failed|disposition CASE LAYER|evaluate|status
 tene-workflow evidence register|verify|list
 tene-workflow report generate|validate
 tene-workflow migrate status|dry-run|apply

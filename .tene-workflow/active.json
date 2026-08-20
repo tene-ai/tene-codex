@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 504,
-  "updated_at": "2026-08-20T01:34:27.638245Z",
+  "revision": 559,
+  "updated_at": "2026-08-20T02:03:28.548017Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -354,6 +354,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "All 33 required IDs map to existing implementation and four residual gaps were repaired.",
       "last_loop_at": "2026-08-20T01:31:10.065149Z"
+    },
+    "sprint_0000380wvj5zg3avxfejqj4wj0": {
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "slug": "qa-evidence-integrity",
+      "title": "QA Evidence Integrity and Independent Evaluation",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wrs5bseqwkpkg84mdwg"
+      ],
+      "intent_ids": [
+        "intent_0000380wvk7q507samchfwpvxw"
+      ],
+      "task_ids": [
+        "task_0000380ww94ys4jxvcmvvcsmj4",
+        "task_0000380ww96c0s257b3msrw78r"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity",
+      "archived_at": "2026-08-20T02:03:28.439816Z",
+      "approval_refs": [
+        "approval_0000380ww9jeqj2wqebqrghz5g",
+        "approval_0000380wx2fz0ztxfwnwpvpzjr"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 8,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "All identified QA false-pass mutations are rejected and complete structured evidence remains accepted.",
+      "last_loop_at": "2026-08-20T02:00:09.143356Z"
     }
   },
   "tasks": {
@@ -733,6 +763,26 @@
         "ac_0000380wrs7a76scmce852d2ar"
       ],
       "layer": "Interface,Business Logic,Persistence,Infrastructure"
+    },
+    "task_0000380ww94ys4jxvcmvvcsmj4": {
+      "task_id": "task_0000380ww94ys4jxvcmvvcsmj4",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "title": "Implement evidence identity layer assertion freshness and integrity contracts",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "layer": "Business Logic"
+    },
+    "task_0000380ww96c0s257b3msrw78r": {
+      "task_id": "task_0000380ww96c0s257b3msrw78r",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "title": "Add adversarial evaluator and structured observation integration tests",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "layer": "Infrastructure"
     }
   },
   "intents": {
@@ -876,6 +926,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T01:28:21.654318Z"
+    },
+    "intent_0000380wvk7q507samchfwpvxw": {
+      "intent_id": "intent_0000380wvk7q507samchfwpvxw",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "QA completion must be impossible unless each blocking acceptance criterion is supported by fresh, redaction-safe assertions that cover every required QA layer and observable journey expectation, with deterministic independent evaluation.",
+      "rationale": "Close the false-pass paths found by the independent semantic audit.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T01:55:49.636468Z"
     }
   },
   "acceptance_criteria": {
@@ -1137,6 +1198,13 @@
       "statement": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes.",
       "priority": "blocking",
       "observable": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass."
+    },
+    "ac_0000380wvk7q5mkdwqj2q1c1gc": {
+      "ac_id": "ac_0000380wvk7q5mkdwqj2q1c1gc",
+      "intent_id": "intent_0000380wvk7q507samchfwpvxw",
+      "statement": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity.",
+      "priority": "blocking",
+      "observable": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected."
     }
   },
   "gaps": {
@@ -1371,6 +1439,34 @@
       "approved_at": "2026-08-20T01:34:26.663381Z",
       "expires_at": "2026-08-21T12:00:00Z",
       "consumed_at": "2026-08-20T01:34:27.529002Z"
+    },
+    "approval_0000380ww9jeqj2wqebqrghz5g": {
+      "approval_id": "approval_0000380ww9jeqj2wqebqrghz5g",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed continuous implementation of all audited gaps.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:56:34.156001Z",
+      "approved_at": "2026-08-20T01:56:39.200785Z",
+      "expires_at": "2026-08-21T01:56:33Z",
+      "consumed_at": "2026-08-20T01:56:39.819102Z"
+    },
+    "approval_0000380wx2fz0ztxfwnwpvpzjr": {
+      "approval_id": "approval_0000380wx2fz0ztxfwnwpvpzjr",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "from": "report",
+      "to": "archived",
+      "reason": "QA evidence integrity Sprint passed mutation, integration, race, vet, E2E, evidence and report gates.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T02:03:22.480193Z",
+      "approved_at": "2026-08-20T02:03:27.763815Z",
+      "expires_at": "2026-08-21T02:03:22Z",
+      "consumed_at": "2026-08-20T02:03:28.439816Z"
     }
   },
   "evidence": {
@@ -1675,6 +1771,1000 @@
       ],
       "created_at": "2026-08-20T01:32:06.201081Z",
       "redaction_status": "passed"
+    },
+    "evidence_0000380wwt3gwsk7rt2aedfg14": {
+      "evidence_id": "evidence_0000380wwt3gwsk7rt2aedfg14",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1x88vahqh81yfhm.json",
+      "sha256": "2715be42255973de29c65b4edee6a0ac2ae9a16509a6ca4f8710df8445cbc6b9",
+      "size": 2316,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:05.038253Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1x88vahqh81yfhm",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwt5k9wnz821jfwjt4r": {
+      "evidence_id": "evidence_0000380wwt5k9wnz821jfwjt4r",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xr92q64z5rr648.json",
+      "sha256": "18f40729bb6071baf7534faa2b8d0ad640b36d1b41302f455a9701cb93613d01",
+      "size": 2324,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:06.100385Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xr92q64z5rr648",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwt7tzch2d9a8mqx6z4": {
+      "evidence_id": "evidence_0000380wwt7tzch2d9a8mqx6z4",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xck8bnrhgfesc4.json",
+      "sha256": "40ae0a0c42f94e0347fe29e3780100333608fea2bbbea19f78465534dd32f538",
+      "size": 2316,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:07.247492Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xck8bnrhgfesc4",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwta0ckxq9dknwfm6h0": {
+      "evidence_id": "evidence_0000380wwta0ckxq9dknwfm6h0",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1w1zeqwg4ws058r.json",
+      "sha256": "ed7de6743a4de308be40180d119afefaf6c7a363f38786e019be98e7fa8736d5",
+      "size": 2326,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:08.359068Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1w1zeqwg4ws058r",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwtc3054gzb7fn14sr8": {
+      "evidence_id": "evidence_0000380wwtc3054gzb7fn14sr8",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1wzk13gsvgqy41r.json",
+      "sha256": "127220229acc44a23ba85a235439c6bd822361f7f0b379615966948341b6a1a2",
+      "size": 2326,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:09.424926Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1wzk13gsvgqy41r",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwte2j1vfkdtyn8gm3m": {
+      "evidence_id": "evidence_0000380wwte2j1vfkdtyn8gm3m",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xy76qmrktz23qc.json",
+      "sha256": "4c4042e87a5c3d2663d607023f5ee2addfd9dca9e95607b5772b880785922f16",
+      "size": 2320,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:10.441702Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xy76qmrktz23qc",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwtfxxp5d3qd13kbm94": {
+      "evidence_id": "evidence_0000380wwtfxxp5d3qd13kbm94",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xj6s4hcngy1708.json",
+      "sha256": "36a1f231cb368517511e6be8a8588c2dc2ebd9c170bb07bf72c752d3a13870a1",
+      "size": 2322,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:11.391037Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xj6s4hcngy1708",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "Static and schema contracts compile",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "layer:L1"
+          ],
+          "actual": "go vet and schema validation passed",
+          "expected": "passed"
+        },
+        {
+          "statement": "Evaluator mutation unit tests pass",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "layer:L2"
+          ],
+          "actual": "all mutation cases rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "CLI structured observation flow passes",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "layer:L3",
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "invalid proof rejected and valid proof accepted",
+          "expected": "false-pass impossible"
+        },
+        {
+          "statement": "Adversarial false-pass paths fail closed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "layer:L6"
+          ],
+          "actual": "wrong identity freshness layer assertion tool redaction and manual pass rejected",
+          "expected": "all rejected"
+        },
+        {
+          "statement": "Full regression remains green",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "layer:L7"
+          ],
+          "actual": "go test race and existing Playwright suite passed",
+          "expected": "passed"
+        }
+      ],
+      "tool": "codex-deterministic-test-observer",
+      "tool_version": "go1.25.0 + tene-workflow-dev",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:00:20Z",
+      "finished_at": "2026-08-20T02:01:00Z"
+    },
+    "evidence_0000380wwwmavf1nksf5xmzrvr": {
+      "evidence_id": "evidence_0000380wwwmavf1nksf5xmzrvr",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1x88vahqh81yfhm-go-test.json",
+      "sha256": "9b9e8753808e7fb4575f449c11fcc24b0ee04b4856fdfe8e43f615bf72a7cf49",
+      "size": 1069,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:46.414542Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1x88vahqh81yfhm",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:25.701182Z",
+      "finished_at": "2026-08-20T02:01:46.412167Z"
+    },
+    "evidence_0000380wwwrgg21sjypza9k3aw": {
+      "evidence_id": "evidence_0000380wwwrgg21sjypza9k3aw",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xr92q64z5rr648-go-test.json",
+      "sha256": "89b48e6681378f58560a698b48e0ab9ea55df595345fb2f3fcae0e816ef13b49",
+      "size": 1076,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:48.553464Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xr92q64z5rr648",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:47.410972Z",
+      "finished_at": "2026-08-20T02:01:48.550584Z"
+    },
+    "evidence_0000380wwwwgrs17nqq396ehkg": {
+      "evidence_id": "evidence_0000380wwwwgrs17nqq396ehkg",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xck8bnrhgfesc4-go-test.json",
+      "sha256": "16f4ddeff0c44087e444bc0d1db3de057785384f35a19d7b1902f6a84fea020b",
+      "size": 1076,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:50.605967Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xck8bnrhgfesc4",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:49.577404Z",
+      "finished_at": "2026-08-20T02:01:50.603336Z"
+    },
+    "evidence_0000380wwx05bnrg8m22c5sab4": {
+      "evidence_id": "evidence_0000380wwx05bnrg8m22c5sab4",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1w1zeqwg4ws058r-go-test.json",
+      "sha256": "931228835f3ffa4aee6720b90b2063fe74ff61bbd79bdc31d69a976d77c695d2",
+      "size": 1076,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:52.470332Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1w1zeqwg4ws058r",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:51.594955Z",
+      "finished_at": "2026-08-20T02:01:52.468229Z"
+    },
+    "evidence_0000380wwx47b1zskxbkynda78": {
+      "evidence_id": "evidence_0000380wwx47b1zskxbkynda78",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1wzk13gsvgqy41r-go-test.json",
+      "sha256": "27b27675c5bff73464e7f4d81da8f57efcbb6363f7ad30081ba0957de794cf8c",
+      "size": 1076,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:54.550862Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1wzk13gsvgqy41r",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:53.411962Z",
+      "finished_at": "2026-08-20T02:01:54.546287Z"
+    },
+    "evidence_0000380wwx8cwrj9n1s3ne95f4": {
+      "evidence_id": "evidence_0000380wwx8cwrj9n1s3ne95f4",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xy76qmrktz23qc-go-test.json",
+      "sha256": "377e0d72b3ebb673344586aa25a58f8a0d9fb4b28108f9c69e9c501855d1fda8",
+      "size": 1076,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:56.687138Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xy76qmrktz23qc",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:55.729367Z",
+      "finished_at": "2026-08-20T02:01:56.684909Z"
+    },
+    "evidence_0000380wwxc3v2k7xvfm7440y0": {
+      "evidence_id": "evidence_0000380wwxc3v2k7xvfm7440y0",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "kind": "adapter-execution",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wvj5zg3avxfejqj4wj0-qa-evidence-integrity/04-qa/evidence/case_0000380wwpw1xj6s4hcngy1708-go-test.json",
+      "sha256": "b008c7d169b9f621236db521fbb20a2642916e1e47def10ec1710aba84fe2bb3",
+      "size": 1075,
+      "ac_ids": [
+        "ac_0000380wvk7q5mkdwqj2q1c1gc"
+      ],
+      "created_at": "2026-08-20T02:01:58.5899Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380wwpw1xj6s4hcngy1708",
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c",
+      "state_revision": 522,
+      "layers": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "assertions": [
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        },
+        {
+          "statement": "adapter completed successfully",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "adapter-exit"
+          ],
+          "actual": "true",
+          "expected": "true"
+        }
+      ],
+      "tool": "go-test",
+      "tool_version": "unknown",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T02:01:57.626257Z",
+      "finished_at": "2026-08-20T02:01:58.58767Z"
     }
   },
   "qa_runs": {
@@ -1941,7 +3031,9 @@
         }
       ],
       "started_at": "2026-08-19T17:14:09.845198Z",
-      "finished_at": "2026-08-19T17:16:25.519849Z"
+      "finished_at": "2026-08-19T17:16:25.519849Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380v1er5qm8zsz2gge2fk4": {
       "run_id": "run_0000380v1er5qm8zsz2gge2fk4",
@@ -2053,7 +3145,9 @@
         }
       ],
       "started_at": "2026-08-19T17:22:26.011584Z",
-      "finished_at": "2026-08-19T17:23:43.608626Z"
+      "finished_at": "2026-08-19T17:23:43.608626Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380v37vaky2n7xsz21633r": {
       "run_id": "run_0000380v37vaky2n7xsz21633r",
@@ -2441,7 +3535,9 @@
         }
       ],
       "started_at": "2026-08-19T17:38:01.513374Z",
-      "finished_at": "2026-08-19T17:38:40.810533Z"
+      "finished_at": "2026-08-19T17:38:40.810533Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380v4frqbxwsjnd0pr3rrg": {
       "run_id": "run_0000380v4frqbxwsjnd0pr3rrg",
@@ -2829,7 +3925,9 @@
         }
       ],
       "started_at": "2026-08-19T17:48:55.54176Z",
-      "finished_at": "2026-08-19T17:49:33.556303Z"
+      "finished_at": "2026-08-19T17:49:33.556303Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380v50py5ybj6recjze76r": {
       "run_id": "run_0000380v50py5ybj6recjze76r",
@@ -3217,7 +4315,9 @@
         }
       ],
       "started_at": "2026-08-19T17:53:33.154434Z",
-      "finished_at": "2026-08-19T17:54:26.651436Z"
+      "finished_at": "2026-08-19T17:54:26.651436Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380whyn7cf2pp7wnqg86c8": {
       "run_id": "run_0000380whyn7cf2pp7wnqg86c8",
@@ -3731,7 +4831,9 @@
         }
       ],
       "started_at": "2026-08-20T00:26:12.470454Z",
-      "finished_at": "2026-08-20T00:27:22.241947Z"
+      "finished_at": "2026-08-20T00:27:22.241947Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wkft6h3n298wyrt1jdr": {
       "run_id": "run_0000380wkft6h3n298wyrt1jdr",
@@ -4245,7 +5347,9 @@
         }
       ],
       "started_at": "2026-08-20T00:39:37.832867Z",
-      "finished_at": "2026-08-20T00:40:47.586463Z"
+      "finished_at": "2026-08-20T00:40:47.586463Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wn16nndrx67dynzxp6w": {
       "run_id": "run_0000380wn16nndrx67dynzxp6w",
@@ -4759,7 +5863,9 @@
         }
       ],
       "started_at": "2026-08-20T00:53:07.034824Z",
-      "finished_at": "2026-08-20T00:54:50.595054Z"
+      "finished_at": "2026-08-20T00:54:50.595054Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wpc76mrbdegm10wvyj4": {
       "run_id": "run_0000380wpc76mrbdegm10wvyj4",
@@ -5147,7 +6253,9 @@
         }
       ],
       "started_at": "2026-08-20T01:04:51.818601Z",
-      "finished_at": "2026-08-20T01:05:43.098669Z"
+      "finished_at": "2026-08-20T01:05:43.098669Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wq6m550ya9bcbyactpw": {
       "run_id": "run_0000380wq6m550ya9bcbyactpw",
@@ -5409,7 +6517,9 @@
         }
       ],
       "started_at": "2026-08-20T01:12:04.434862Z",
-      "finished_at": "2026-08-20T01:12:59.808539Z"
+      "finished_at": "2026-08-20T01:12:59.808539Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wqpcqrrqsk8bjf4j3p4": {
       "run_id": "run_0000380wqpcqrrqsk8bjf4j3p4",
@@ -5545,7 +6655,9 @@
         }
       ],
       "started_at": "2026-08-20T01:16:22.780434Z",
-      "finished_at": "2026-08-20T01:17:21.404394Z"
+      "finished_at": "2026-08-20T01:17:21.404394Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wrgp06nq4jyp6e344hw": {
       "run_id": "run_0000380wrgp06nq4jyp6e344hw",
@@ -5807,7 +6919,9 @@
         }
       ],
       "started_at": "2026-08-20T01:23:33.507651Z",
-      "finished_at": "2026-08-20T01:24:25.092737Z"
+      "finished_at": "2026-08-20T01:24:25.092737Z",
+      "state_revision": 0,
+      "spec_hash": ""
     },
     "run_0000380wscknmw8qbazrxrzsar": {
       "run_id": "run_0000380wscknmw8qbazrxrzsar",
@@ -6111,7 +7225,329 @@
         }
       ],
       "started_at": "2026-08-20T01:31:11.066215Z",
-      "finished_at": "2026-08-20T01:32:18.084058Z"
+      "finished_at": "2026-08-20T01:32:18.084058Z",
+      "state_revision": 0,
+      "spec_hash": ""
+    },
+    "run_0000380wwpw1tf7nv0wxs525qm": {
+      "run_id": "run_0000380wwpw1tf7nv0wxs525qm",
+      "sprint_id": "sprint_0000380wvj5zg3avxfejqj4wj0",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380wwpw1x88vahqh81yfhm",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwt3gwsk7rt2aedfg14",
+            "evidence_0000380wwwmavf1nksf5xmzrvr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wwpw1xr92q64z5rr648",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwt5k9wnz821jfwjt4r",
+            "evidence_0000380wwwrgg21sjypza9k3aw"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wwpw1xck8bnrhgfesc4",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwt7tzch2d9a8mqx6z4",
+            "evidence_0000380wwwwgrs17nqq396ehkg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wwpw1w1zeqwg4ws058r",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwta0ckxq9dknwfm6h0",
+            "evidence_0000380wwx05bnrg8m22c5sab4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wwpw1wzk13gsvgqy41r",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwtc3054gzb7fn14sr8",
+            "evidence_0000380wwx47b1zskxbkynda78"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wwpw1xy76qmrktz23qc",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwte2j1vfkdtyn8gm3m",
+            "evidence_0000380wwx8cwrj9n1s3ne95f4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wwpw1xj6s4hcngy1708",
+          "ac_ids": [
+            "ac_0000380wvk7q5mkdwqj2q1c1gc"
+          ],
+          "title": "A QA run fails when evidence lacks required-layer coverage, relevant passing assertions, matching run/case/criterion/revision, freshness, or redaction integrity. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wwtfxxp5d3qd13kbm94",
+            "evidence_0000380wwxc3v2k7xvfm7440y0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Mutation tests attempting hash-only, wrong-layer, stale, unrelated, manual-status, or failed-assertion evidence are rejected.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable:Kay Kim (continuous implementation directive):CLI evaluator has no deployed system boundary in this Sprint; integration is covered at L3.",
+            "L5": "not-applicable:Kay Kim (continuous implementation directive):This Sprint changes evaluator rules without an end-user UI; observable CLI behavior is covered by integration assertions.",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T02:00:12.061809Z",
+      "finished_at": "2026-08-20T02:02:33.457228Z",
+      "state_revision": 522,
+      "spec_hash": "8b90ae3f98a9a8fe813ffc87e95fc01f0163113aa0a90d82ea83d69fd5740d3c"
     }
   },
   "graph": {

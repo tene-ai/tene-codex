@@ -1455,12 +1455,12 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 	case "capabilities":
 		return qaadapter.Discover(rt.root), p.Revision, nil
 	case "plan":
-		run := &domain.QARun{RunID: domain.NewID("run"), SprintID: sp.SprintID, Status: "planned", Environment: "local", StartedAt: time.Now().UTC()}
+		run := &domain.QARun{RunID: domain.NewID("run"), SprintID: sp.SprintID, Status: "planned", Environment: qaadapter.EnvironmentFingerprint(rt.root), StartedAt: time.Now().UTC(), StateRevision: p.Revision, SpecHash: workflow.QASpecHash(p, sp)}
 		for _, ac := range p.Criteria {
 			if slices.Contains(sp.IntentIDs, ac.IntentID) && ac.Priority == "blocking" {
 				for _, variant := range qaVariants() {
-					dispositions := map[string]string{"L1": "required", "L2": "required", "L3": "required", "L4": "not-applicable: capability dependent", "L5": "required", "L6": "required", "L7": "required"}
-					run.Cases = append(run.Cases, domain.QACase{CaseID: domain.NewID("case"), CriterionIDs: []string{ac.CriterionID}, Title: ac.Statement + " — " + variant, Variant: variant, Layers: []string{"L1", "L2", "L3", "L5", "L6", "L7"}, Status: "pending", Actor: "project user", Preconditions: append([]string(nil), ac.Preconditions...), Steps: []domain.QAStep{{Action: qaVariantAction(variant), ExpectedUI: ac.Observable, ExpectedData: strings.Join(ac.Expected, "; "), ObserverIDs: []string{"interface", "boundary", "persistence"}}}, ForbiddenOutcomes: append([]string(nil), ac.Forbidden...), RequiredLayers: dispositions, Risk: "high"})
+					dispositions := map[string]string{"L1": "required", "L2": "required", "L3": "required", "L4": "required", "L5": "required", "L6": "required", "L7": "required"}
+					run.Cases = append(run.Cases, domain.QACase{CaseID: domain.NewID("case"), CriterionIDs: []string{ac.CriterionID}, Title: ac.Statement + " — " + variant, Variant: variant, Layers: []string{"L1", "L2", "L3", "L4", "L5", "L6", "L7"}, Status: "pending", Actor: "project user", Preconditions: append([]string(nil), ac.Preconditions...), Steps: []domain.QAStep{{Action: qaVariantAction(variant), ExpectedUI: ac.Observable, ExpectedData: strings.Join(ac.Expected, "; "), ObserverIDs: []string{"interface", "boundary", "persistence"}}}, ForbiddenOutcomes: append([]string(nil), ac.Forbidden...), RequiredLayers: dispositions, Risk: "high"})
 				}
 			}
 		}
@@ -1509,6 +1509,9 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		if obs.RunID != run.RunID || obs.CaseID != caseID {
 			return nil, 0, &commandError{"QA_OBSERVATION_MISMATCH", "observation run_id or case_id does not match active QA case", "Regenerate the observation for the active run and case.", 3}
 		}
+		if obs.SpecHash != run.SpecHash || obs.StateRevision != run.StateRevision {
+			return nil, 0, &commandError{"QA_OBSERVATION_STALE", "observation specification hash or state revision is stale", "Regenerate the observation from the active QA plan.", 3}
+		}
 		if looksSecret(b) {
 			return nil, 0, &commandError{"SEC_EVIDENCE_LEAK", "potential secret detected in observation", "Sanitize the observation and rotate exposed credentials.", 6}
 		}
@@ -1518,13 +1521,17 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		}
 		sum := sha256.Sum256(b)
 		id := domain.NewID("evidence")
-		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, RunID: run.RunID, Kind: "journey-observation", URI: relative(rt.root, abs), SHA256: hex.EncodeToString(sum[:]), Size: int64(len(b)), CriterionIDs: append([]string(nil), target.CriterionIDs...), CreatedAt: time.Now().UTC(), RedactionStatus: "passed"}
+		assertions := make([]domain.EvidenceAssertion, 0, len(obs.Assertions))
+		for _, assertion := range obs.Assertions {
+			assertions = append(assertions, domain.EvidenceAssertion{Statement: assertion.Statement, Passed: assertion.Passed, Layer: assertion.Layer, RequirementRefs: append([]string(nil), assertion.RequirementRefs...), Actual: assertion.Actual, Expected: assertion.Expected})
+		}
+		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, RunID: run.RunID, CaseID: caseID, SpecHash: run.SpecHash, StateRevision: run.StateRevision, Kind: "journey-observation", URI: relative(rt.root, abs), SHA256: hex.EncodeToString(sum[:]), Size: int64(len(b)), CriterionIDs: append([]string(nil), target.CriterionIDs...), CreatedAt: time.Now().UTC(), RedactionStatus: "passed", Layers: append([]string(nil), obs.Layers...), Assertions: assertions, Tool: obs.Adapter, ToolVersion: obs.ToolVersion, Environment: obs.Environment, StartedAt: &obs.StartedAt, FinishedAt: &obs.FinishedAt}
 		r, err := s.Mutate(rt.expected, actor(), "QAObservationImported", id, obs, func(p *domain.Project) error {
 			p.Evidence[id] = ev
 			rr := p.QARuns[sp.LastQAID]
 			for i := range rr.Cases {
 				if rr.Cases[i].CaseID == caseID {
-					rr.Cases[i].Status = "passed"
+					rr.Cases[i].Status = "evidenced"
 					rr.Cases[i].EvidenceIDs = unique(append(rr.Cases[i].EvidenceIDs, id))
 				}
 			}
@@ -1582,7 +1589,13 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		}
 		sum := sha256.Sum256(artifact)
 		id := domain.NewID("evidence")
-		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, RunID: run.RunID, Kind: "adapter-execution", URI: relative(rt.root, path), SHA256: hex.EncodeToString(sum[:]), Size: int64(len(artifact)), CriterionIDs: append([]string(nil), target.CriterionIDs...), CreatedAt: time.Now().UTC(), RedactionStatus: "passed"}
+		capability, _ := qaadapter.CapabilityByName(rt.root, *adapter)
+		assertions := []domain.EvidenceAssertion{}
+		for _, layer := range capability.Layers {
+			assertions = append(assertions, domain.EvidenceAssertion{Statement: "adapter completed successfully", Passed: executeErr == nil, Layer: layer, RequirementRefs: []string{"adapter-exit"}, Actual: fmt.Sprint(execution.Passed), Expected: "true"})
+		}
+		started, finished := execution.StartedAt, execution.FinishedAt
+		ev := &domain.Evidence{EvidenceID: id, SprintID: sp.SprintID, RunID: run.RunID, CaseID: caseID, SpecHash: run.SpecHash, StateRevision: run.StateRevision, Kind: "adapter-execution", URI: relative(rt.root, path), SHA256: hex.EncodeToString(sum[:]), Size: int64(len(artifact)), CriterionIDs: append([]string(nil), target.CriterionIDs...), CreatedAt: time.Now().UTC(), RedactionStatus: "passed", Layers: append([]string(nil), capability.Layers...), Assertions: assertions, Tool: *adapter, ToolVersion: qaadapter.ToolVersion(capability.Command), Environment: run.Environment, StartedAt: &started, FinishedAt: &finished}
 		statusValue := "passed"
 		if executeErr != nil {
 			statusValue = "failed"
@@ -1611,6 +1624,12 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 			return nil, 0, usageErr("use qa case <case-id> <passed|failed> --evidence id,id")
 		}
 		caseID, statusValue := args[1], args[2]
+		if statusValue == "passed" {
+			return nil, p.Revision, &commandError{"QA_MANUAL_PASS_FORBIDDEN", "a QA case cannot be manually marked passed", "Attach structured evidence and run qa evaluate.", 3}
+		}
+		if statusValue != "failed" {
+			return nil, 0, usageErr("manual case status must be failed")
+		}
 		evs := ""
 		for i := 3; i < len(args)-1; i++ {
 			if args[i] == "--evidence" {
@@ -1644,9 +1663,64 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 			return nil, 0, err
 		}
 		return r.QARuns[sp.LastQAID], r.Revision, nil
+	case "disposition":
+		if len(args) < 3 {
+			return nil, 0, usageErr("use qa disposition <case-id> <L1..L7> --status required|not-applicable|waived [--reason TEXT --approver ID]")
+		}
+		caseID, layer := args[1], strings.ToUpper(args[2])
+		if !slices.Contains([]string{"L1", "L2", "L3", "L4", "L5", "L6", "L7"}, layer) {
+			return nil, 0, usageErr("layer must be L1..L7")
+		}
+		fs := flag.NewFlagSet("qa disposition", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		statusValue := fs.String("status", "required", "")
+		reason := fs.String("reason", "", "")
+		approver := fs.String("approver", "", "")
+		if err := fs.Parse(args[3:]); err != nil {
+			return nil, 0, err
+		}
+		if !slices.Contains([]string{"required", "not-applicable", "waived"}, *statusValue) {
+			return nil, 0, usageErr("status must be required, not-applicable, or waived")
+		}
+		if *statusValue != "required" && (*reason == "" || *approver == "") {
+			return nil, 0, usageErr("--reason and --approver are required for non-required layers")
+		}
+		run := p.QARuns[sp.LastQAID]
+		if run == nil {
+			return nil, 0, notFound("qa run", sp.LastQAID)
+		}
+		found := false
+		for i := range run.Cases {
+			if run.Cases[i].CaseID == caseID {
+				found = true
+			}
+		}
+		if !found {
+			return nil, 0, notFound("qa case", caseID)
+		}
+		disposition := *statusValue
+		if *statusValue != "required" {
+			disposition = *statusValue + ":" + *approver + ":" + *reason
+		}
+		r, err := s.Mutate(rt.expected, actor(), "QALayerDispositionChanged", caseID, map[string]string{"layer": layer, "disposition": disposition}, func(p *domain.Project) error {
+			for i := range p.QARuns[sp.LastQAID].Cases {
+				c := &p.QARuns[sp.LastQAID].Cases[i]
+				if c.CaseID == caseID {
+					if c.RequiredLayers == nil {
+						c.RequiredLayers = map[string]string{}
+					}
+					c.RequiredLayers[layer] = disposition
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.QARuns[sp.LastQAID], r.Revision, nil
 	case "evaluate":
 		run := p.QARuns[sp.LastQAID]
-		findings := workflow.EvaluateQAGate(p, sp, run)
+		findings := workflow.EvaluateQAGateAtRoot(rt.root, p, sp, run)
 		statusValue := "passed"
 		if workflow.Blocking(findings) {
 			statusValue = "failed"
@@ -1654,6 +1728,14 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		now := time.Now().UTC()
 		r, err := s.Mutate(rt.expected, actor(), "QAEvaluated", sp.LastQAID, map[string]any{"status": statusValue, "findings": findings}, func(p *domain.Project) error {
 			run := p.QARuns[sp.LastQAID]
+			for i := range run.Cases {
+				run.Cases[i].Status = "failed"
+			}
+			if statusValue == "passed" {
+				for i := range run.Cases {
+					run.Cases[i].Status = "passed"
+				}
+			}
 			run.Status = statusValue
 			run.FinishedAt = &now
 			p.Sprints[sp.SprintID].LastQAStatus = statusValue

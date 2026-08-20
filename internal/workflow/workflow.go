@@ -4,8 +4,14 @@
 package workflow
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
+	"os"
+	"path/filepath"
 	"slices"
+	"sort"
 	"strings"
 	"time"
 
@@ -178,9 +184,17 @@ func finding(code, severity, ref, message, remediation string, waivable bool) do
 }
 
 func EvaluateQAGate(p *domain.Project, sprint *domain.Sprint, run *domain.QARun) []domain.Finding {
+	return EvaluateQAGateAtRoot("", p, sprint, run)
+}
+
+func EvaluateQAGateAtRoot(root string, p *domain.Project, sprint *domain.Sprint, run *domain.QARun) []domain.Finding {
 	var findings []domain.Finding
 	if run == nil {
 		return []domain.Finding{finding("QA_RUN_MISSING", "blocker", sprint.SprintID, "QA run is missing", "Create a QA plan and attach evidence.", false)}
+	}
+	currentSpecHash := QASpecHash(p, sprint)
+	if run.SpecHash == "" || run.SpecHash != currentSpecHash {
+		findings = append(findings, finding("QA_SPEC_STALE", "blocker", run.RunID, "QA plan no longer matches the confirmed intent and acceptance criteria", "Create a new QA plan after the specification change.", false))
 	}
 	caseByAC := map[string][]domain.QACase{}
 	for _, c := range run.Cases {
@@ -199,14 +213,51 @@ func EvaluateQAGate(p *domain.Project, sprint *domain.Sprint, run *domain.QARun)
 		}
 		allPassed := true
 		for _, c := range cases {
-			if c.Status != "passed" || len(c.EvidenceIDs) == 0 {
+			if len(c.EvidenceIDs) == 0 {
 				allPassed = false
 				continue
 			}
 			valid := true
+			coveredLayers := map[string]bool{}
+			coveredRequirements := map[string]bool{}
 			for _, id := range c.EvidenceIDs {
 				ev := p.Evidence[id]
-				if ev == nil || ev.SHA256 == "" || ev.RedactionStatus != "passed" || !slices.Contains(ev.CriterionIDs, ac.CriterionID) {
+				if ev == nil || ev.SHA256 == "" || ev.RedactionStatus != "passed" || !slices.Contains(ev.CriterionIDs, ac.CriterionID) || ev.RunID != run.RunID || ev.CaseID != c.CaseID || ev.SpecHash != run.SpecHash || ev.StateRevision != run.StateRevision || ev.Tool == "" || ev.ToolVersion == "" || ev.Environment == "" || ev.StartedAt == nil || ev.FinishedAt == nil || ev.FinishedAt.Before(*ev.StartedAt) {
+					valid = false
+					continue
+				}
+				if root != "" && !evidenceContentValid(root, ev) {
+					valid = false
+					continue
+				}
+				for _, assertion := range ev.Assertions {
+					if !assertion.Passed || assertion.Layer == "" || !slices.Contains(ev.Layers, assertion.Layer) {
+						valid = false
+						continue
+					}
+					coveredLayers[assertion.Layer] = true
+					for _, ref := range assertion.RequirementRefs {
+						coveredRequirements[ref] = true
+					}
+				}
+			}
+			for layer, disposition := range c.RequiredLayers {
+				switch {
+				case disposition == "required":
+					if !coveredLayers[layer] {
+						valid = false
+					}
+				case strings.HasPrefix(disposition, "not-applicable:") || strings.HasPrefix(disposition, "waived:"):
+					parts := strings.SplitN(disposition, ":", 3)
+					if len(parts) != 3 || strings.TrimSpace(parts[1]) == "" || strings.TrimSpace(parts[2]) == "" {
+						valid = false
+					}
+				default:
+					valid = false
+				}
+			}
+			for _, ref := range RequiredQARequirementRefs(c, ac) {
+				if !coveredRequirements[ref] {
 					valid = false
 				}
 			}
@@ -217,4 +268,53 @@ func EvaluateQAGate(p *domain.Project, sprint *domain.Sprint, run *domain.QARun)
 		}
 	}
 	return findings
+}
+
+func QASpecHash(p *domain.Project, sprint *domain.Sprint) string {
+	type spec struct {
+		Intents  []*domain.Intent    `json:"intents"`
+		Criteria []*domain.Criterion `json:"criteria"`
+	}
+	v := spec{}
+	for _, id := range append([]string(nil), sprint.IntentIDs...) {
+		if in := p.Intents[id]; in != nil {
+			x := *in
+			v.Intents = append(v.Intents, &x)
+		}
+	}
+	for _, ac := range p.Criteria {
+		if slices.Contains(sprint.IntentIDs, ac.IntentID) {
+			x := *ac
+			v.Criteria = append(v.Criteria, &x)
+		}
+	}
+	sort.Slice(v.Intents, func(i, j int) bool { return v.Intents[i].IntentID < v.Intents[j].IntentID })
+	sort.Slice(v.Criteria, func(i, j int) bool { return v.Criteria[i].CriterionID < v.Criteria[j].CriterionID })
+	b, _ := json.Marshal(v)
+	sum := sha256.Sum256(b)
+	return hex.EncodeToString(sum[:])
+}
+
+func RequiredQARequirementRefs(c domain.QACase, ac *domain.Criterion) []string {
+	refs := []string{"observable", "variant:" + c.Variant}
+	for i := range ac.Expected {
+		refs = append(refs, fmt.Sprintf("expected:%d", i))
+	}
+	for i := range ac.Forbidden {
+		refs = append(refs, fmt.Sprintf("forbidden:%d", i))
+	}
+	return refs
+}
+
+func evidenceContentValid(root string, ev *domain.Evidence) bool {
+	path := ev.URI
+	if !filepath.IsAbs(path) {
+		path = filepath.Join(root, filepath.FromSlash(path))
+	}
+	b, err := os.ReadFile(path)
+	if err != nil || int64(len(b)) != ev.Size {
+		return false
+	}
+	sum := sha256.Sum256(b)
+	return hex.EncodeToString(sum[:]) == ev.SHA256
 }

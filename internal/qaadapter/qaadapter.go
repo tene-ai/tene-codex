@@ -5,6 +5,8 @@ package qaadapter
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -29,10 +31,12 @@ type Checkpoint struct {
 	After  any    `json:"after,omitempty"`
 }
 type Assertion struct {
-	Statement string `json:"statement"`
-	Passed    bool   `json:"passed"`
-	Actual    string `json:"actual,omitempty"`
-	Expected  string `json:"expected,omitempty"`
+	Statement       string   `json:"statement"`
+	Passed          bool     `json:"passed"`
+	Layer           string   `json:"layer"`
+	RequirementRefs []string `json:"requirement_refs"`
+	Actual          string   `json:"actual,omitempty"`
+	Expected        string   `json:"expected,omitempty"`
 }
 type Observation struct {
 	SchemaVersion   string       `json:"schema_version"`
@@ -45,6 +49,10 @@ type Observation struct {
 	Checkpoints     []Checkpoint `json:"checkpoints"`
 	Assertions      []Assertion  `json:"assertions"`
 	RedactionStatus string       `json:"redaction_status"`
+	SpecHash        string       `json:"spec_hash"`
+	StateRevision   uint64       `json:"state_revision"`
+	Layers          []string     `json:"layers"`
+	ToolVersion     string       `json:"tool_version"`
 }
 type ExecutionResult struct {
 	Adapter    string    `json:"adapter"`
@@ -113,6 +121,37 @@ func Discover(root string) []Capability {
 	return []Capability{goCap, npm, pw, browser}
 }
 
+func CapabilityByName(root, name string) (Capability, bool) {
+	for _, capability := range Discover(root) {
+		if capability.Adapter == name {
+			return capability, true
+		}
+	}
+	return Capability{}, false
+}
+
+func ToolVersion(command []string) string {
+	if len(command) == 0 {
+		return "unknown"
+	}
+	cmd := exec.Command(command[0], "--version")
+	b, err := cmd.CombinedOutput()
+	if err != nil || strings.TrimSpace(string(b)) == "" {
+		return "unknown"
+	}
+	line := strings.Split(strings.TrimSpace(string(b)), "\n")[0]
+	if len(line) > 200 {
+		line = line[:200]
+	}
+	return line
+}
+
+func EnvironmentFingerprint(root string) string {
+	abs, _ := filepath.Abs(root)
+	sum := sha256.Sum256([]byte(abs))
+	return "local:" + hex.EncodeToString(sum[:8])
+}
+
 func ReadObservation(root, path string) (Observation, []byte, error) {
 	abs := path
 	if !filepath.IsAbs(abs) {
@@ -138,18 +177,31 @@ func ReadObservation(root, path string) (Observation, []byte, error) {
 	if err := json.Unmarshal(b, &o); err != nil {
 		return o, nil, fmt.Errorf("QA_OBSERVATION_INVALID: %w", err)
 	}
-	if o.SchemaVersion != "1.0.0" || o.Adapter == "" || o.RunID == "" || o.CaseID == "" || o.StartedAt.IsZero() || o.FinishedAt.IsZero() || o.FinishedAt.Before(o.StartedAt) || len(o.Assertions) == 0 {
+	if o.SchemaVersion != "1.0.0" || o.Adapter == "" || o.RunID == "" || o.CaseID == "" || o.SpecHash == "" || o.StateRevision == 0 || o.ToolVersion == "" || o.StartedAt.IsZero() || o.FinishedAt.IsZero() || o.FinishedAt.Before(o.StartedAt) || len(o.Layers) == 0 || len(o.Checkpoints) == 0 || len(o.Assertions) == 0 {
 		return o, nil, fmt.Errorf("QA_OBSERVATION_INVALID: required fields or timestamps are invalid")
+	}
+	for _, checkpoint := range o.Checkpoints {
+		if checkpoint.Name == "" || checkpoint.Kind == "" || checkpoint.Before == nil || checkpoint.After == nil {
+			return o, nil, fmt.Errorf("QA_OBSERVATION_CHECKPOINT_INVALID: before and after are required")
+		}
 	}
 	if o.RedactionStatus != "passed" {
 		return o, nil, fmt.Errorf("QA_OBSERVATION_REDACTION_FAILED: artifact was not sanitized")
 	}
 	for _, a := range o.Assertions {
-		if !a.Passed {
-			return o, nil, fmt.Errorf("QA_OBSERVATION_ASSERTION_FAILED: %s", a.Statement)
+		if a.Statement == "" || a.Layer == "" || len(a.RequirementRefs) == 0 || a.Actual == "" || a.Expected == "" || !contains(o.Layers, a.Layer) {
+			return o, nil, fmt.Errorf("QA_OBSERVATION_ASSERTION_INVALID: %s", a.Statement)
 		}
 	}
 	return o, b, nil
+}
+func contains(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
 func exists(path string) bool { _, err := os.Stat(path); return err == nil }
 func hasScript(path, name string) bool {
