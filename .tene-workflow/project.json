@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 436,
-  "updated_at": "2026-08-20T01:17:45.501189Z",
+  "revision": 471,
+  "updated_at": "2026-08-20T01:24:55.638429Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -88,9 +88,6 @@
         "task_0000380v40h5kxjf6b9xwc7s50",
         "task_0000380v40wpr7rbpz33f704p4",
         "task_0000380v40xhhkzw7pea6nbr6c"
-      ],
-      "open_gap_ids": [
-        "gap_0000380v4d3aas9weqex1ajbb0"
       ],
       "document_root": "docs/sprints/_archive/2026-08/sprint_0000380v3xjbejnjk8w65p9q2w-waiver-schema-recovery",
       "archived_at": "2026-08-19T17:49:49.893212Z",
@@ -297,6 +294,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Three repository types pass and degraded semantics remain explicit.",
       "last_loop_at": "2026-08-20T01:16:21.65151Z"
+    },
+    "sprint_0000380wr84t6p1hb89mf2wbkc": {
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "slug": "release-marketplace",
+      "title": "Release and Marketplace Completion",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wqhfdnwqjvftv68ge7g"
+      ],
+      "intent_ids": [
+        "intent_0000380wr877dd8bq79gacg7kc"
+      ],
+      "task_ids": [
+        "task_0000380wrdgqsem9gnfwtwncp0",
+        "task_0000380wrdhjvzjgv4hgfx983r"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wr84t6p1hb89mf2wbkc-release-marketplace",
+      "archived_at": "2026-08-20T01:24:55.585544Z",
+      "approval_refs": [
+        "approval_0000380wrdkwjwm8zt29bvab58",
+        "approval_0000380wrn95ngqjsz7rkyd33r"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wrgp06nq4jyp6e344hw",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wr84t6p1hb89mf2wbkc-release-marketplace/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Release artifact, Marketplace materials, tamper and migration contracts have no open gaps.",
+      "last_loop_at": "2026-08-20T01:23:32.721445Z"
     }
   },
   "tasks": {
@@ -636,6 +663,26 @@
         "ac_0000380wqhjfq5y4p9jcbajkpm"
       ],
       "layer": "Interface,Business Logic,Persistence,Infrastructure"
+    },
+    "task_0000380wrdgqsem9gnfwtwncp0": {
+      "task_id": "task_0000380wrdgqsem9gnfwtwncp0",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "title": "Implement trusted package and Marketplace lifecycle",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wr877cqrzpmgq248dwc"
+      ],
+      "layer": "Interface,Infrastructure"
+    },
+    "task_0000380wrdhjvzjgv4hgfx983r": {
+      "task_id": "task_0000380wrdhjvzjgv4hgfx983r",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "title": "Close migration compatibility debt",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wr8jmksakse7nx1mv4w"
+      ],
+      "layer": "Business Logic,Persistence"
     }
   },
   "intents": {
@@ -757,6 +804,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T01:15:40.833726Z"
+    },
+    "intent_0000380wr877dd8bq79gacg7kc": {
+      "intent_id": "intent_0000380wr877dd8bq79gacg7kc",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Maintainers can build, verify, publish, install, update, and uninstall a trustworthy tene-codex public plugin artifact.",
+      "rationale": "Marketplace readiness requires reproducible supply-chain and clean-profile evidence, not only source tests.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T01:21:21.177255Z"
     }
   },
   "acceptance_criteria": {
@@ -997,6 +1055,20 @@
       "statement": "Three reference repository types are analyzed with layer coverage, Six Questions, secret-vault exclusion, and explicit degraded-provider unknowns.",
       "priority": "blocking",
       "observable": "The reference matrix test passes for greenfield web, a four-layer mature monolith, and a polyglot frontend/backend/worker/infra app; non-Go components expose five explicit unknown categories and .tene is absent."
+    },
+    "ac_0000380wr877cqrzpmgq248dwc": {
+      "ac_id": "ac_0000380wr877cqrzpmgq248dwc",
+      "intent_id": "intent_0000380wr877dd8bq79gacg7kc",
+      "statement": "A self-contained 0.1.0 skills-only bundle passes checksums, SPDX SBOM, explicit/implicit routing, update, uninstall-state preservation, validators and documented OpenAI submission requirements.",
+      "priority": "blocking",
+      "observable": "make check includes release-smoke; package contains platform binary, manifest, skills, hooks, legal/support/privacy/terms, SBOM and checksums; CI attests tagged zip; marketplace catalog and submission checklist validate."
+    },
+    "ac_0000380wr8jmksakse7nx1mv4w": {
+      "ac_id": "ac_0000380wr8jmksakse7nx1mv4w",
+      "intent_id": "intent_0000380wr877dd8bq79gacg7kc",
+      "statement": "The published schema support window is explicit and unsupported downgrade/cross-major inputs fail closed without mutation.",
+      "priority": "blocking",
+      "observable": "0.9 to 1.0 migration and backup pass; 0.8 and 2.0 plans are unsupported and apply leaves bytes unchanged; the inherited migration debt is resolved with release evidence."
     }
   },
   "gaps": {
@@ -1013,8 +1085,12 @@
       "sprint_id": "sprint_0000380v3xjbejnjk8w65p9q2w",
       "category": "debt",
       "severity": "blocker",
-      "status": "open",
-      "description": "Live downgrade and cross-major migration are outside the declared 0.9 to 1.0 contract"
+      "status": "resolved",
+      "description": "Live downgrade and cross-major migration are outside the declared 0.9 to 1.0 contract",
+      "resolution": "Published support window is 0.9.0 to 1.0.0; unsupported downgrade and cross-major inputs fail closed and byte-preservation tests pass.",
+      "resolution_evidence_ids": [
+        "evidence_0000380wrk39cpxfexj3gxn584"
+      ]
     }
   },
   "waivers": {
@@ -1025,9 +1101,10 @@
       "reason": "Bounded migration scope is explicitly 0.9 to 1.0 for pre-alpha; broader paths require real released fixtures",
       "scope": "phase-transition",
       "approver": "kay",
-      "status": "active",
+      "status": "revoked",
       "created_at": "2026-08-19T17:48:19.938524Z",
-      "expires_at": "2026-08-22T00:00:00Z"
+      "expires_at": "2026-08-22T00:00:00Z",
+      "revoked_at": "2026-08-20T01:24:21.868688Z"
     }
   },
   "approvals": {
@@ -1170,6 +1247,34 @@
       "approved_at": "2026-08-20T01:17:44.936012Z",
       "expires_at": "2026-08-21T12:00:00Z",
       "consumed_at": "2026-08-20T01:17:45.433684Z"
+    },
+    "approval_0000380wrdkwjwm8zt29bvab58": {
+      "approval_id": "approval_0000380wrdkwjwm8zt29bvab58",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed complete continuous implementation.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:22:43.273512Z",
+      "approved_at": "2026-08-20T01:23:04.511527Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:23:04.934937Z"
+    },
+    "approval_0000380wrn95ngqjsz7rkyd33r": {
+      "approval_id": "approval_0000380wrn95ngqjsz7rkyd33r",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "from": "report",
+      "to": "archived",
+      "reason": "Release gate passed and inherited migration debt is resolved.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:24:48.858623Z",
+      "approved_at": "2026-08-20T01:24:55.15785Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:24:55.585544Z"
     }
   },
   "evidence": {
@@ -1446,6 +1551,20 @@
         "ac_0000380wqhjfq5y4p9jcbajkpm"
       ],
       "created_at": "2026-08-20T01:17:10.253204Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380wrk39cpxfexj3gxn584": {
+      "evidence_id": "evidence_0000380wrk39cpxfexj3gxn584",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "kind": "release-gate",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wr84t6p1hb89mf2wbkc-release-marketplace/04-qa/evidence/release-summary.json",
+      "sha256": "3d76769cb5d7380d764b46cbf432bda7e71d4c962402ae4ad5c003f2a522418e",
+      "size": 440,
+      "ac_ids": [
+        "ac_0000380wr877cqrzpmgq248dwc",
+        "ac_0000380wr8jmksakse7nx1mv4w"
+      ],
+      "created_at": "2026-08-20T01:24:13.078259Z",
       "redaction_status": "passed"
     }
   },
@@ -5318,6 +5437,268 @@
       ],
       "started_at": "2026-08-20T01:16:22.780434Z",
       "finished_at": "2026-08-20T01:17:21.404394Z"
+    },
+    "run_0000380wrgp06nq4jyp6e344hw": {
+      "run_id": "run_0000380wrgp06nq4jyp6e344hw",
+      "sprint_id": "sprint_0000380wr84t6p1hb89mf2wbkc",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380wrgp07knnxfvtmngbp0",
+          "ac_ids": [
+            "ac_0000380wr8jmksakse7nx1mv4w"
+          ],
+          "title": "The published schema support window is explicit and unsupported downgrade/cross-major inputs fail closed without mutation. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wrk39cpxfexj3gxn584"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "0.9 to 1.0 migration and backup pass; 0.8 and 2.0 plans are unsupported and apply leaves bytes unchanged; the inherited migration debt is resolved with release evidence.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wrgp072ykvk5gd7zjrg",
+          "ac_ids": [
+            "ac_0000380wr8jmksakse7nx1mv4w"
+          ],
+          "title": "The published schema support window is explicit and unsupported downgrade/cross-major inputs fail closed without mutation. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wrk39cpxfexj3gxn584"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "0.9 to 1.0 migration and backup pass; 0.8 and 2.0 plans are unsupported and apply leaves bytes unchanged; the inherited migration debt is resolved with release evidence.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wrgp067v82ds56e61br",
+          "ac_ids": [
+            "ac_0000380wr8jmksakse7nx1mv4w"
+          ],
+          "title": "The published schema support window is explicit and unsupported downgrade/cross-major inputs fail closed without mutation. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wrk39cpxfexj3gxn584"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "0.9 to 1.0 migration and backup pass; 0.8 and 2.0 plans are unsupported and apply leaves bytes unchanged; the inherited migration debt is resolved with release evidence.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wrgp06weha2nxe0yn1g",
+          "ac_ids": [
+            "ac_0000380wr877cqrzpmgq248dwc"
+          ],
+          "title": "A self-contained 0.1.0 skills-only bundle passes checksums, SPDX SBOM, explicit/implicit routing, update, uninstall-state preservation, validators and documented OpenAI submission requirements. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wrk39cpxfexj3gxn584"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "make check includes release-smoke; package contains platform binary, manifest, skills, hooks, legal/support/privacy/terms, SBOM and checksums; CI attests tagged zip; marketplace catalog and submission checklist validate.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wrgp06w37gp1p6bjxy0",
+          "ac_ids": [
+            "ac_0000380wr877cqrzpmgq248dwc"
+          ],
+          "title": "A self-contained 0.1.0 skills-only bundle passes checksums, SPDX SBOM, explicit/implicit routing, update, uninstall-state preservation, validators and documented OpenAI submission requirements. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wrk39cpxfexj3gxn584"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "make check includes release-smoke; package contains platform binary, manifest, skills, hooks, legal/support/privacy/terms, SBOM and checksums; CI attests tagged zip; marketplace catalog and submission checklist validate.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wrgp07qqssfb4mbhk1r",
+          "ac_ids": [
+            "ac_0000380wr877cqrzpmgq248dwc"
+          ],
+          "title": "A self-contained 0.1.0 skills-only bundle passes checksums, SPDX SBOM, explicit/implicit routing, update, uninstall-state preservation, validators and documented OpenAI submission requirements. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wrk39cpxfexj3gxn584"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "make check includes release-smoke; package contains platform binary, manifest, skills, hooks, legal/support/privacy/terms, SBOM and checksums; CI attests tagged zip; marketplace catalog and submission checklist validate.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T01:23:33.507651Z",
+      "finished_at": "2026-08-20T01:24:25.092737Z"
     }
   },
   "graph": {

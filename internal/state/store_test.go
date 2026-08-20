@@ -75,6 +75,37 @@ func TestLoadRejectsUnknownPersistedField(t *testing.T) {
 	}
 }
 
+func TestMigrationSupportWindowFailsClosedWithoutMutation(t *testing.T) {
+	for _, version := range []string{"0.8.0", "2.0.0"} {
+		t.Run(version, func(t *testing.T) {
+			root := t.TempDir()
+			s := New(root)
+			p := domain.NewProject("project_test", "fixture", "strict", time.Now())
+			if err := s.Initialize(p); err != nil {
+				t.Fatal(err)
+			}
+			b, _ := os.ReadFile(s.ProjectPath())
+			var raw map[string]any
+			_ = json.Unmarshal(b, &raw)
+			raw["schema_version"] = version
+			b, _ = json.Marshal(raw)
+			_ = os.WriteFile(s.ProjectPath(), b, 0644)
+			before, _ := os.ReadFile(s.ProjectPath())
+			plan, err := s.PlanMigration()
+			if err != nil || plan.Supported || !plan.Required {
+				t.Fatalf("%+v %v", plan, err)
+			}
+			if _, err = s.Migrate(); err == nil {
+				t.Fatal("unsupported migration accepted")
+			}
+			after, _ := os.ReadFile(s.ProjectPath())
+			if string(before) != string(after) {
+				t.Fatal("unsupported migration changed projection")
+			}
+		})
+	}
+}
+
 func TestStoreInitializeMutateAndVerify(t *testing.T) {
 	root := t.TempDir()
 	s := New(root)

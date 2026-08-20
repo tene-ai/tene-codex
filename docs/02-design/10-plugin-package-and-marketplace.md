@@ -7,7 +7,7 @@ tene/
 ├── .codex-plugin/plugin.json
 ├── README.md
 ├── LICENSE
-├── CHANGELOG.md
+├── CHANGELOG.md, PRIVACY.md, TERMS.md, SECURITY.md, SUPPORT.md
 ├── skills/
 │   ├── tene-sprint/{SKILL.md,agents/openai.yaml,references/}
 │   └── ...
@@ -23,12 +23,12 @@ tene/
 
 ```json
 {
-  "name": "tene",
+  "name": "tene-codex",
   "version": "0.1.0",
   "description": "Spec-driven sprint workflow and intent-based QA for Codex",
   "author": {"name": "agent-kay-it"},
   "license": "LICENSE",
-  "repository": "https://github.com/agent-kay-it/tene-codex"
+  "repository": "https://github.com/tene-ai/tene-codex"
 }
 ```
 
@@ -48,11 +48,11 @@ tene/
 
 - tag 기반 immutable artifact, SemVer, checksum, provenance/SBOM.
 - release note에 Codex minimum version, core/schema version range, migration, known limitations.
-- clean Codex profile에서 install → explicit skill → implicit routing → update → uninstall 검증.
+- clean profile artifact에서 install → explicit skill → implicit routing → update → uninstall 후 project state 보존을 `scripts/release-smoke.sh`로 검증.
 - marketplace 제출 전 plugin validator와 skill validator 결과를 release evidence로 첨부.
 - beta channel에서 reference projects와 routing telemetry를 확인한 뒤 stable 승격.
 
-Marketplace의 실제 제출 UI/API와 심사 규칙은 변할 수 있으므로 release 당시 공식 Codex 문서를 다시 확인하는 release checklist 항목으로 둔다. 저장소 문서는 특정 비공식 Claude marketplace 절차를 Codex 절차로 오인하지 않는다.
+2026-08-20 공식 문서 기준 public plugin은 universal directory에 portal로 skills-only 제출할 수 있다. verified identity, Apps Management Write, listing/support/privacy/terms, starter prompts, positive 5/negative 3 test cases, availability와 release note가 필요하다. 세부 심사 규칙은 release마다 공식 문서로 재확인한다.
 
 ## 5. Compatibility
 
@@ -87,4 +87,3 @@ clean-profile smoke test
 ```
 
 정확한 validator command는 설치된 Codex tooling을 discovery해 release automation에 고정한다.
-

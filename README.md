@@ -4,7 +4,7 @@
 
 It is designed to turn an informal coding conversation into a durable engineering workflow that Codex can resume, inspect, verify, and improve across sessions. Instead of treating generated code or passing test scripts as proof of completion, tene-codex keeps product intent, implementation decisions, code impact, user journeys, data flows, and QA evidence connected throughout the work.
 
-> Project status: **working pre-alpha**. The repository contains the first runnable `tene-workflow` vertical slice, Codex plugin manifest, nine skills, lifecycle hooks, specialized subagent profiles, tests, and release packaging. Public APIs and persisted schemas can still change; do not rely on it as the only production control.
+> Project status: **0.1 public beta**. The complete local workflow, nine skills, hooks, subagent profiles, routing and security evals, recovery, reference matrix, and release packaging are implemented. Public APIs remain pre-1.0 and may change with documented migration.
 
 ## Quick Start from Source
 
@@ -30,6 +30,7 @@ Common core commands:
 
 ```text
 tene-workflow status --json
+tene-workflow route --text "UX와 데이터 흐름 QA해줘" --phase qa
 tene-workflow phase transition <phase> --dry-run
 tene-workflow document validate <phase>
 tene-workflow context build --phase design --budget 32768 --output .tene-workflow/cache/context.json
@@ -143,7 +144,11 @@ QA can combine project-native tests, API checks, Playwright, Codex browser capab
 
 `graph understand` uses an existing CodeGraph index when explicitly queried and otherwise falls back to bounded Go AST analysis. It materializes each declaration's definition, imports/references, calls/uses, input shape, output/side effects, Understanding Layer, provider and confidence. `qa capabilities` discovers native and Playwright runners; `qa execute` permits only discovered allowlisted adapters, while `qa observe` imports schema-validated UX/API/data observations produced by Codex browser or Chrome tools.
 
-The repository includes a real reference journey under `testdata/reference-web` and `tests/e2e`. `npm run test:e2e` drives Chromium through a form, API boundary, validation and downstream failure/retry paths, then verifies persistent state through a read-only observer.
+The repository includes greenfield web, mature monolith, and polyglot service reference projects. `npm run test:e2e` drives Chromium through the greenfield UI/API/persistence journey; the reference matrix verifies four-layer coverage and uncertainty-honest fallback for unsupported languages.
+
+## Packaging and Marketplace
+
+`scripts/package-plugin.sh 0.1.0` creates self-contained macOS/Linux bundles with verified binaries, SPDX SBOM and SHA-256 checksums. `scripts/release-smoke.sh` exercises package, explicit and implicit routing, update and uninstall-state preservation. A repo marketplace catalog lives at `.agents/plugins/marketplace.json`; add it with `codex plugin marketplace add owner/repo` or link the local repository while developing. Public directory submission is completed through the OpenAI plugin submission portal and requires verified publisher identity, Apps Management write access, listing/support/privacy/terms URLs, five positive and three negative cases, release notes, and the final skills bundle.
 
 ## Secret-Safe Execution with tene
 

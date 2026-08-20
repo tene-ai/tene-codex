@@ -1133,14 +1133,18 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 		fs.SetOutput(io.Discard)
 		resolution := fs.String("resolution", "", "")
 		evidenceIDs := fs.String("evidence", "", "")
+		crossSprint := fs.Bool("cross-sprint", false, "")
 		if err := fs.Parse(args[2:]); err != nil {
 			return nil, 0, err
 		}
 		if *resolution == "" || *evidenceIDs == "" {
 			return nil, 0, usageErr("--resolution and --evidence are required")
 		}
-		if p.Gaps[id] == nil || p.Gaps[id].SprintID != sp.SprintID {
+		if p.Gaps[id] == nil || (p.Gaps[id].SprintID != sp.SprintID && !*crossSprint) {
 			return nil, 0, notFound("gap", id)
+		}
+		if p.Gaps[id].SprintID != sp.SprintID && (p.Gaps[id].Category != "debt" || p.Sprints[p.Gaps[id].SprintID] == nil || p.Sprints[p.Gaps[id].SprintID].Phase != domain.PhaseArchived) {
+			return nil, p.Revision, &commandError{"WF_CROSS_SPRINT_GAP_FORBIDDEN", "only inherited debt from an archived sprint can be resolved cross-sprint", "Resolve current work in its owning sprint or archive the predecessor first.", 3}
 		}
 		if p.Gaps[id].Status != "open" {
 			return nil, p.Revision, &commandError{"WF_GAP_NOT_OPEN", "only open gaps can be resolved", "Inspect the current gap disposition.", 3}
@@ -1154,7 +1158,7 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 			p.Gaps[id].Status = "resolved"
 			p.Gaps[id].Resolution = *resolution
 			p.Gaps[id].ResolutionEvidenceIDs = csv(*evidenceIDs)
-			p.Sprints[sp.SprintID].OpenGapIDs = remove(p.Sprints[sp.SprintID].OpenGapIDs, id)
+			p.Sprints[p.Gaps[id].SprintID].OpenGapIDs = remove(p.Sprints[p.Gaps[id].SprintID].OpenGapIDs, id)
 			return nil
 		})
 		if err != nil {

@@ -4,7 +4,7 @@
 
 자연스러운 코딩 대화를 Codex가 여러 세션에 걸쳐 재개하고 조사하고 검증하고 개선할 수 있는 지속 가능한 엔지니어링 workflow로 전환하는 것이 목적입니다. 생성된 코드나 통과한 test script만으로 완료를 판단하지 않고, 제품의 기획 의도, 구현 결정, 코드 영향, 사용자 여정, 데이터 흐름과 QA evidence를 작업 전체에서 연결해 관리합니다.
 
-> 프로젝트 상태: **동작하는 pre-alpha**. 첫 번째 실행 가능한 `tene-workflow` vertical slice, Codex plugin manifest, 9개 skill, lifecycle hook, 전문 subagent profile, test와 release packaging이 포함되어 있습니다. Public API와 영속 schema는 아직 변경될 수 있으므로 유일한 production 통제로 사용하면 안 됩니다.
+> 프로젝트 상태: **0.1 public beta**. 전체 로컬 workflow, 9개 skill, hook, subagent profile, routing/security eval, recovery, reference matrix, release packaging을 구현했습니다. 1.0 이전 public API는 문서화된 migration과 함께 변경될 수 있습니다.
 
 ## Source에서 빠르게 시작하기
 
@@ -143,7 +143,11 @@ QA는 프로젝트의 기존 test, API 검사, Playwright, Codex browser 기능,
 
 `graph understand`는 명시적으로 요청할 때 기존 CodeGraph index를 사용하고, 그 외에는 범위가 제한된 Go AST 분석으로 fallback합니다. 각 선언의 정의 위치, import/reference, call/use, 입력 shape, 출력/side effect, Understanding Layer, provider와 confidence를 구체화합니다. `qa capabilities`는 native/Playwright runner를 발견하고, `qa execute`는 발견된 allowlist adapter만 허용합니다. Codex browser나 Chrome 도구가 생성한 UX/API/data 관찰은 `qa observe`가 schema 검증 후 evidence로 가져옵니다.
 
-저장소의 `testdata/reference-web`과 `tests/e2e`에는 실제 reference journey가 포함됩니다. `npm run test:e2e`는 Chromium으로 form, API boundary, validation, downstream failure/retry를 실행하고 read-only observer를 통해 persistent state까지 확인합니다.
+저장소에는 greenfield web, mature monolith, polyglot service reference project가 포함됩니다. `npm run test:e2e`는 greenfield UI/API/persistence journey를 실행하고, reference matrix는 4개 layer와 지원되지 않는 언어의 정직한 unknown fallback을 검증합니다.
+
+## Packaging과 Marketplace
+
+`scripts/package-plugin.sh 0.1.0`은 검증되는 binary, SPDX SBOM, SHA-256 checksum을 포함한 macOS/Linux bundle을 만듭니다. `scripts/release-smoke.sh`는 package, 명시/암시 routing, update, uninstall 후 project state 보존을 검증합니다. Repo marketplace catalog는 `.agents/plugins/marketplace.json`에 있으며 개발 중에는 `codex plugin marketplace add owner/repo` 또는 local repository로 연결할 수 있습니다. Public directory 제출은 OpenAI plugin submission portal에서 수행하며 verified publisher identity, Apps Management write 권한, listing/support/privacy/terms URL, positive 5개와 negative 3개 test case, release note, 최종 skill bundle이 필요합니다.
 
 ## tene를 이용한 Secret-Safe 실행
 
