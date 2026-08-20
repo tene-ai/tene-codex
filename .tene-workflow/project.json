@@ -23,8 +23,8 @@
       "all implementation follows the fixed Sprint lifecycle"
     ]
   },
-  "revision": 966,
-  "updated_at": "2026-08-20T07:20:40.770254Z",
+  "revision": 1010,
+  "updated_at": "2026-08-20T07:31:45.905305Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -584,6 +584,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Segmented archive, anchored active checkpoint, replay equality, repeated compact and tamper rejection match the PRD/design; automatic gap analysis resolved all 12 artifact-link gaps",
       "last_loop_at": "2026-08-20T07:14:50.650272Z"
+    },
+    "sprint_0000380y1g1eyc1xeym60b0rtc": {
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "slug": "portable-clean-workflow-matrix",
+      "title": "Portable Clean Workflow Matrix",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380xznb6mpm5bx0xpxex6w"
+      ],
+      "intent_ids": [
+        "intent_0000380y1xbkhac1273cdc3284"
+      ],
+      "task_ids": [
+        "task_0000380y21dtymdms0ys2mcqyw",
+        "task_0000380y21f450p879vr1qgpv4"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix",
+      "archived_at": "2026-08-20T07:31:45.775255Z",
+      "approval_refs": [
+        "approval_0000380y2217z2rjzehxgvyt58",
+        "approval_0000380y2mmrs7jcew26rqcy4w"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380y2448wswq7ed8jqh83g",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Black-box local and staged package matrices each completed Go, Next.js, and Python full Sprint lifecycles; no loop gaps remain",
+      "last_loop_at": "2026-08-20T07:27:05.39876Z"
     }
   },
   "tasks": {
@@ -1203,6 +1233,35 @@
         "README-KR.md",
         "scripts/qa-compaction-observations.py"
       ]
+    },
+    "task_0000380y21dtymdms0ys2mcqyw": {
+      "task_id": "task_0000380y21dtymdms0ys2mcqyw",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "title": "Implement three-stack public lifecycle runner",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "layer": "infrastructure",
+      "artifacts": [
+        "scripts/portable-workflow-smoke.py"
+      ]
+    },
+    "task_0000380y21f450p879vr1qgpv4": {
+      "task_id": "task_0000380y21f450p879vr1qgpv4",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "title": "Integrate portability proof into staged release and semantic gates",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "layer": "interface",
+      "artifacts": [
+        "scripts/release-smoke.sh",
+        "docs/release/semantic-contracts.json",
+        "scripts/requirements-audit.py",
+        "scripts/qa-portable-observations.py"
+      ]
     }
   },
   "intents": {
@@ -1472,6 +1531,37 @@
       "source_locator": "conversation:2026-08-20",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T07:11:50.886914Z"
+    },
+    "intent_0000380y1xbkhac1273cdc3284": {
+      "intent_id": "intent_0000380y1xbkhac1273cdc3284",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "A packaged tene plugin must complete the same governed Sprint lifecycle in clean Go CLI, Next.js web, and Python API-worker repositories",
+      "rationale": "Existing references proved code analysis and selected journeys but did not prove portable end-to-end workflow execution",
+      "actors": [
+        "plugin adopter",
+        "Codex agent",
+        "release maintainer"
+      ],
+      "desired_outcomes": [
+        "three archived clean-stack sprints",
+        "identical document contract",
+        "healthy post-archive replay"
+      ],
+      "non_goals": [
+        "testing every framework",
+        "deploying fixture apps"
+      ],
+      "policies": [
+        "black-box staged package only",
+        "no phase skips",
+        "all evidence gates required"
+      ],
+      "source": "user",
+      "source_locator": "conversation:2026-08-20",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T07:26:21.623564Z"
     }
   },
   "acceptance_criteria": {
@@ -1782,6 +1872,13 @@
       "statement": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata",
       "priority": "blocking",
       "observable": "active journal shrinks while replayed project state remains semantically equal"
+    },
+    "ac_0000380y1xbkgdqhqk45j21axg": {
+      "ac_id": "ac_0000380y1xbkgdqhqk45j21axg",
+      "intent_id": "intent_0000380y1xbkhac1273cdc3284",
+      "statement": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification",
+      "priority": "blocking",
+      "observable": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor"
     }
   },
   "gaps": {
@@ -2407,6 +2504,34 @@
       "approved_at": "2026-08-20T07:20:39.614778Z",
       "expires_at": "2026-08-20T09:20:30Z",
       "consumed_at": "2026-08-20T07:20:40.549657Z"
+    },
+    "approval_0000380y2217z2rjzehxgvyt58": {
+      "approval_id": "approval_0000380y2217z2rjzehxgvyt58",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "from": "design",
+      "to": "do",
+      "reason": "User instructed continued completion of all documented implementation requirements",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:26:33.599661Z",
+      "approved_at": "2026-08-20T07:26:45.126435Z",
+      "expires_at": "2026-08-20T09:26:33Z",
+      "consumed_at": "2026-08-20T07:26:45.862628Z"
+    },
+    "approval_0000380y2mmrs7jcew26rqcy4w": {
+      "approval_id": "approval_0000380y2mmrs7jcew26rqcy4w",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "from": "report",
+      "to": "archived",
+      "reason": "Three clean-stack staged workflows and all blocking QA/release gates passed",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:31:38.508974Z",
+      "approved_at": "2026-08-20T07:31:45.117457Z",
+      "expires_at": "2026-08-20T09:31:38Z",
+      "consumed_at": "2026-08-20T07:31:45.775255Z"
     }
   },
   "evidence": {
@@ -11258,6 +11383,776 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T07:17:56.214381Z",
       "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y2b35kc0ha3h1kvh7q8": {
+      "evidence_id": "evidence_0000380y2b35kc0ha3h1kvh7q8",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448wkrwqwv17gvtj8.json",
+      "sha256": "3adcf4c9db461cd0a7634bf3da6d9098cc07f07150facff8b3c9db1f8227ee3f",
+      "size": 5260,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:02.041569Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448wkrwqwv17gvtj8",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "every command runs in a new process and resumes the same active phase/revision; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y2b4khkctr36639fpsm": {
+      "evidence_id": "evidence_0000380y2b4khkctr36639fpsm",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448wt72ghvxf7fshm.json",
+      "sha256": "8b7b69d0454ad6bcaeda86973faa12c06434b28150b95e35294d78c8a1394541",
+      "size": 5043,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:02.777021Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448wt72ghvxf7fshm",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "all three clean stacks complete PRD through archive; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y2b61fpch859cg7s880": {
+      "evidence_id": "evidence_0000380y2b61fpch859cg7s880",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448xbchnckc4gd2j8.json",
+      "sha256": "488974ab42cd9e9b0a9dd49f3f732d09ed7775d00a5ad3d52772c0aa97311ba6",
+      "size": 5211,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:03.511179Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448xbchnckc4gd2j8",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "each repository starts from no workflow state and initializes independently; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y2b7g1w2m3sfq5ge09r": {
+      "evidence_id": "evidence_0000380y2b7g1w2m3sfq5ge09r",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448xkre03rvkf8hhc.json",
+      "sha256": "db4c7c93c618a47ba4bc21605958a98e03bbbbbc68a7c2c5550f910933a6c334",
+      "size": 5190,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:04.256486Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448xkre03rvkf8hhc",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "any nonzero or invalid JSON command aborts the matrix and release gate; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y2b8wt94cfv98r9weam": {
+      "evidence_id": "evidence_0000380y2b8wt94cfv98r9weam",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448xnrs745ps88z50.json",
+      "sha256": "0d35cc6eef05a74e9f0b172e37e6820a4baaca50149a521e2ce69f57d982508a",
+      "size": 5225,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:04.973786Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448xnrs745ps88z50",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y2ba9jg9yz716d7ayr8": {
+      "evidence_id": "evidence_0000380y2ba9jg9yz716d7ayr8",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448xz0rb186kfrs34.json",
+      "sha256": "acc33d47d18f20536dcbc3bb5a5b11b7e342bf9515fac226bb707b82d75c43f8",
+      "size": 5232,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:05.689061Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448xz0rb186kfrs34",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "post-archive status is inactive while doctor and evidence verification pass; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
+    },
+    "evidence_0000380y2bbq2bfbskvgmvwt5r": {
+      "evidence_id": "evidence_0000380y2bbq2bfbskvgmvwt5r",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y1g1eyc1xeym60b0rtc-portable-clean-workflow-matrix/04-qa/observations/case_0000380y2448xz80k763tz3xw4.json",
+      "sha256": "77d0eb9afcfeca875e46b7c19c5f80ccbed489ab248209792827b6198723beb7",
+      "size": 5141,
+      "ac_ids": [
+        "ac_0000380y1xbkgdqhqk45j21axg"
+      ],
+      "created_at": "2026-08-20T07:29:06.417624Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y2448xz80k763tz3xw4",
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+      "state_revision": 994,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 portable workflow contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L2 portable workflow contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L3 portable workflow contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L4 portable workflow contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L5 portable workflow contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L6 portable workflow contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        },
+        {
+          "statement": "L7 portable workflow contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "state and artifacts stay scoped to isolated repository roots; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+          "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+        }
+      ],
+      "tool": "portable-workflow-matrix",
+      "tool_version": "portable-workflow-matrix/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:27:38.331438Z",
+      "finished_at": "2026-08-20T07:28:56.355439Z"
     }
   },
   "qa_runs": {
@@ -18573,6 +19468,319 @@
       "finished_at": "2026-08-20T07:18:40.331008Z",
       "state_revision": 949,
       "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3"
+    },
+    "run_0000380y2448wswq7ed8jqh83g": {
+      "run_id": "run_0000380y2448wswq7ed8jqh83g",
+      "sprint_id": "sprint_0000380y1g1eyc1xeym60b0rtc",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380y2448wt72ghvxf7fshm",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2b4khkctr36639fpsm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y2448wkrwqwv17gvtj8",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2b35kc0ha3h1kvh7q8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y2448xbchnckc4gd2j8",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2b61fpch859cg7s880"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y2448xnrs745ps88z50",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2b8wt94cfv98r9weam"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y2448xz80k763tz3xw4",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2bbq2bfbskvgmvwt5r"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y2448xkre03rvkf8hhc",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2b7g1w2m3sfq5ge09r"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y2448xz0rb186kfrs34",
+          "ac_ids": [
+            "ac_0000380y1xbkgdqhqk45j21axg"
+          ],
+          "title": "The staged public CLI completes PRD through archive in three isolated repository stacks and passes doctor and evidence verification — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y2ba9jg9yz716d7ayr8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Go, Next.js, and Python matrix entries each have an archive manifest, seven valid evidence items, no active Sprint, and healthy doctor",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T07:27:07.918158Z",
+      "finished_at": "2026-08-20T07:29:07.158893Z",
+      "state_revision": 994,
+      "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de"
     }
   },
   "graph": {

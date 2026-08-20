@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "portable-workflow-matrix",
+  "run_id": "run_0000380y2448wswq7ed8jqh83g",
+  "case_id": "case_0000380y2448xnrs745ps88z50",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T07:27:38.331438Z",
+  "finished_at": "2026-08-20T07:28:56.355439Z",
+  "checkpoints": [
+    {
+      "name": "three-stack-public-lifecycle",
+      "kind": "cli-doc-state",
+      "before": {
+        "stacks": [
+          "go-cli",
+          "nextjs-web",
+          "python-api-worker"
+        ],
+        "state": "clean"
+      },
+      "after": {
+        "stacks": [
+          {
+            "stack": "go-cli",
+            "revision": 32,
+            "events": 33,
+            "evidence": 7,
+            "archive_manifest": "docs/sprints/_archive/2026-08/sprint_0000380y2616srcxb0hw0b8r2c-go-cli-portable-lifecycle/99-archive/archive-manifest.json"
+          },
+          {
+            "stack": "nextjs-web",
+            "revision": 32,
+            "events": 33,
+            "evidence": 7,
+            "archive_manifest": "docs/sprints/_archive/2026-08/sprint_0000380y26sj8scypdhqr8ke10-nextjs-web-portable-lifecycle/99-archive/archive-manifest.json"
+          },
+          {
+            "stack": "python-api-worker",
+            "revision": 32,
+            "events": 33,
+            "evidence": 7,
+            "archive_manifest": "docs/sprints/_archive/2026-08/sprint_0000380y27k3w5rt7ffyyenf8w-python-api-worker-portable-lifecycle/99-archive/archive-manifest.json"
+          }
+        ],
+        "staged_release": "passed"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 portable workflow contract passed",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    },
+    {
+      "statement": "L2 portable workflow contract passed",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    },
+    {
+      "statement": "L3 portable workflow contract passed",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    },
+    {
+      "statement": "L4 portable workflow contract passed",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    },
+    {
+      "statement": "L5 portable workflow contract passed",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    },
+    {
+      "statement": "L6 portable workflow contract passed",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    },
+    {
+      "statement": "L7 portable workflow contract passed",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:validation"
+      ],
+      "actual": "phase, document, loop and evidence gates remain mandatory in every stack; local and staged-package matrices passed for go-cli, nextjs-web, python-api-worker",
+      "expected": "the same public lifecycle and document/evidence gates work across three stacks"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "0c824b3950f803efe78f6f0d2d615921ae6747d04ceeb28543e19fc7c17f78de",
+  "state_revision": 994,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "portable-workflow-matrix/1.0.0"
+}

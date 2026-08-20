@@ -15,6 +15,7 @@ binary="$stage/bin/$platform/tene-workflow";cp "$binary" "$tmp/binary.backup";pr
 if PLUGIN_ROOT="$stage" "$stage/scripts/tene-workflow" version >/dev/null 2>&1; then echo "tampered binary was accepted" >&2;exit 1;fi
 mv "$tmp/binary.backup" "$binary"
 project="$tmp/project";mkdir -p "$project";PLUGIN_ROOT="$stage" "$stage/scripts/tene-workflow" --root "$project" init --name preserve >/dev/null
+PLUGIN_ROOT="$stage" python3 "$root/scripts/portable-workflow-smoke.py" --cli "$stage/scripts/tene-workflow" --workspace "$tmp/portable-matrix" >/dev/null
 cp -R "$stage" "$tmp/update";PLUGIN_ROOT="$tmp/update" "$tmp/update/scripts/tene-workflow" --root "$project" status --json >/dev/null
 rm -rf "$tmp/update" "$stage"
 test -f "$project/.tene-workflow/project.json"

@@ -20,7 +20,7 @@
     "AC-PRODUCT-04": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/workflow/workflow.go","EvaluateQAGateAtRoot"],["internal/app/app_test.go","TestQA"]],"commands":["workflow","qa"]},
     "AC-PRODUCT-05": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["tests/e2e/reference-web.spec.ts","success crosses UI API and persistence"],["testdata/reference-nextjs/runtime/journey.mjs","runCheckoutJourney"]],"commands":["references","playwright"]},
     "AC-PRODUCT-06": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/secret/runner.go","DetectLeak"],["hooks/tene_hook.py","deny"]],"commands":["secret","hooks"]},
-    "AC-PRODUCT-07": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/codeintel/reference_matrix_test.go","nextjs-fullstack"],["internal/codeintel/reference_matrix_test.go","python-worker"]],"commands":["references","release"]},
+    "AC-PRODUCT-07": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["scripts/portable-workflow-smoke.py","STACKS ="],["scripts/portable-workflow-smoke.py","call\\(project, \"sprint\", \"archive\"\\)"],["scripts/release-smoke.sh","portable-workflow-smoke.py"]],"commands":["portable"]},
     "AC-PRODUCT-08": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/document/document.go","PhaseReport"],["internal/app/app.go","Generated Sprint Summary"]],"commands":["document","app-report"]}
   },
   "work_packages": {

@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "stacks": [
+    {
+      "stack": "go-cli",
+      "revision": 32,
+      "events": 33,
+      "evidence": 7,
+      "archive_manifest": "docs/sprints/_archive/2026-08/sprint_0000380y2616srcxb0hw0b8r2c-go-cli-portable-lifecycle/99-archive/archive-manifest.json"
+    },
+    {
+      "stack": "nextjs-web",
+      "revision": 32,
+      "events": 33,
+      "evidence": 7,
+      "archive_manifest": "docs/sprints/_archive/2026-08/sprint_0000380y26sj8scypdhqr8ke10-nextjs-web-portable-lifecycle/99-archive/archive-manifest.json"
+    },
+    {
+      "stack": "python-api-worker",
+      "revision": 32,
+      "events": 33,
+      "evidence": 7,
+      "archive_manifest": "docs/sprints/_archive/2026-08/sprint_0000380y27k3w5rt7ffyyenf8w-python-api-worker-portable-lifecycle/99-archive/archive-manifest.json"
+    }
+  ],
+  "workspace": "/var/folders/r9/fbtgppdn7t7f_04mvv64n8_w0000gn/T/tene-portable-workflow-ci_69617"
+}
+
+release smoke passed
