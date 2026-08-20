@@ -25,6 +25,10 @@ func ParsePhase(value string) (domain.Phase, error) {
 }
 
 func CanTransition(p *domain.Project, sprint *domain.Sprint, target domain.Phase, docExists func(domain.Phase) bool) []domain.Finding {
+	return CanTransitionWithApproval(p, sprint, target, "", time.Now().UTC(), docExists)
+}
+
+func CanTransitionWithApproval(p *domain.Project, sprint *domain.Sprint, target domain.Phase, approvalID string, now time.Time, docExists func(domain.Phase) bool) []domain.Finding {
 	var findings []domain.Finding
 	if sprint.Phase == target {
 		return findings
@@ -106,7 +110,46 @@ func CanTransition(p *domain.Project, sprint *domain.Sprint, target domain.Phase
 			findings = append(findings, finding("REPORT_REQUIRED", "blocker", sprint.SprintID, "validated sprint report is missing", "Generate and validate the report.", false))
 		}
 	}
+	if RequiredApproval(p.Profile, sprint.Phase, target) {
+		if code := ApprovalValidity(p, sprint, approvalID, sprint.Phase, target, now); code != "" {
+			findings = append(findings, finding(code, "blocker", sprint.SprintID, "a valid human approval is required for this profile boundary", "Request and approve the exact transition, then retry with --approval ID.", false))
+		}
+	}
 	return findings
+}
+
+func RequiredApproval(profile string, from, to domain.Phase) bool {
+	switch profile {
+	case "strict":
+		return from == domain.PhaseDesign && to == domain.PhaseDo || from == domain.PhaseReport && to == domain.PhaseArchived
+	case "standard":
+		return from == domain.PhaseReport && to == domain.PhaseArchived
+	default:
+		return false
+	}
+}
+
+func ApprovalValidity(p *domain.Project, sprint *domain.Sprint, id string, from, to domain.Phase, now time.Time) string {
+	if id == "" {
+		return "WF_APPROVAL_REQUIRED"
+	}
+	a := p.Approvals[id]
+	if a == nil || a.SprintID != sprint.SprintID {
+		return "WF_APPROVAL_INVALID"
+	}
+	if a.From != from || a.To != to {
+		return "WF_APPROVAL_SCOPE_MISMATCH"
+	}
+	if !a.ExpiresAt.After(now) {
+		return "WF_APPROVAL_EXPIRED"
+	}
+	if a.Status == "consumed" || a.ConsumedAt != nil {
+		return "WF_APPROVAL_CONSUMED"
+	}
+	if a.Status != "approved" || a.ApprovedAt == nil || a.Approver == "" {
+		return "WF_APPROVAL_NOT_APPROVED"
+	}
+	return ""
 }
 
 func ActiveWaiver(p *domain.Project, gap *domain.Gap, now time.Time) bool {

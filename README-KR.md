@@ -34,6 +34,9 @@ tene-workflow phase transition <phase> --dry-run
 tene-workflow document validate <phase>
 tene-workflow context build --phase design --budget 32768 --output .tene-workflow/cache/context.json
 tene-workflow context validate --input .tene-workflow/cache/context.json
+tene-workflow approval request --to do --reason "Design reviewed" --requester kay --expires 2026-08-21T00:00:00Z
+tene-workflow approval approve <approval-id> --approver kay
+tene-workflow phase transition do --approval <approval-id>
 tene-workflow loop check
 tene-workflow graph providers|build|understand|trace|impact|validate
 tene-workflow qa capabilities|plan|execute|observe|case|evaluate|status

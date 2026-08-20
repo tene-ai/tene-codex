@@ -43,6 +43,7 @@ type Project struct {
 	Criteria       map[string]*Criterion    `json:"acceptance_criteria"`
 	Gaps           map[string]*Gap          `json:"gaps"`
 	Waivers        map[string]*Waiver       `json:"waivers"`
+	Approvals      map[string]*Approval     `json:"approvals"`
 	Evidence       map[string]*Evidence     `json:"evidence"`
 	QARuns         map[string]*QARun        `json:"qa_runs"`
 	Graph          Graph                    `json:"graph"`
@@ -50,21 +51,26 @@ type Project struct {
 }
 
 type Sprint struct {
-	SprintID     string     `json:"sprint_id"`
-	Slug         string     `json:"slug"`
-	Title        string     `json:"title"`
-	Phase        Phase      `json:"phase"`
-	Predecessors []string   `json:"predecessor_ids,omitempty"`
-	IntentIDs    []string   `json:"intent_ids,omitempty"`
-	TaskIDs      []string   `json:"task_ids,omitempty"`
-	OpenGapIDs   []string   `json:"open_gap_ids,omitempty"`
-	DocumentRoot string     `json:"document_root"`
-	StartedAt    *time.Time `json:"started_at,omitempty"`
-	ArchivedAt   *time.Time `json:"archived_at,omitempty"`
-	ApprovalRefs []string   `json:"approval_refs,omitempty"`
-	LastQAStatus string     `json:"last_qa_status,omitempty"`
-	LastQAID     string     `json:"last_qa_id,omitempty"`
-	ReportPath   string     `json:"report_path,omitempty"`
+	SprintID          string     `json:"sprint_id"`
+	Slug              string     `json:"slug"`
+	Title             string     `json:"title"`
+	Phase             Phase      `json:"phase"`
+	Predecessors      []string   `json:"predecessor_ids,omitempty"`
+	IntentIDs         []string   `json:"intent_ids,omitempty"`
+	TaskIDs           []string   `json:"task_ids,omitempty"`
+	OpenGapIDs        []string   `json:"open_gap_ids,omitempty"`
+	DocumentRoot      string     `json:"document_root"`
+	StartedAt         *time.Time `json:"started_at,omitempty"`
+	ArchivedAt        *time.Time `json:"archived_at,omitempty"`
+	ApprovalRefs      []string   `json:"approval_refs,omitempty"`
+	LastQAStatus      string     `json:"last_qa_status,omitempty"`
+	LastQAID          string     `json:"last_qa_id,omitempty"`
+	ReportPath        string     `json:"report_path,omitempty"`
+	LoopIteration     int        `json:"loop_iteration"`
+	MaxLoopIterations int        `json:"max_loop_iterations"`
+	LastLoopOutcome   string     `json:"last_loop_outcome,omitempty"`
+	LastLoopSummary   string     `json:"last_loop_summary,omitempty"`
+	LastLoopAt        *time.Time `json:"last_loop_at,omitempty"`
 }
 
 type Task struct {
@@ -107,15 +113,35 @@ type Criterion struct {
 }
 
 type Gap struct {
-	GapID        string   `json:"gap_id"`
-	SprintID     string   `json:"sprint_id"`
-	Category     string   `json:"category"`
-	Severity     string   `json:"severity"`
-	Status       string   `json:"status"`
-	Description  string   `json:"description"`
-	SubjectRefs  []string `json:"subject_refs,omitempty"`
-	EvidenceRefs []string `json:"evidence_refs,omitempty"`
-	Resolution   string   `json:"resolution,omitempty"`
+	GapID                 string     `json:"gap_id"`
+	SprintID              string     `json:"sprint_id"`
+	Category              string     `json:"category"`
+	Severity              string     `json:"severity"`
+	Status                string     `json:"status"`
+	Description           string     `json:"description"`
+	SubjectRefs           []string   `json:"subject_refs,omitempty"`
+	EvidenceRefs          []string   `json:"evidence_refs,omitempty"`
+	Resolution            string     `json:"resolution,omitempty"`
+	ResolutionEvidenceIDs []string   `json:"resolution_evidence_ids,omitempty"`
+	DeferredReason        string     `json:"deferred_reason,omitempty"`
+	DeferredOwner         string     `json:"deferred_owner,omitempty"`
+	DeferredTargetSprint  string     `json:"deferred_target_sprint,omitempty"`
+	DeferredAt            *time.Time `json:"deferred_at,omitempty"`
+}
+
+type Approval struct {
+	ApprovalID  string     `json:"approval_id"`
+	SprintID    string     `json:"sprint_id"`
+	From        Phase      `json:"from"`
+	To          Phase      `json:"to"`
+	Reason      string     `json:"reason"`
+	Requester   string     `json:"requester"`
+	Approver    string     `json:"approver,omitempty"`
+	Status      string     `json:"status"`
+	RequestedAt time.Time  `json:"requested_at"`
+	ApprovedAt  *time.Time `json:"approved_at,omitempty"`
+	ExpiresAt   time.Time  `json:"expires_at"`
+	ConsumedAt  *time.Time `json:"consumed_at,omitempty"`
 }
 
 type Waiver struct {
@@ -235,7 +261,7 @@ func NewProject(id, name, profile string, now time.Time) *Project {
 		SchemaVersion: SchemaVersion, ProjectID: id, Name: name, Profile: profile,
 		UpdatedAt: now.UTC(), Sprints: map[string]*Sprint{}, Tasks: map[string]*Task{},
 		Intents: map[string]*Intent{}, Criteria: map[string]*Criterion{}, Gaps: map[string]*Gap{},
-		Waivers:  map[string]*Waiver{},
+		Waivers: map[string]*Waiver{}, Approvals: map[string]*Approval{},
 		Evidence: map[string]*Evidence{}, QARuns: map[string]*QARun{},
 		Graph:          Graph{Nodes: map[string]Node{}, Edges: map[string]Edge{}},
 		RequestResults: map[string]RequestResult{},

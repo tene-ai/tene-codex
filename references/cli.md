@@ -2,10 +2,11 @@
 
 ```text
 tene-workflow init --name NAME --profile standard
-tene-workflow sprint create --title TITLE [--slug SLUG]
+tene-workflow sprint create --title TITLE [--slug SLUG] [--max-iterations N]
 tene-workflow sprint start ID
 tene-workflow status --json
-tene-workflow phase transition PHASE [--dry-run]
+tene-workflow phase transition PHASE [--dry-run] [--approval ID]
+tene-workflow approval request|approve|list
 tene-workflow intent capture --statement TEXT --ac TEXT --observable TEXT
 tene-workflow intent confirm ID
 tene-workflow task add --title TEXT --layer LAYER [--ac IDS]
@@ -14,7 +15,7 @@ tene-workflow document scaffold|validate
 tene-workflow graph providers|build|understand [--changed|--path CSV]|trace ID|impact ID [--depth N] [--call-depth N]|validate
 tene-workflow context build [--phase PHASE] [--budget BYTES] [--output PATH]
 tene-workflow context validate --input PATH
-tene-workflow loop check|record-gap|resolve-gap
+tene-workflow loop check|iterate|record-gap|resolve-gap|defer-gap
 tene-workflow waiver create --gap ID --reason TEXT --approver ID --expires RFC3339|list|revoke ID
 tene-workflow qa capabilities|plan|execute CASE --adapter NAME|observe CASE --input FILE|case|evaluate|status
 tene-workflow evidence register|verify|list

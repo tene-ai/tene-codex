@@ -86,6 +86,8 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		result, revision, err = rt.sprint(args[1:])
 	case "phase":
 		result, revision, err = rt.phase(args[1:])
+	case "approval":
+		result, revision, err = rt.approval(args[1:])
 	case "task":
 		result, revision, err = rt.task(args[1:])
 	case "intent":
@@ -239,7 +241,12 @@ func (rt *runtime) status() (any, uint64, error) {
 	if p.ActiveSprintID != "" {
 		active = p.Sprints[p.ActiveSprintID]
 	}
-	return map[string]any{"project_id": p.ProjectID, "name": p.Name, "profile": p.Profile, "active_sprint": active, "counts": map[string]int{"sprints": len(p.Sprints), "tasks": len(p.Tasks), "intents": len(p.Intents), "open_gaps": openGaps(p)}}, p.Revision, nil
+	counts := map[string]int{"sprints": len(p.Sprints), "tasks": len(p.Tasks), "intents": len(p.Intents), "open_gaps": openGaps(p), "deferred_gaps": deferredGaps(p)}
+	result := map[string]any{"project_id": p.ProjectID, "name": p.Name, "profile": p.Profile, "active_sprint": active, "counts": counts}
+	if active != nil {
+		result["workflow"] = map[string]any{"effective_blockers": effectiveBlockers(p, active), "active_waivers": activeWaiverCount(p, active), "loop_iteration": active.LoopIteration, "max_loop_iterations": active.MaxLoopIterations, "loop_remaining": max(0, active.MaxLoopIterations-active.LoopIteration), "last_loop_outcome": active.LastLoopOutcome}
+	}
+	return result, p.Revision, nil
 }
 
 func (rt *runtime) sprint(args []string) (any, uint64, error) {
@@ -258,17 +265,21 @@ func (rt *runtime) sprint(args []string) (any, uint64, error) {
 		title := fs.String("title", "", "")
 		slug := fs.String("slug", "", "")
 		pred := fs.String("predecessors", "", "")
+		maxIterations := fs.Int("max-iterations", 5, "")
 		if err := fs.Parse(args[1:]); err != nil {
 			return nil, 0, err
 		}
 		if *title == "" {
 			return nil, 0, usageErr("--title is required")
 		}
+		if *maxIterations < 1 || *maxIterations > 20 {
+			return nil, 0, usageErr("--max-iterations must be between 1 and 20")
+		}
 		if *slug == "" {
 			*slug = slugify(*title)
 		}
 		id := domain.NewID("sprint")
-		sp := &domain.Sprint{SprintID: id, Slug: *slug, Title: *title, Phase: domain.PhaseDraft, Predecessors: csv(*pred), DocumentRoot: filepath.ToSlash(filepath.Join("docs", "sprints", id+"-"+*slug))}
+		sp := &domain.Sprint{SprintID: id, Slug: *slug, Title: *title, Phase: domain.PhaseDraft, Predecessors: csv(*pred), DocumentRoot: filepath.ToSlash(filepath.Join("docs", "sprints", id+"-"+*slug)), MaxLoopIterations: *maxIterations}
 		result, err := s.Mutate(rt.expected, actor(), "SprintCreated", id, sp, func(p *domain.Project) error { p.Sprints[id] = sp; p.ActiveSprintID = id; return nil })
 		if err != nil {
 			return nil, 0, err
@@ -305,7 +316,13 @@ func (rt *runtime) sprint(args []string) (any, uint64, error) {
 		}
 		return result.Sprints[sp.SprintID], result.Revision, nil
 	case "archive":
-		return rt.transition(domain.PhaseArchived, false)
+		fs := flag.NewFlagSet("sprint archive", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		approvalID := fs.String("approval", "", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		return rt.transition(domain.PhaseArchived, false, *approvalID)
 	default:
 		return nil, 0, usageErr("unknown sprint action")
 	}
@@ -333,10 +350,17 @@ func (rt *runtime) phase(args []string) (any, uint64, error) {
 	if err != nil {
 		return nil, 0, err
 	}
-	return rt.transition(target, slices.Contains(args, "--dry-run"))
+	fs := flag.NewFlagSet("phase transition", flag.ContinueOnError)
+	fs.SetOutput(io.Discard)
+	dry := fs.Bool("dry-run", false, "")
+	approvalID := fs.String("approval", "", "")
+	if err := fs.Parse(args[2:]); err != nil {
+		return nil, 0, err
+	}
+	return rt.transition(target, *dry, *approvalID)
 }
 
-func (rt *runtime) transition(target domain.Phase, dry bool) (any, uint64, error) {
+func (rt *runtime) transition(target domain.Phase, dry bool, approvalID string) (any, uint64, error) {
 	s := state.New(rt.root)
 	p, err := s.Load()
 	if err != nil {
@@ -346,20 +370,28 @@ func (rt *runtime) transition(target domain.Phase, dry bool) (any, uint64, error
 	if err != nil {
 		return nil, 0, err
 	}
-	findings := workflow.CanTransition(p, sp, target, func(ph domain.Phase) bool {
+	now := time.Now().UTC()
+	findings := workflow.CanTransitionWithApproval(p, sp, target, approvalID, now, func(ph domain.Phase) bool {
 		if !document.Exists(rt.root, sp, ph) {
 			return false
 		}
 		return !workflow.Blocking(document.Validate(document.Path(rt.root, sp, ph), ph))
 	})
 	if workflow.Blocking(findings) {
-		return map[string]any{"allowed": false, "findings": findings}, p.Revision, &commandError{"WF_GUARD_FAILED", fmt.Sprintf("%d blocking guard(s) failed", len(findings)), "Resolve the listed findings and retry.", 3}
+		code := "WF_GUARD_FAILED"
+		message := fmt.Sprintf("%d blocking guard(s) failed", len(findings))
+		remediation := "Resolve the listed findings and retry."
+		if len(findings) == 1 && strings.HasPrefix(findings[0].Code, "WF_APPROVAL_") {
+			code = findings[0].Code
+			message = findings[0].Message
+			remediation = findings[0].Remediation
+		}
+		return map[string]any{"allowed": false, "findings": findings}, p.Revision, &commandError{code, message, remediation, 3}
 	}
 	if dry {
 		return map[string]any{"allowed": true, "from": sp.Phase, "to": target, "findings": findings}, p.Revision, nil
 	}
 	from := sp.Phase
-	now := time.Now().UTC()
 	oldDocumentRoot := sp.DocumentRoot
 	newDocumentRoot := oldDocumentRoot
 	var oldPath, newPath string
@@ -391,6 +423,12 @@ func (rt *runtime) transition(target domain.Phase, dry bool) (any, uint64, error
 	result, err := s.Mutate(rt.expected, actor(), "PhaseTransitioned", sp.SprintID, map[string]any{"from": from, "to": target}, func(p *domain.Project) error {
 		x := p.Sprints[sp.SprintID]
 		x.Phase = target
+		if approvalID != "" && workflow.RequiredApproval(p.Profile, from, target) {
+			a := p.Approvals[approvalID]
+			a.Status = "consumed"
+			a.ConsumedAt = &now
+			x.ApprovalRefs = unique(append(x.ApprovalRefs, approvalID))
+		}
 		if target == domain.PhaseArchived {
 			x.ArchivedAt = &now
 			x.DocumentRoot = newDocumentRoot
@@ -419,6 +457,109 @@ func (rt *runtime) transition(target domain.Phase, dry bool) (any, uint64, error
 		return nil, 0, err
 	}
 	return map[string]any{"from": from, "to": target, "sprint": result.Sprints[sp.SprintID]}, result.Revision, nil
+}
+
+func (rt *runtime) approval(args []string) (any, uint64, error) {
+	if len(args) == 0 {
+		return nil, 0, usageErr("approval action required")
+	}
+	s := state.New(rt.root)
+	p, err := s.Load()
+	if err != nil {
+		return nil, 0, err
+	}
+	sp, err := activeSprint(p)
+	if err != nil {
+		return nil, 0, err
+	}
+	switch args[0] {
+	case "list":
+		var out []*domain.Approval
+		for _, a := range p.Approvals {
+			if a.SprintID == sp.SprintID {
+				out = append(out, a)
+			}
+		}
+		sort.Slice(out, func(i, j int) bool { return out[i].ApprovalID < out[j].ApprovalID })
+		return out, p.Revision, nil
+	case "request":
+		fs := flag.NewFlagSet("approval request", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		fromText := fs.String("from", string(sp.Phase), "")
+		toText := fs.String("to", "", "")
+		reason := fs.String("reason", "", "")
+		requester := fs.String("requester", "", "")
+		expires := fs.String("expires", "", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		if *toText == "" || *reason == "" || *requester == "" || *expires == "" {
+			return nil, 0, usageErr("--to --reason --requester --expires are required")
+		}
+		from, err := workflow.ParsePhase(*fromText)
+		if err != nil {
+			return nil, 0, err
+		}
+		to, err := workflow.ParsePhase(*toText)
+		if err != nil {
+			return nil, 0, err
+		}
+		if from != sp.Phase {
+			return nil, p.Revision, &commandError{"WF_APPROVAL_SCOPE_MISMATCH", "approval from phase is not current sprint phase", "Request approval for the active transition.", 3}
+		}
+		expiry, err := time.Parse(time.RFC3339, *expires)
+		if err != nil || !expiry.After(time.Now().UTC()) {
+			return nil, p.Revision, &commandError{"WF_APPROVAL_EXPIRY_INVALID", "expiry must be a future RFC3339 timestamp", "Provide a bounded future expiry.", 2}
+		}
+		if !workflow.RequiredApproval(p.Profile, from, to) {
+			return nil, p.Revision, &commandError{"WF_APPROVAL_NOT_REQUIRED", "this profile transition does not require approval", "Run phase transition without an approval.", 2}
+		}
+		id := domain.NewID("approval")
+		a := &domain.Approval{ApprovalID: id, SprintID: sp.SprintID, From: from, To: to, Reason: *reason, Requester: *requester, Status: "requested", RequestedAt: time.Now().UTC(), ExpiresAt: expiry.UTC()}
+		r, err := s.Mutate(rt.expected, actor(), "ApprovalRequested", id, a, func(p *domain.Project) error { p.Approvals[id] = a; return nil })
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Approvals[id], r.Revision, nil
+	case "approve":
+		if len(args) < 2 {
+			return nil, 0, usageErr("approval id required")
+		}
+		id := args[1]
+		a := p.Approvals[id]
+		if a == nil || a.SprintID != sp.SprintID {
+			return nil, 0, notFound("approval", id)
+		}
+		fs := flag.NewFlagSet("approval approve", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		approver := fs.String("approver", "", "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		if *approver == "" {
+			return nil, 0, usageErr("--approver is required")
+		}
+		if a.Status != "requested" {
+			return nil, p.Revision, &commandError{"WF_APPROVAL_INVALID", "only requested approvals can be approved", "Create a new approval request.", 3}
+		}
+		now := time.Now().UTC()
+		if !a.ExpiresAt.After(now) {
+			return nil, p.Revision, &commandError{"WF_APPROVAL_EXPIRED", "approval request has expired", "Create a new bounded approval request.", 3}
+		}
+		r, err := s.Mutate(rt.expected, actor(), "ApprovalGranted", id, map[string]string{"approver": *approver}, func(p *domain.Project) error {
+			x := p.Approvals[id]
+			x.Status = "approved"
+			x.Approver = *approver
+			x.ApprovedAt = &now
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Approvals[id], r.Revision, nil
+	default:
+		return nil, 0, usageErr("unknown approval action")
+	}
 }
 
 func (rt *runtime) task(args []string) (any, uint64, error) {
@@ -882,21 +1023,59 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 				gaps = append(gaps, g)
 			}
 		}
-		return map[string]any{"passed": len(gaps) == 0, "open_gaps": gaps}, p.Revision, nil
+		return map[string]any{"passed": len(gaps) == 0, "open_gaps": gaps, "iteration": sp.LoopIteration, "max_iterations": sp.MaxLoopIterations, "remaining": max(0, sp.MaxLoopIterations-sp.LoopIteration), "exhausted": sp.LoopIteration >= sp.MaxLoopIterations}, p.Revision, nil
+	case "iterate":
+		if sp.Phase != domain.PhaseLoopCheck {
+			return nil, p.Revision, &commandError{"WF_LOOP_PHASE_REQUIRED", "loop iterations can only be recorded in loop-check", "Transition to loop-check first.", 3}
+		}
+		fs := flag.NewFlagSet("loop iterate", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		outcome := fs.String("outcome", "repair", "")
+		summary := fs.String("summary", "", "")
+		if err := fs.Parse(args[1:]); err != nil {
+			return nil, 0, err
+		}
+		if !slices.Contains([]string{"repair", "passed", "blocked"}, *outcome) || *summary == "" {
+			return nil, 0, usageErr("--outcome repair|passed|blocked and --summary are required")
+		}
+		if sp.LoopIteration >= sp.MaxLoopIterations {
+			return nil, p.Revision, &commandError{"WF_LOOP_EXHAUSTED", "loop iteration budget is exhausted", "Leave unresolved gaps visible and request a policy decision.", 3}
+		}
+		now := time.Now().UTC()
+		r, err := s.Mutate(rt.expected, actor(), "LoopIterated", sp.SprintID, map[string]any{"outcome": *outcome, "summary": *summary, "iteration": sp.LoopIteration + 1}, func(p *domain.Project) error {
+			x := p.Sprints[sp.SprintID]
+			x.LoopIteration++
+			x.LastLoopOutcome = *outcome
+			x.LastLoopSummary = *summary
+			x.LastLoopAt = &now
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		x := r.Sprints[sp.SprintID]
+		return map[string]any{"iteration": x.LoopIteration, "max_iterations": x.MaxLoopIterations, "remaining": max(0, x.MaxLoopIterations-x.LoopIteration), "outcome": x.LastLoopOutcome, "exhausted": x.LoopIteration >= x.MaxLoopIterations}, r.Revision, nil
 	case "record-gap":
 		fs := flag.NewFlagSet("loop record-gap", flag.ContinueOnError)
 		fs.SetOutput(io.Discard)
 		desc := fs.String("description", "", "")
 		category := fs.String("category", "mismatch", "")
 		severity := fs.String("severity", "blocker", "")
+		subjects := fs.String("subject", "", "")
 		if err := fs.Parse(args[1:]); err != nil {
 			return nil, 0, err
 		}
 		if *desc == "" {
 			return nil, 0, usageErr("--description required")
 		}
+		if !slices.Contains([]string{"missing", "mismatch", "unverified", "regression", "debt", "security", "evidence-integrity"}, *category) {
+			return nil, 0, usageErr("unsupported gap category")
+		}
+		if !slices.Contains([]string{"blocker", "warning"}, *severity) {
+			return nil, 0, usageErr("severity must be blocker or warning")
+		}
 		id := domain.NewID("gap")
-		g := &domain.Gap{GapID: id, SprintID: sp.SprintID, Category: *category, Severity: *severity, Status: "open", Description: *desc}
+		g := &domain.Gap{GapID: id, SprintID: sp.SprintID, Category: *category, Severity: *severity, Status: "open", Description: *desc, SubjectRefs: csv(*subjects)}
 		r, err := s.Mutate(rt.expected, actor(), "GapRecorded", id, g, func(p *domain.Project) error {
 			p.Gaps[id] = g
 			p.Sprints[sp.SprintID].OpenGapIDs = append(p.Sprints[sp.SprintID].OpenGapIDs, id)
@@ -911,11 +1090,72 @@ func (rt *runtime) loop(args []string) (any, uint64, error) {
 			return nil, 0, usageErr("gap id required")
 		}
 		id := args[1]
-		if p.Gaps[id] == nil {
+		fs := flag.NewFlagSet("loop resolve-gap", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		resolution := fs.String("resolution", "", "")
+		evidenceIDs := fs.String("evidence", "", "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		if *resolution == "" || *evidenceIDs == "" {
+			return nil, 0, usageErr("--resolution and --evidence are required")
+		}
+		if p.Gaps[id] == nil || p.Gaps[id].SprintID != sp.SprintID {
 			return nil, 0, notFound("gap", id)
 		}
-		r, err := s.Mutate(rt.expected, actor(), "GapResolved", id, nil, func(p *domain.Project) error {
+		if p.Gaps[id].Status != "open" {
+			return nil, p.Revision, &commandError{"WF_GAP_NOT_OPEN", "only open gaps can be resolved", "Inspect the current gap disposition.", 3}
+		}
+		for _, evidenceID := range csv(*evidenceIDs) {
+			if p.Evidence[evidenceID] == nil {
+				return nil, 0, notFound("evidence", evidenceID)
+			}
+		}
+		r, err := s.Mutate(rt.expected, actor(), "GapResolved", id, map[string]any{"resolution": *resolution, "evidence_ids": csv(*evidenceIDs)}, func(p *domain.Project) error {
 			p.Gaps[id].Status = "resolved"
+			p.Gaps[id].Resolution = *resolution
+			p.Gaps[id].ResolutionEvidenceIDs = csv(*evidenceIDs)
+			p.Sprints[sp.SprintID].OpenGapIDs = remove(p.Sprints[sp.SprintID].OpenGapIDs, id)
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return r.Gaps[id], r.Revision, nil
+	case "defer-gap":
+		if len(args) < 2 {
+			return nil, 0, usageErr("gap id required")
+		}
+		id := args[1]
+		g := p.Gaps[id]
+		if g == nil || g.SprintID != sp.SprintID {
+			return nil, 0, notFound("gap", id)
+		}
+		if g.Status != "open" {
+			return nil, p.Revision, &commandError{"WF_GAP_NOT_OPEN", "only open gaps can be deferred", "Inspect the current gap disposition.", 3}
+		}
+		if g.Category == "security" || g.Category == "evidence-integrity" {
+			return nil, p.Revision, &commandError{"WF_GAP_DEFER_FORBIDDEN", "security and evidence-integrity gaps cannot be deferred", "Resolve the gap with valid evidence.", 3}
+		}
+		fs := flag.NewFlagSet("loop defer-gap", flag.ContinueOnError)
+		fs.SetOutput(io.Discard)
+		reason := fs.String("reason", "", "")
+		owner := fs.String("owner", "", "")
+		target := fs.String("target-sprint", "", "")
+		if err := fs.Parse(args[2:]); err != nil {
+			return nil, 0, err
+		}
+		if *reason == "" || *owner == "" || *target == "" {
+			return nil, 0, usageErr("--reason --owner --target-sprint are required")
+		}
+		now := time.Now().UTC()
+		r, err := s.Mutate(rt.expected, actor(), "GapDeferred", id, map[string]string{"reason": *reason, "owner": *owner, "target_sprint": *target}, func(p *domain.Project) error {
+			x := p.Gaps[id]
+			x.Status = "deferred"
+			x.DeferredReason = *reason
+			x.DeferredOwner = *owner
+			x.DeferredTargetSprint = *target
+			x.DeferredAt = &now
 			p.Sprints[sp.SprintID].OpenGapIDs = remove(p.Sprints[sp.SprintID].OpenGapIDs, id)
 			return nil
 		})
@@ -1513,6 +1753,13 @@ func buildGraph(p *domain.Project) domain.Graph {
 			addEdge(&g, subject, id, "depends_on")
 		}
 	}
+	for id, sprint := range p.Sprints {
+		g.Nodes[id] = domain.Node{ID: id, Kind: "Sprint", Label: sprint.Title, Locator: sprint.DocumentRoot, Source: "authored", Confidence: 1, Attributes: map[string]any{"phase": sprint.Phase}}
+	}
+	for id, approval := range p.Approvals {
+		g.Nodes[id] = domain.Node{ID: id, Kind: "Approval", Label: string(approval.From) + " → " + string(approval.To), Source: "authored", Confidence: 1, Attributes: map[string]any{"status": approval.Status, "requester": approval.Requester, "approver": approval.Approver, "expires_at": approval.ExpiresAt}}
+		addEdge(&g, approval.SprintID, id, "belongs_to")
+	}
 	for id, w := range p.Waivers {
 		g.Nodes[id] = domain.Node{ID: id, Kind: "Waiver", Label: w.Reason, Source: "authored", Confidence: 1, Attributes: map[string]any{"status": w.Status, "expires_at": w.ExpiresAt, "approver": w.Approver, "scope": w.Scope}}
 		addEdge(&g, w.GapID, id, "waived_by")
@@ -1661,6 +1908,35 @@ func openGaps(p *domain.Project) int {
 	}
 	return n
 }
+func deferredGaps(p *domain.Project) int {
+	n := 0
+	for _, g := range p.Gaps {
+		if g.Status == "deferred" {
+			n++
+		}
+	}
+	return n
+}
+func effectiveBlockers(p *domain.Project, sp *domain.Sprint) int {
+	n := 0
+	now := time.Now().UTC()
+	for _, id := range sp.OpenGapIDs {
+		if g := p.Gaps[id]; g != nil && g.Status == "open" && g.Severity == "blocker" && !workflow.ActiveWaiver(p, g, now) {
+			n++
+		}
+	}
+	return n
+}
+func activeWaiverCount(p *domain.Project, sp *domain.Sprint) int {
+	n := 0
+	now := time.Now().UTC()
+	for _, id := range sp.OpenGapIDs {
+		if workflow.ActiveWaiver(p, p.Gaps[id], now) {
+			n++
+		}
+	}
+	return n
+}
 func actor() domain.Actor { return domain.Actor{Kind: "codex"} }
 func arg(a []string, i int) string {
 	if i < len(a) {
@@ -1765,6 +2041,6 @@ Usage:
   tene-workflow [--root PATH] [--json] <command>
 
 Commands:
-  init, status, sprint, phase, task, intent, document, graph, context,
+  init, status, sprint, phase, approval, task, intent, document, graph, context,
   loop, waiver, evidence, qa, report, secret, migrate, doctor, compact, clear, version`
 }

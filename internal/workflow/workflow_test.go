@@ -47,6 +47,34 @@ func TestFixedLifecycleRejectsSkip(t *testing.T) {
 	}
 }
 
+func TestProfileApprovalMatrixAndValidity(t *testing.T) {
+	p, sp := fixture()
+	sp.Phase = domain.PhaseDesign
+	now := time.Now().UTC()
+	for _, tc := range []struct {
+		profile  string
+		from, to domain.Phase
+		required bool
+	}{{"strict", domain.PhaseDesign, domain.PhaseDo, true}, {"strict", domain.PhaseReport, domain.PhaseArchived, true}, {"standard", domain.PhaseDesign, domain.PhaseDo, false}, {"standard", domain.PhaseReport, domain.PhaseArchived, true}, {"light", domain.PhaseReport, domain.PhaseArchived, false}, {"off", domain.PhaseDesign, domain.PhaseDo, false}} {
+		if got := RequiredApproval(tc.profile, tc.from, tc.to); got != tc.required {
+			t.Fatalf("%#v got %v", tc, got)
+		}
+	}
+	approved := now
+	a := &domain.Approval{ApprovalID: "approval_x", SprintID: sp.SprintID, From: domain.PhaseDesign, To: domain.PhaseDo, Status: "approved", Approver: "human", ApprovedAt: &approved, ExpiresAt: now.Add(time.Hour)}
+	p.Approvals[a.ApprovalID] = a
+	if code := ApprovalValidity(p, sp, a.ApprovalID, a.From, a.To, now); code != "" {
+		t.Fatal(code)
+	}
+	if code := ApprovalValidity(p, sp, a.ApprovalID, a.From, domain.PhaseQA, now); code != "WF_APPROVAL_SCOPE_MISMATCH" {
+		t.Fatal(code)
+	}
+	a.ExpiresAt = now.Add(-time.Second)
+	if code := ApprovalValidity(p, sp, a.ApprovalID, a.From, a.To, now); code != "WF_APPROVAL_EXPIRED" {
+		t.Fatal(code)
+	}
+}
+
 func TestPRDGateRequiresConfirmedIntentAndCriterion(t *testing.T) {
 	p, sp := fixture()
 	if got := CanTransition(p, sp, domain.PhasePlan, func(domain.Phase) bool { return true }); Blocking(got) {

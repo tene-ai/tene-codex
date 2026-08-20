@@ -464,6 +464,14 @@ func ensureMaps(p *domain.Project) {
 	if p.Waivers == nil {
 		p.Waivers = map[string]*domain.Waiver{}
 	}
+	if p.Approvals == nil {
+		p.Approvals = map[string]*domain.Approval{}
+	}
+	for _, sprint := range p.Sprints {
+		if sprint.MaxLoopIterations == 0 {
+			sprint.MaxLoopIterations = 5
+		}
+	}
 	if p.Evidence == nil {
 		p.Evidence = map[string]*domain.Evidence{}
 	}

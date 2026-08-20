@@ -1,0 +1,38 @@
+Workflow Approval Loop Completion verification
+Date: 2026-08-20 UTC
+
+PASS make check
+- Go unit/integration packages passed.
+- go vet passed.
+- plugin, hook, and schema JSON parsed.
+- Python hook tests: 3 passed.
+
+PASS go test -race ./...
+- app approval/loop/gap CLI journey passed.
+- workflow profile/approval table passed.
+- all packages passed race detection.
+
+PASS workflow behavior
+- strict design→do without approval failed with WF_APPROVAL_REQUIRED.
+- exact requested and approved transition passed dry-run without consumption, then actual transition consumed it.
+- standard archive integration now requests and consumes report→archive approval.
+- strict/standard/light/off profile matrix passed.
+- wrong scope and expired approval fail closed in unit tests.
+- max-iterations=2 accepted two iterations and rejected the third with exit 3.
+- eligible debt defer retained owner, reason, and target Sprint.
+- security gap defer was rejected with exit 3.
+- status exposed effective blockers, active waivers, iteration, maximum, and remaining budget.
+
+PASS npm run test:e2e
+- 3 reference web UI/API/persistence/error-retry journeys passed.
+
+PASS Codex validators
+- plugin validator passed.
+- 9 of 9 tene skill validators passed.
+
+PASS evidence verify
+- 14 existing evidence records were hash-valid and redaction-safe before this artifact registration.
+
+PASS doctor
+- healthy=true, events=271, blockers=0.
+- four GRAPH_AC_UNVERIFIED warnings were expected before registering this Sprint evidence.

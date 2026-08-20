@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/tene-ai/tene-codex/internal/state"
 )
@@ -147,7 +148,16 @@ func TestCLICompleteSprintArchivesDocuments(t *testing.T) {
 	if code, _ := execute(t, root, "report", "validate"); code != 0 {
 		t.Fatal("report validation failed")
 	}
-	if code, _ := execute(t, root, "sprint", "archive"); code != 0 {
+	expiry := time.Now().UTC().Add(time.Hour).Format(time.RFC3339)
+	code, requested := execute(t, root, "approval", "request", "--from", "report", "--to", "archived", "--reason", "final report reviewed", "--requester", "test", "--expires", expiry)
+	if code != 0 {
+		t.Fatalf("approval request failed: %#v", requested)
+	}
+	approvalID := requested.Result.(map[string]any)["approval_id"].(string)
+	if code, _ := execute(t, root, "approval", "approve", approvalID, "--approver", "reviewer"); code != 0 {
+		t.Fatal("approval failed")
+	}
+	if code, _ := execute(t, root, "sprint", "archive", "--approval", approvalID); code != 0 {
 		t.Fatal("archive failed")
 	}
 	if _, err := os.Stat(originalRoot); !os.IsNotExist(err) {
@@ -229,5 +239,61 @@ func TestCLIGraphImpactAndContextFreshness(t *testing.T) {
 	}
 	if code, stale := execute(t, root, "context", "validate", "--input", packPath); code != 3 || stale.OK {
 		t.Fatalf("expected stale context: code=%d %#v", code, stale)
+	}
+}
+
+func TestCLIApprovalLoopAndGapLifecycle(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--profile", "strict")
+	_, created := execute(t, root, "sprint", "create", "--title", "Guarded", "--max-iterations", "2")
+	sprint := created.Result.(map[string]any)["sprint"].(map[string]any)
+	execute(t, root, "phase", "transition", "prd")
+	completeDocument(t, root, filepath.ToSlash(filepath.Join(sprint["document_root"].(string), "00-prd", "00-prd.md")))
+	_, captured := execute(t, root, "intent", "capture", "--statement", "guarded flow", "--ac", "flow is controlled", "--observable", "state is visible")
+	intentID := captured.Result.(map[string]any)["intent"].(map[string]any)["intent_id"].(string)
+	acID := captured.Result.(map[string]any)["criterion"].(map[string]any)["ac_id"].(string)
+	execute(t, root, "intent", "confirm", intentID)
+	execute(t, root, "phase", "transition", "plan")
+	completeDocument(t, root, filepath.ToSlash(filepath.Join(sprint["document_root"].(string), "01-plan", "00-plan.md")))
+	_, taskEnv := execute(t, root, "task", "add", "--title", "work", "--ac", acID)
+	taskID := taskEnv.Result.(map[string]any)["task_id"].(string)
+	execute(t, root, "phase", "transition", "design")
+	completeDocument(t, root, filepath.ToSlash(filepath.Join(sprint["document_root"].(string), "02-design", "00-design.md")))
+	if code, env := execute(t, root, "phase", "transition", "do", "--dry-run"); code != 3 || env.OK {
+		t.Fatalf("approval boundary passed: %#v", env)
+	}
+	expires := time.Now().UTC().Add(time.Hour).Format(time.RFC3339)
+	_, request := execute(t, root, "approval", "request", "--to", "do", "--reason", "design reviewed", "--requester", "agent", "--expires", expires)
+	approvalID := request.Result.(map[string]any)["approval_id"].(string)
+	execute(t, root, "approval", "approve", approvalID, "--approver", "human")
+	if code, _ := execute(t, root, "phase", "transition", "do", "--approval", approvalID, "--dry-run"); code != 0 {
+		t.Fatal("approved dry-run failed")
+	}
+	if code, _ := execute(t, root, "phase", "transition", "do", "--approval", approvalID); code != 0 {
+		t.Fatal("approved transition failed")
+	}
+	if code, _ := execute(t, root, "approval", "approve", approvalID, "--approver", "human"); code == 0 {
+		t.Fatal("consumed approval reused")
+	}
+	execute(t, root, "task", "complete", taskID)
+	execute(t, root, "phase", "transition", "loop-check")
+	if code, _ := execute(t, root, "loop", "iterate", "--outcome", "repair", "--summary", "first repair"); code != 0 {
+		t.Fatal(code)
+	}
+	if code, _ := execute(t, root, "loop", "iterate", "--outcome", "blocked", "--summary", "policy needed"); code != 0 {
+		t.Fatal(code)
+	}
+	if code, _ := execute(t, root, "loop", "iterate", "--outcome", "repair", "--summary", "too many"); code != 3 {
+		t.Fatalf("expected exhausted, got %d", code)
+	}
+	_, gapEnv := execute(t, root, "loop", "record-gap", "--description", "carry debt", "--category", "debt", "--severity", "warning")
+	gapID := gapEnv.Result.(map[string]any)["gap_id"].(string)
+	if code, _ := execute(t, root, "loop", "defer-gap", gapID, "--reason", "bounded scope", "--owner", "team", "--target-sprint", "next"); code != 0 {
+		t.Fatal(code)
+	}
+	_, securityEnv := execute(t, root, "loop", "record-gap", "--description", "security defect", "--category", "security")
+	securityID := securityEnv.Result.(map[string]any)["gap_id"].(string)
+	if code, _ := execute(t, root, "loop", "defer-gap", securityID, "--reason", "no", "--owner", "team", "--target-sprint", "next"); code != 3 {
+		t.Fatalf("security defer code=%d", code)
 	}
 }
