@@ -161,7 +161,7 @@ func (s *Store) CreateCheckpoint() (string, *domain.Project, error) {
 		if err := atomicJSON(s.ProjectPath(), p); err != nil {
 			return err
 		}
-		if err := atomicJSON(s.ActivePath(), p); err != nil {
+		if err := atomicJSON(s.ActivePath(), activeProjection(p)); err != nil {
 			return err
 		}
 		if err := atomicJSON(s.MasterPlanPath(), masterPlan(p)); err != nil {
@@ -185,7 +185,7 @@ func (s *Store) ProjectionDrift() ([]ProjectionDrift, *domain.Project, error) {
 	checks := []struct {
 		path  string
 		value any
-	}{{s.ProjectPath(), p}, {s.ActivePath(), p}, {s.MasterPlanPath(), masterPlan(p)}}
+	}{{s.ProjectPath(), p}, {s.ActivePath(), activeProjection(p)}, {s.MasterPlanPath(), masterPlan(p)}}
 	var out []ProjectionDrift
 	for _, c := range checks {
 		expected, _ := json.MarshalIndent(c.value, "", "  ")
@@ -264,6 +264,9 @@ func (s *Store) RepairFromJournal() ([]string, error) {
 				}
 			}
 			var value any = p
+			if d.Path == s.ActivePath() {
+				value = activeProjection(p)
+			}
 			if d.Path == s.MasterPlanPath() {
 				value = masterPlan(p)
 			}

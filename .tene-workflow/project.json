@@ -23,8 +23,8 @@
       "all implementation follows the fixed Sprint lifecycle"
     ]
   },
-  "revision": 874,
-  "updated_at": "2026-08-20T03:18:04.328538Z",
+  "revision": 913,
+  "updated_at": "2026-08-20T03:27:35.053101Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -525,6 +525,35 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "All 33 documented MVP contracts resolve to implementation symbols and fixed executable proofs; master, intent, graph, context, error, replay and audit mutations have zero automatic gaps.",
       "last_loop_at": "2026-08-20T03:10:41.082902Z"
+    },
+    "sprint_0000380x5ytygknc3dgjzabepm": {
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "slug": "bounded-active-projection",
+      "title": "Bounded Active Projection Repair",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380x2dmqv18kkk1fr627v0"
+      ],
+      "intent_ids": [
+        "intent_0000380x5z1z88fessgksyy8ac"
+      ],
+      "task_ids": [
+        "task_0000380x5znht0btzehgzrht2w"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection",
+      "archived_at": "2026-08-20T03:27:34.81251Z",
+      "approval_refs": [
+        "approval_0000380x62fst6h1k949cdh6sc",
+        "approval_0000380x6prgjyf9srz90rmtk0"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Active projection is 4.3KB versus 2.9MB canonical state, excludes graph/evidence/history, retains all current resume fields and matches journal replay.",
+      "last_loop_at": "2026-08-20T03:23:18.899204Z"
     }
   },
   "tasks": {
@@ -1092,6 +1121,23 @@
         "docs/release/semantic-contracts.json",
         "scripts/qa-semantic-audit-observations.py"
       ]
+    },
+    "task_0000380x5znht0btzehgzrht2w": {
+      "task_id": "task_0000380x5znht0btzehgzrht2w",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "title": "Implement bounded replayable active projection",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "layer": "persistence",
+      "artifacts": [
+        "internal/state/store.go",
+        "internal/state/replay.go",
+        "internal/app/app_test.go",
+        "docs/release/semantic-contracts.json",
+        "scripts/qa-active-projection-observations.py"
+      ]
     }
   },
   "intents": {
@@ -1305,6 +1351,29 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T02:55:27.867801Z"
+    },
+    "intent_0000380x5z1z88fessgksyy8ac": {
+      "intent_id": "intent_0000380x5z1z88fessgksyy8ac",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Active workflow state must stay bounded to the current Sprint and never duplicate the full project graph, history or evidence archive.",
+      "rationale": "The semantic audit exposed a 2.9MB active.json duplicate, violating FR-08/09 bounded resume and compaction contracts.",
+      "actors": [
+        "plugin user",
+        "Codex session"
+      ],
+      "desired_outcomes": [
+        "active.json contains only current master/sprint/task/intent/gap/decision/checkpoint context and becomes minimal after archive"
+      ],
+      "policies": [
+        "project.json remains canonical",
+        "active.json is derived and replay-repairable"
+      ],
+      "source": "user",
+      "source_locator": "conversation:current",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T03:21:12.988302Z"
     }
   },
   "acceptance_criteria": {
@@ -1601,6 +1670,13 @@
       "statement": "Each FR-01..11, WP-01..14 and AC-PRODUCT-01..08 maps to implemented symbols plus executable behavioral assertions; the audit fails for missing symbols, tests, commands, stale evidence, invalid archives or active work.",
       "priority": "blocking",
       "observable": "A machine-readable semantic contract manifest and audit execute all mapped proofs with zero failures, while targeted mutation tests demonstrate false-pass rejection."
+    },
+    "ac_0000380x5z1z9x273dcf4hk5vw": {
+      "ac_id": "ac_0000380x5z1z9x273dcf4hk5vw",
+      "intent_id": "intent_0000380x5z1z88fessgksyy8ac",
+      "statement": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive.",
+      "priority": "blocking",
+      "observable": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit."
     }
   },
   "gaps": {
@@ -1990,6 +2066,34 @@
       "approved_at": "2026-08-20T03:18:02.961865Z",
       "expires_at": "2026-08-20T06:17:53Z",
       "consumed_at": "2026-08-20T03:18:04.032316Z"
+    },
+    "approval_0000380x62fst6h1k949cdh6sc": {
+      "approval_id": "approval_0000380x62fst6h1k949cdh6sc",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "from": "design",
+      "to": "do",
+      "reason": "Bounded projection retains every live guard field",
+      "requester": "codex",
+      "approver": "codex-reviewer",
+      "status": "consumed",
+      "requested_at": "2026-08-20T03:22:00.989647Z",
+      "approved_at": "2026-08-20T03:22:02.133541Z",
+      "expires_at": "2026-08-20T05:22:00Z",
+      "consumed_at": "2026-08-20T03:22:03.381521Z"
+    },
+    "approval_0000380x6prgjyf9srz90rmtk0": {
+      "approval_id": "approval_0000380x6prgjyf9srz90rmtk0",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "from": "report",
+      "to": "archived",
+      "reason": "Bounded active projection passed size, content, replay, drift and recovery gates",
+      "requester": "codex",
+      "approver": "codex-reviewer",
+      "status": "consumed",
+      "requested_at": "2026-08-20T03:27:33.129059Z",
+      "approved_at": "2026-08-20T03:27:33.951079Z",
+      "expires_at": "2026-08-20T05:27:32Z",
+      "consumed_at": "2026-08-20T03:27:34.81251Z"
     }
   },
   "evidence": {
@@ -9301,6 +9405,776 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T03:13:53.391665Z",
       "finished_at": "2026-08-20T03:13:53.399845Z"
+    },
+    "evidence_0000380x6dwgs9eqwjy8f1aefc": {
+      "evidence_id": "evidence_0000380x6dwgs9eqwjy8f1aefc",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrgeq7geqx1p94pm.json",
+      "sha256": "80638ae3bd556db56cbb755f61d20525670fcc5d5f77a875111b5765c1a9c0dd",
+      "size": 3463,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:07.72466Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrgeq7geqx1p94pm",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active alternate",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active alternate",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active alternate",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active alternate",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active alternate",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active alternate",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active alternate",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "new Sprint projection retained only its current identity/context",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.539707Z"
+    },
+    "evidence_0000380x6dy75s1n9nz2pg7m4r": {
+      "evidence_id": "evidence_0000380x6dy75s1n9nz2pg7m4r",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrgm2pxe6ephypm0.json",
+      "sha256": "2c9e31b40c6c0c907f0788b298706b9f23e27ea325e08ecf99bb63d0cb4a674e",
+      "size": 3654,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:08.594889Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrgm2pxe6ephypm0",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active permission",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active permission",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active permission",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active permission",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active permission",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active permission",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active permission",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "active projection exposed neither evidence history nor secret/vault/environment fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.541069Z"
+    },
+    "evidence_0000380x6dzx8zpsqkjgr55fz4": {
+      "evidence_id": "evidence_0000380x6dzx8zpsqkjgr55fz4",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrgnckgxv62mvzj0.json",
+      "sha256": "45a24207b3971ee1c06889baa495690d5f2a2c2c8b63f36781f43d8c6c3c5bfb",
+      "size": 3521,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:09.46048Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrgnckgxv62mvzj0",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active failure",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active failure",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active failure",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active failure",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active failure",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active failure",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active failure",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "missing active.json was detected without altering canonical project/journal",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.541492Z"
+    },
+    "evidence_0000380x6e1y0dt3r9ddwn1hp0": {
+      "evidence_id": "evidence_0000380x6e1y0dt3r9ddwn1hp0",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrgz658edtahstkm.json",
+      "sha256": "1616cd2b908002b35f9d54df949c1604178c8add695dda12132527fea2e88a74",
+      "size": 3531,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:10.496854Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrgz658edtahstkm",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active empty",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active empty",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active empty",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active empty",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active empty",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active empty",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active empty",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized project without an active Sprint produced identity/master-only state",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.540147Z"
+    },
+    "evidence_0000380x6e3n3n38kb92mdjqym": {
+      "evidence_id": "evidence_0000380x6e3n3n38kb92mdjqym",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrhcx3jpp8cyyk50.json",
+      "sha256": "94006e30e69338b5006ea97dcff1804cf5d319063d8012c5d841a3973513538e",
+      "size": 3443,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:11.377289Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrhcx3jpp8cyyk50",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active happy",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active happy",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active happy",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active happy",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active happy",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active happy",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active happy",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active 14538 bytes \u003c project 2903316 bytes with current resume fields",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.538985Z"
+    },
+    "evidence_0000380x6e595txd5r5pdz392g": {
+      "evidence_id": "evidence_0000380x6e595txd5r5pdz392g",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrhjt6f8xbxfcb38.json",
+      "sha256": "56bf29714e15f28aa546d91ea4da1dc200cc5e6d412813b9d72bc5549ece1eee",
+      "size": 3390,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:12.210992Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrhjt6f8xbxfcb38",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active validation",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active validation",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active validation",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active validation",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active validation",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active validation",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active validation",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "injected graph field was detected as projection drift",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.540603Z"
+    },
+    "evidence_0000380x6e6v5pk5315nt3ezdr": {
+      "evidence_id": "evidence_0000380x6e6v5pk5315nt3ezdr",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380x5ytygknc3dgjzabepm-bounded-active-projection/04-qa/observations/case_0000380x68hrhs88tbxrx0qfkg.json",
+      "sha256": "4158617945d8e111c700e4658044066e9da9890cdb45fcf7abd47a4cde25a001",
+      "size": 3544,
+      "ac_ids": [
+        "ac_0000380x5z1z9x273dcf4hk5vw"
+      ],
+      "created_at": "2026-08-20T03:25:13.010982Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380x68hrhs88tbxrx0qfkg",
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+      "state_revision": 896,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 bounded active recovery",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L2 bounded active recovery",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L3 bounded active recovery",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L4 bounded active recovery",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L5 bounded active recovery",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L6 bounded active recovery",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        },
+        {
+          "statement": "L7 bounded active recovery",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "doctor repair regenerated the missing active projection and returned healthy",
+          "expected": "active state remains bounded, resumable, detectable and repairable"
+        }
+      ],
+      "tool": "active-projection-fixture",
+      "tool_version": "active-projection-fixture/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T03:24:58.538042Z",
+      "finished_at": "2026-08-20T03:24:58.541906Z"
     }
   },
   "qa_runs": {
@@ -15990,6 +16864,319 @@
       "finished_at": "2026-08-20T03:14:17.15131Z",
       "state_revision": 854,
       "spec_hash": "1289f9f9246a48fc56022bf67485c5c83b349f6a446b8202c2ecc45e7806cc86"
+    },
+    "run_0000380x68hrhap7fkvxh4epxc": {
+      "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+      "sprint_id": "sprint_0000380x5ytygknc3dgjzabepm",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380x68hrhcx3jpp8cyyk50",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6e3n3n38kb92mdjqym"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x68hrgeq7geqx1p94pm",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6dwgs9eqwjy8f1aefc"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x68hrgz658edtahstkm",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6e1y0dt3r9ddwn1hp0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x68hrhjt6f8xbxfcb38",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6e595txd5r5pdz392g"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x68hrgm2pxe6ephypm0",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6dy75s1n9nz2pg7m4r"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x68hrgnckgxv62mvzj0",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6dzx8zpsqkjgr55fz4"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380x68hrhs88tbxrx0qfkg",
+          "ac_ids": [
+            "ac_0000380x5z1z9x273dcf4hk5vw"
+          ],
+          "title": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380x6e6v5pk5315nt3ezdr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T03:23:40.296251Z",
+      "finished_at": "2026-08-20T03:25:13.771021Z",
+      "state_revision": 896,
+      "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422"
     }
   },
   "graph": {

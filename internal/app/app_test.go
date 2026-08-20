@@ -159,6 +159,11 @@ func TestGraphBuildKeepsJournalProjectionEquivalent(t *testing.T) {
 	if !bytes.Equal(a, b) {
 		t.Fatalf("live/replay mismatch\nlive=%s\nreplayed=%s", a, b)
 	}
+	projectBytes, _ := os.ReadFile(filepath.Join(root, ".tene-workflow", "project.json"))
+	activeBytes, _ := os.ReadFile(filepath.Join(root, ".tene-workflow", "active.json"))
+	if len(activeBytes) >= len(projectBytes) || bytes.Contains(activeBytes, []byte(`"graph"`)) || !bytes.Contains(activeBytes, []byte(`"active_sprint"`)) {
+		t.Fatalf("active projection is not bounded or resumable: active=%d project=%d", len(activeBytes), len(projectBytes))
+	}
 }
 
 func TestQAPlanVariantContract(t *testing.T) {

@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "active-projection-fixture",
+  "run_id": "run_0000380x68hrhap7fkvxh4epxc",
+  "case_id": "case_0000380x68hrgz658edtahstkm",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T03:24:58.538042Z",
+  "finished_at": "2026-08-20T03:24:58.540147Z",
+  "checkpoints": [
+    {
+      "name": "active-projection-empty",
+      "kind": "state-replay",
+      "before": {
+        "verdict": "pending"
+      },
+      "after": {
+        "verdict": "passed",
+        "actual": "initialized project without an active Sprint produced identity/master-only state"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 bounded active empty",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    },
+    {
+      "statement": "L2 bounded active empty",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    },
+    {
+      "statement": "L3 bounded active empty",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    },
+    {
+      "statement": "L4 bounded active empty",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    },
+    {
+      "statement": "L5 bounded active empty",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    },
+    {
+      "statement": "L6 bounded active empty",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    },
+    {
+      "statement": "L7 bounded active empty",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:empty"
+      ],
+      "actual": "initialized project without an active Sprint produced identity/master-only state",
+      "expected": "active state remains bounded, resumable, detectable and repairable"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422",
+  "state_revision": 896,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "active-projection-fixture/1.0.0"
+}

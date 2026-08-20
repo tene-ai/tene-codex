@@ -61,7 +61,7 @@ func (s *Store) Initialize(project *domain.Project) error {
 		if err := atomicJSON(s.ProjectPath(), project); err != nil {
 			return err
 		}
-		if err := atomicJSON(s.ActivePath(), project); err != nil {
+		if err := atomicJSON(s.ActivePath(), activeProjection(project)); err != nil {
 			return err
 		}
 		if err := atomicJSON(s.MasterPlanPath(), masterPlan(project)); err != nil {
@@ -177,7 +177,7 @@ func (s *Store) Migrate() (MigrationPlan, error) {
 		if err := atomicJSON(s.ProjectPath(), &p); err != nil {
 			return err
 		}
-		if err := atomicJSON(s.ActivePath(), &p); err != nil {
+		if err := atomicJSON(s.ActivePath(), activeProjection(&p)); err != nil {
 			return err
 		}
 		if err := atomicJSON(s.MasterPlanPath(), masterPlan(&p)); err != nil {
@@ -234,7 +234,7 @@ func (s *Store) Mutate(expected *uint64, actor domain.Actor, eventType, aggregat
 		if err := atomicJSON(s.ProjectPath(), p); err != nil {
 			return err
 		}
-		if err := atomicJSON(s.ActivePath(), p); err != nil {
+		if err := atomicJSON(s.ActivePath(), activeProjection(p)); err != nil {
 			return err
 		}
 		if err := atomicJSON(s.MasterPlanPath(), masterPlan(p)); err != nil {
@@ -261,6 +261,62 @@ func masterPlan(p *domain.Project) map[string]any {
 	}
 	sort.Slice(items, func(i, j int) bool { return items[i].SprintID < items[j].SprintID })
 	return map[string]any{"schema_version": domain.SchemaVersion, "project_id": p.ProjectID, "revision": p.Revision, "active_sprint_id": p.ActiveSprintID, "plan": p.MasterPlan, "sprints": items}
+}
+
+func activeProjection(p *domain.Project) map[string]any {
+	result := map[string]any{"schema_version": domain.SchemaVersion, "project_id": p.ProjectID, "revision": p.Revision, "profile": p.Profile, "master_plan": p.MasterPlan, "active_sprint_id": p.ActiveSprintID}
+	sp := p.Sprints[p.ActiveSprintID]
+	if sp == nil {
+		return result
+	}
+	tasks := map[string]*domain.Task{}
+	intents := map[string]*domain.Intent{}
+	criteria := map[string]*domain.Criterion{}
+	gaps := map[string]*domain.Gap{}
+	waivers := map[string]*domain.Waiver{}
+	approvals := map[string]*domain.Approval{}
+	for _, id := range sp.TaskIDs {
+		if value := p.Tasks[id]; value != nil {
+			tasks[id] = value
+		}
+	}
+	for _, id := range sp.IntentIDs {
+		if value := p.Intents[id]; value != nil {
+			intents[id] = value
+		}
+		for acID, ac := range p.Criteria {
+			if ac.IntentID == id {
+				criteria[acID] = ac
+			}
+		}
+	}
+	for _, id := range sp.OpenGapIDs {
+		if value := p.Gaps[id]; value != nil {
+			gaps[id] = value
+		}
+	}
+	for id, value := range p.Waivers {
+		if value.SprintID == sp.SprintID {
+			waivers[id] = value
+		}
+	}
+	for id, value := range p.Approvals {
+		if value.SprintID == sp.SprintID {
+			approvals[id] = value
+		}
+	}
+	result["active_sprint"] = sp
+	result["tasks"] = tasks
+	result["intents"] = intents
+	result["acceptance_criteria"] = criteria
+	result["open_gaps"] = gaps
+	result["waivers"] = waivers
+	result["approvals"] = approvals
+	if run := p.QARuns[sp.LastQAID]; run != nil {
+		result["last_qa_run"] = run
+	}
+	result["checkpoint"] = map[string]any{"phase": sp.Phase, "loop_iteration": sp.LoopIteration, "last_loop_outcome": sp.LastLoopOutcome, "last_qa_status": sp.LastQAStatus}
+	return result
 }
 
 func (s *Store) VerifyJournal() ([]domain.Event, error) {

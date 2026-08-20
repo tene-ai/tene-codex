@@ -8,7 +8,7 @@
     "FR-05": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/loopcheck/analyzer.go","func Analyze"],["internal/app/app.go","case \"check\""]],"commands":["loopcheck"]},
     "FR-06": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/qaadapter/qaadapter.go","type Observation struct"],["internal/app/app.go","func qaVariants"]],"commands":["qa","references"]},
     "FR-07": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/workflow/workflow.go","func EvaluateQAGateAtRoot"],["internal/app/app.go","QA_MANUAL_PASS_FORBIDDEN"]],"commands":["workflow","qa"]},
-    "FR-08": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/state/replay.go","func \\(s \\*Store\\) Replay"],["internal/tracecontext/context.go","func BuildContextPack"]],"commands":["state","context"]},
+    "FR-08": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/state/replay.go","func \\(s \\*Store\\) Replay"],["internal/state/store.go","func activeProjection"],["internal/tracecontext/context.go","func BuildContextPack"]],"commands":["state","context"]},
     "FR-09": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/state/store.go","func \\(s \\*Store\\) Compact"],["internal/state/store.go","func \\(s \\*Store\\) ClearDerived"]],"commands":["state"]},
     "FR-10": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/router/router.go","func Route"]],"commands":["routing"]},
     "FR-11": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/secret/runner.go","func Run"],["hooks/tene_hook.py","DENIED"]],"commands":["secret","hooks"]}

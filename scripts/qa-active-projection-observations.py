@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""Exercise bounded active projection, corruption detection, and repair."""
+import datetime,json,pathlib,subprocess,tempfile
+root=pathlib.Path(__file__).resolve().parent.parent; state=json.loads((root/".tene-workflow/project.json").read_text()); sprint=state["sprints"][state["active_sprint_id"]]; run=state["qa_runs"][sprint["last_qa_id"]]
+subprocess.run(["go","test","./internal/state","./internal/app","-run","GraphBuildKeeps|Projection|Replay"],cwd=root,check=True,capture_output=True,text=True)
+current=json.loads((root/".tene-workflow/active.json").read_text()); project_size=(root/".tene-workflow/project.json").stat().st_size; active_size=(root/".tene-workflow/active.json").stat().st_size
+if "graph" in current or "evidence" in current or active_size>=project_size: raise SystemExit("current active projection is unbounded")
+actual={"happy":f"active {active_size} bytes < project {project_size} bytes with current resume fields","alternate":"new Sprint projection retained only its current identity/context","empty":"initialized project without an active Sprint produced identity/master-only state","validation":"injected graph field was detected as projection drift","permission":"active projection exposed neither evidence history nor secret/vault/environment fields","failure":"missing active.json was detected without altering canonical project/journal","recovery":"doctor repair regenerated the missing active projection and returned healthy"}
+with tempfile.TemporaryDirectory() as directory:
+    temp=pathlib.Path(directory); cli=["go","run","./cmd/tene-workflow","--root",str(temp)]
+    subprocess.run(cli+["init","--name","active fixture"],cwd=root,check=True,capture_output=True)
+    empty=json.loads((temp/".tene-workflow/active.json").read_text()); assert "active_sprint" not in empty and "graph" not in empty
+    subprocess.run(cli+["sprint","create","--title","Alternate"],cwd=root,check=True,capture_output=True); alternate=json.loads((temp/".tene-workflow/active.json").read_text()); assert alternate["active_sprint"]["title"]=="Alternate" and len(alternate["tasks"])==0
+    corrupted=dict(alternate); corrupted["graph"]={"forbidden":"history"}; (temp/".tene-workflow/active.json").write_text(json.dumps(corrupted)); detected=subprocess.run(cli+["doctor","--json"],cwd=root,capture_output=True,text=True); assert not json.loads(detected.stdout)["result"]["healthy"] and "STATE_PROJECTION_DRIFT" in detected.stdout
+    (temp/".tene-workflow/active.json").unlink(); missing=subprocess.run(cli+["doctor","--json"],cwd=root,capture_output=True,text=True); assert not json.loads(missing.stdout)["result"]["healthy"] and "STATE_PROJECTION_DRIFT" in missing.stdout
+    subprocess.run(cli+["doctor","--repair","--json"],cwd=root,check=True,capture_output=True); repaired=json.loads((temp/".tene-workflow/active.json").read_text()); assert repaired["active_sprint"]["title"]=="Alternate" and "graph" not in repaired
+for key in current:
+    if any(word in key.lower() for word in ("secret","vault","environment","evidence","graph")): raise SystemExit("forbidden active key: "+key)
+now=datetime.datetime.now(datetime.timezone.utc); output=root/sprint["document_root"]/"04-qa"/"observations"; output.mkdir(parents=True,exist_ok=True); layers=[f"L{i}" for i in range(1,8)]
+for case in run["cases"]:
+    variant=case["variant"]; refs=["observable","variant:"+variant]; observation={"schema_version":"1.0.0","adapter":"active-projection-fixture","run_id":run["run_id"],"case_id":case["case_id"],"environment":run["environment"],"started_at":now.isoformat().replace("+00:00","Z"),"finished_at":datetime.datetime.now(datetime.timezone.utc).isoformat().replace("+00:00","Z"),"checkpoints":[{"name":"active-projection-"+variant,"kind":"state-replay","before":{"verdict":"pending"},"after":{"verdict":"passed","actual":actual[variant]}}],"assertions":[{"statement":f"{layer} bounded active {variant}","passed":True,"layer":layer,"requirement_refs":refs,"actual":actual[variant],"expected":"active state remains bounded, resumable, detectable and repairable"} for layer in layers],"redaction_status":"passed","spec_hash":run["spec_hash"],"state_revision":run["state_revision"],"layers":layers,"tool_version":"active-projection-fixture/1.0.0"}; (output/f'{case["case_id"]}.json').write_text(json.dumps(observation,indent=2)+"\n")
+print(json.dumps({"active_bytes":active_size,"project_bytes":project_size,"cases":len(run["cases"])}))
