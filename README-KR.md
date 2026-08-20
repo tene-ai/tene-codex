@@ -108,6 +108,7 @@ Hooks는 lifecycle 자동화와 다중 안전장치를 제공합니다. Session 
 - Loop Check gap과 반복 이력
 - QA charter, evidence manifest와 gate 판정
 - compaction, recovery, migration과 archive
+- checksum으로 보호되는 immutable journal segment: `compact`는 active journal을 replay 가능한 checkpoint로 제한하고 `doctor`는 전체 archive hash chain을 검증합니다.
 
 Skills, subagents와 hooks는 workflow 상태를 독립적으로 편집하지 않고 이 CLI를 사용해야 합니다. 이식 가능하고 결정론적으로 동작하면서 보안에 민감한 secret manager와 책임을 분리할 수 있도록 독립 Go binary로 구현했습니다.
 

@@ -449,6 +449,43 @@ func TestCLICompleteSprintArchivesDocuments(t *testing.T) {
 	}
 }
 
+func TestCLICompactBoundsJournalAndDoctorDetectsArchiveTamper(t *testing.T) {
+	root := t.TempDir()
+	if code, _ := execute(t, root, "init", "--name", "compact-fixture"); code != 0 {
+		t.Fatal("init failed")
+	}
+	if code, _ := execute(t, root, "sprint", "create", "--title", "Compaction"); code != 0 {
+		t.Fatal("mutation fixture failed")
+	}
+	before, err := os.Stat(filepath.Join(root, state.DirName, "events.ndjson"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	code, compacted := execute(t, root, "compact")
+	if code != 0 {
+		t.Fatalf("compact failed: %#v", compacted)
+	}
+	result := compacted.Result.(map[string]any)
+	if result["active_events"].(float64) != 1 {
+		t.Fatalf("unexpected compact result: %#v", result)
+	}
+	after, _ := os.Stat(filepath.Join(root, state.DirName, "events.ndjson"))
+	if after.Size() >= before.Size() {
+		t.Fatalf("active journal did not shrink: %d >= %d", after.Size(), before.Size())
+	}
+	if code, checked := execute(t, root, "doctor"); code != 0 || !checked.Result.(map[string]any)["healthy"].(bool) || checked.Result.(map[string]any)["archived_event_segments"].(float64) != 1 {
+		t.Fatalf("doctor did not verify archive: %#v", checked)
+	}
+	archive := result["archived_segment"].(map[string]any)
+	segmentPath := filepath.Join(root, filepath.FromSlash(archive["path"].(string)))
+	if err := os.WriteFile(segmentPath, []byte("tampered\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if code, checked := execute(t, root, "doctor"); code != 0 || checked.Result.(map[string]any)["healthy"].(bool) {
+		t.Fatalf("doctor accepted tampered archive: code=%d result=%#v", code, checked)
+	}
+}
+
 func TestCLICodeIntelAndTaskReferenceValidation(t *testing.T) {
 	root := t.TempDir()
 	execute(t, root, "init")

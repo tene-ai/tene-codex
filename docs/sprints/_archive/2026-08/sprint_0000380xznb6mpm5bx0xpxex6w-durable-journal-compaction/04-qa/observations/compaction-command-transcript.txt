@@ -1,0 +1,143 @@
+$ go test ./internal/state ./internal/app
+ok  	github.com/tene-ai/tene-codex/internal/state	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/app	(cached)
+
+$ go test -race ./internal/state ./internal/app
+ok  	github.com/tene-ai/tene-codex/internal/state	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/app	(cached)
+
+$ go vet ./...
+
+$ make test test-references vet routing-eval
+go test ./...
+?   	github.com/tene-ai/tene-codex/cmd/tene-routing-eval	[no test files]
+?   	github.com/tene-ai/tene-codex/cmd/tene-workflow	[no test files]
+ok  	github.com/tene-ai/tene-codex/internal/app	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/codeintel	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/document	(cached)
+?   	github.com/tene-ai/tene-codex/internal/domain	[no test files]
+ok  	github.com/tene-ai/tene-codex/internal/loopcheck	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/projectconfig	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/qaadapter	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/router	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/secret	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/state	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/tracecontext	(cached)
+ok  	github.com/tene-ai/tene-codex/internal/workflow	(cached)
+npm run test:references
+
+> test:references
+> node testdata/reference-nextjs/runtime/journey.mjs && PYTHONPATH=testdata/reference-python python3 -m unittest discover -s testdata/reference-python/tests -p '*_test.py'
+
+{"screen":"confirmed:order-sku-42","apiStatus":200,"persisted":{"id":"order-sku-42","productId":"sku-42"},"writes":1}
+go vet ./...
+go run ./cmd/tene-routing-eval evals/routing-corpus.json >/dev/null
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+OK
+
+$ ./scripts/release-smoke.sh
+release smoke passed
+
+$ python3 scripts/requirements-audit.py --contracts-only
+{
+  "schema_version": "1.0.0",
+  "coverage": {
+    "functional_requirements": 11,
+    "product_acceptance": 8,
+    "work_packages": 14
+  },
+  "missing": [],
+  "contract_failures": {},
+  "command_results": {
+    "app-compact": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/app -run TestCLICompactBoundsJournalAndDoctorDetectsArchiveTamper\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\n"
+    },
+    "app-intent": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/app -run TestMasterMetadataAndStructuredIntentLifecycle\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\n"
+    },
+    "app-master": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/app -run TestMaster\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\n"
+    },
+    "app-report": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/app -run TestCLIHappyPath\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached) [no tests to run]\n"
+    },
+    "codeintel": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/codeintel\nok  \tgithub.com/tene-ai/tene-codex/internal/codeintel\t(cached)\n"
+    },
+    "context": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/tracecontext ./internal/app -run Context|Graph\nok  \tgithub.com/tene-ai/tene-codex/internal/tracecontext\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\n"
+    },
+    "document": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/document\nok  \tgithub.com/tene-ai/tene-codex/internal/document\t(cached)\n"
+    },
+    "graph": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/tracecontext -run Graph|Impact\nok  \tgithub.com/tene-ai/tene-codex/internal/tracecontext\t(cached)\n"
+    },
+    "hooks": {
+      "passed": true,
+      "log_tail": "$ python3 -m unittest tests/hooks_test.py\n.....\n----------------------------------------------------------------------\nRan 5 tests in 0.592s\n\nOK\n"
+    },
+    "loopcheck": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/loopcheck\nok  \tgithub.com/tene-ai/tene-codex/internal/loopcheck\t(cached)\n"
+    },
+    "playwright": {
+      "passed": true,
+      "log_tail": "$ npx playwright test tests/e2e/reference-web.spec.ts\n\nRunning 3 tests using 1 worker\n\n  ✓  1 tests/e2e/reference-web.spec.ts:3:5 › success crosses UI API and persistence (902ms)\n  ✓  2 tests/e2e/reference-web.spec.ts:10:5 › validation prevents a network write (326ms)\n  ✓  3 tests/e2e/reference-web.spec.ts:14:5 › downstream failure is visible and retry writes exactly once (574ms)\n\n  3 passed (4.0s)\n(node:71746) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+    },
+    "plugin": {
+      "passed": true,
+      "log_tail": "validated plugin manifests"
+    },
+    "qa": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/qaadapter ./internal/workflow ./internal/app -run QA|Observation|Evidence\nok  \tgithub.com/tene-ai/tene-codex/internal/qaadapter\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/workflow\t(cached)\nok  \tgithub.com/tene-ai/tene-codex/internal/app\t(cached)\n"
+    },
+    "references": {
+      "passed": true,
+      "log_tail": "$ npm run test:references\n\n> test:references\n> node testdata/reference-nextjs/runtime/journey.mjs && PYTHONPATH=testdata/reference-python python3 -m unittest discover -s testdata/reference-python/tests -p '*_test.py'\n\n{\"screen\":\"confirmed:order-sku-42\",\"apiStatus\":200,\"persisted\":{\"id\":\"order-sku-42\",\"productId\":\"sku-42\"},\"writes\":1}\n.\n----------------------------------------------------------------------\nRan 1 test in 0.003s\n\nOK\n"
+    },
+    "release": {
+      "passed": true,
+      "log_tail": "$ ./scripts/release-smoke.sh\nrelease smoke passed\n"
+    },
+    "routing": {
+      "passed": true,
+      "log_tail": "     \"ConflictTotal\": 20,\n      \"WrongPhase\": 0,\n      \"Precision\": 1,\n      \"Recall\": 0.95,\n      \"WrongPhaseRate\": 0,\n      \"UnnecessaryTriggerRate\": 0,\n      \"MultiIntentRate\": 0.9,\n      \"Passed\": true\n    },\n    \"tene-report\": {\n      \"ExplicitTotal\": 5,\n      \"ExplicitPassed\": 5,\n      \"PositiveTotal\": 20,\n      \"TruePositive\": 20,\n      \"NegativeTotal\": 20,\n      \"FalsePositive\": 0,\n      \"MultiTotal\": 10,\n      \"MultiPassed\": 9,\n      \"ConflictTotal\": 20,\n      \"WrongPhase\": 0,\n      \"Precision\": 1,\n      \"Recall\": 1,\n      \"WrongPhaseRate\": 0,\n      \"UnnecessaryTriggerRate\": 0,\n      \"MultiIntentRate\": 0.9,\n      \"Passed\": true\n    },\n    \"tene-secrets\": {\n      \"ExplicitTotal\": 5,\n      \"ExplicitPassed\": 5,\n      \"PositiveTotal\": 20,\n      \"TruePositive\": 19,\n      \"NegativeTotal\": 20,\n      \"FalsePositive\": 0,\n      \"MultiTotal\": 10,\n      \"MultiPassed\": 9,\n      \"ConflictTotal\": 0,\n      \"WrongPhase\": 0,\n      \"Precision\": 1,\n      \"Recall\": 0.95,\n      \"WrongPhaseRate\": 0,\n      \"UnnecessaryTriggerRate\": 0,\n      \"MultiIntentRate\": 0.9,\n      \"Passed\": true\n    },\n    \"tene-sprint\": {\n      \"ExplicitTotal\": 5,\n      \"ExplicitPassed\": 5,\n      \"PositiveTotal\": 20,\n      \"TruePositive\": 20,\n      \"NegativeTotal\": 20,\n      \"FalsePositive\": 0,\n      \"MultiTotal\": 10,\n      \"MultiPassed\": 10,\n      \"ConflictTotal\": 0,\n      \"WrongPhase\": 0,\n      \"Precision\": 1,\n      \"Recall\": 1,\n      \"WrongPhaseRate\": 0,\n      \"UnnecessaryTriggerRate\": 0,\n      \"MultiIntentRate\": 1,\n      \"Passed\": true\n    },\n    \"tene-status\": {\n      \"ExplicitTotal\": 5,\n      \"ExplicitPassed\": 5,\n      \"PositiveTotal\": 20,\n      \"TruePositive\": 20,\n      \"NegativeTotal\": 20,\n      \"FalsePositive\": 0,\n      \"MultiTotal\": 10,\n      \"MultiPassed\": 9,\n      \"ConflictTotal\": 0,\n      \"WrongPhase\": 0,\n      \"Precision\": 1,\n      \"Recall\": 1,\n      \"WrongPhaseRate\": 0,\n      \"UnnecessaryTriggerRate\": 0,\n      \"MultiIntentRate\": 0.9,\n      \"Passed\": true\n    }\n  },\n  \"overall_passed\": true\n}\n"
+    },
+    "schema": {
+      "passed": true,
+      "log_tail": "validated schemas/*.json"
+    },
+    "secret": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/secret\nok  \tgithub.com/tene-ai/tene-codex/internal/secret\t(cached)\n"
+    },
+    "state": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/state\nok  \tgithub.com/tene-ai/tene-codex/internal/state\t(cached)\n"
+    },
+    "workflow": {
+      "passed": true,
+      "log_tail": "$ go test ./internal/workflow\nok  \tgithub.com/tene-ai/tene-codex/internal/workflow\t(cached)\n"
+    }
+  },
+  "workflow_failures": [],
+  "active_sprint_id": "",
+  "passed": true
+}
+
+{"ok":true,"schema_version":"1.0.0","revision":952,"result":{"active_events":1,"archived_segment":{"path":".tene-workflow/event-archive/segment-00000000000000000001-00000000000000000952-6c0642b93e12.ndjson","manifest_path":".tene-workflow/event-archive/segment-00000000000000000001-00000000000000000952-6c0642b93e12.manifest.json","sha256":"6c0642b93e12794ebd47a44c42a889c657ba7c7f0c174fae68130147488dbeec","event_count":952,"byte_count":7542532,"first_sequence":1,"last_sequence":952,"last_hash":"1710d21da6d8b2309cb32de769cc8d7f5d8d9743fb23eaf670263b5a8bd8d54e"},"checkpoint":"created","snapshot":".tene-workflow/backups/checkpoint-00000000000000000952.json"},"warnings":[],"errors":[]}
+
+{"ok":true,"schema_version":"1.0.0","revision":952,"result":{"archived_event_segments":1,"capabilities":{"codex":{"cli":true,"version":"codex-cli 0.148.0","plugin_manifest":true,"skills":9,"hooks":true,"subagent_profiles":5,"app_server":true,"mcp_config":false,"probe_errors":null},"tene_cli":true},"events":1,"findings":[{"code":"GRAPH_AC_UNVERIFIED","severity":"warning","subject_refs":["ac_0000380y046tkpdm8ey9panj70"],"message":"blocking criterion has no evidence edge","remediation":"Register QA evidence.","waivable":false}],"healthy":true,"projection_drift":[{"path":"/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/.tene-workflow/project.json","status":"match"},{"path":"/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/.tene-workflow/active.json","status":"match"},{"path":"/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/.tene-workflow/master-plan.json","status":"match"}],"repaired":null,"revision":952},"warnings":[],"errors":[]}

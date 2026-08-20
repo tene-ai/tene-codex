@@ -11,6 +11,7 @@
 ├── policies.yaml
 ├── graph/{nodes.ndjson,edges.ndjson,index.json}
 ├── evidence/<run-id>/{manifest.json,artifacts...}
+├── event-archive/{segment-*.ndjson,segment-*.manifest.json}
 ├── cache/                     # clear 가능
 ├── backups/
 └── .lock
@@ -103,7 +104,7 @@ interface Event {
 
 `compact`는 journal snapshot을 만들고 기존 segment를 checksummed archive로 옮긴다. `clear`는 derived/ephemeral만 제거한다. `archive`는 Sprint 문서 경로를 이동하고 immutable flag/event를 남긴다.
 
-구현된 replay contract에서 `compact`는 현재 revision의 full `ProjectionCheckpoint`와 checksummed snapshot을 남긴다. 이후 event는 원래 domain payload와 canonical projection merge patch를 함께 hash-chain에 포함한다. `doctor`는 최신 checkpoint부터 patch를 replay하여 세 projection을 비교하고, `--repair`는 timestamped backup 후 replay 결과만 기록한다. Journal 자체가 손상되었거나 checkpoint 이후 patch가 누락되면 fail closed 한다.
+구현된 replay contract에서 `compact`는 현재 active journal의 정확한 bytes를 SHA-256 manifest와 함께 `event-archive/`의 immutable segment로 옮기고, active journal은 현재 revision의 full `ProjectionCheckpoint` 한 건으로 교체한다. checkpoint는 archive의 마지막 global sequence/hash를 anchor로 유지하므로 이후 event도 기존 sequence와 hash-chain을 계속한다. 반복 compact는 모든 이전 segment를 보존·검증한다. `doctor`는 active chain뿐 아니라 각 archive의 checksum, byte/event count, sequence와 terminal hash를 독립 검증하고 최신 checkpoint부터 patch를 replay하여 세 projection을 비교한다. `--repair`는 timestamped backup 후 derived projection만 기록하며, journal이나 archive가 손상되면 fail closed 한다.
 
 ## 7. Atomicity
 

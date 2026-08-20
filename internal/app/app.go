@@ -2262,6 +2262,10 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 		return nil, p.Revision, err
 	}
 	findings := validateGraph(p)
+	archives, archiveErr := s.VerifyArchivedSegments()
+	if archiveErr != nil {
+		findings = append(findings, domain.Finding{Code: "STATE_ARCHIVE_CORRUPT", Severity: "blocker", Message: archiveErr.Error(), Remediation: "Restore the archived event segment from a verified backup."})
+	}
 	drift, _, replayErr := s.ProjectionDrift()
 	if replayErr != nil {
 		findings = append(findings, domain.Finding{Code: "STATE_REPLAY_FAILED", Severity: "blocker", Message: replayErr.Error(), Remediation: "Run compact on a known-good projection to create a checkpoint."})
@@ -2282,7 +2286,7 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 			}
 		}
 	}
-	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }(), "codex": projectconfig.ProbeCodex(rt.root)}}, p.Revision, nil
+	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "archived_event_segments": len(archives), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }(), "codex": projectconfig.ProbeCodex(rt.root)}}, p.Revision, nil
 }
 
 func invalidEvidence(root string, p *domain.Project) []string {
@@ -2317,7 +2321,12 @@ func (rt *runtime) compact() (any, uint64, error) {
 	if err != nil {
 		return nil, 0, err
 	}
-	return map[string]string{"snapshot": relative(rt.root, path), "checkpoint": "created"}, p.Revision, nil
+	archives, err := s.VerifyArchivedSegments()
+	if err != nil {
+		return nil, p.Revision, err
+	}
+	latest := archives[len(archives)-1]
+	return map[string]any{"snapshot": relative(rt.root, path), "checkpoint": "created", "archived_segment": latest, "active_events": 1}, p.Revision, nil
 }
 func (rt *runtime) clear() (any, uint64, error) {
 	s := state.New(rt.root)

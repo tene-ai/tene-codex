@@ -5,6 +5,8 @@ package state
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -19,6 +21,21 @@ type eventEnvelope struct {
 	Data            any             `json:"data,omitempty"`
 	ProjectionPatch any             `json:"projection_patch,omitempty"`
 	Projection      *domain.Project `json:"projection,omitempty"`
+	Archive         *JournalArchive `json:"archive,omitempty"`
+}
+
+// JournalArchive links a compacted checkpoint to the immutable source
+// segment that immediately precedes it.
+type JournalArchive struct {
+	Path               string `json:"path"`
+	ManifestPath       string `json:"manifest_path"`
+	SHA256             string `json:"sha256"`
+	EventCount         int    `json:"event_count"`
+	ByteCount          int64  `json:"byte_count"`
+	FirstSequence      uint64 `json:"first_sequence"`
+	LastSequence       uint64 `json:"last_sequence"`
+	AnchorPreviousHash string `json:"anchor_previous_hash,omitempty"`
+	LastHash           string `json:"last_hash"`
 }
 type ProjectionDrift struct {
 	Path        string   `json:"path"`
@@ -146,16 +163,43 @@ func (s *Store) CreateCheckpoint() (string, *domain.Project, error) {
 		if err != nil {
 			return err
 		}
-		prev, seq, err := s.lastEvent()
+		journal, err := os.ReadFile(s.EventsPath())
 		if err != nil {
+			return err
+		}
+		events, err := s.VerifyJournal()
+		if err != nil || len(events) == 0 {
+			return fmt.Errorf("%w: cannot compact an invalid or empty journal", ErrCorrupt)
+		}
+		if _, err := s.VerifyArchivedSegments(); err != nil {
+			return fmt.Errorf("%w: cannot compact with invalid archived history: %v", ErrCorrupt, err)
+		}
+		first, last := events[0], events[len(events)-1]
+		sum := sha256.Sum256(journal)
+		base := fmt.Sprintf("segment-%020d-%020d-%s", first.Sequence, last.Sequence, hex.EncodeToString(sum[:])[:12])
+		archivePath := filepath.Join(s.EventArchiveDir(), base+".ndjson")
+		manifestPath := filepath.Join(s.EventArchiveDir(), base+".manifest.json")
+		archive := JournalArchive{
+			Path: filepath.ToSlash(relativePath(s.Root, archivePath)), ManifestPath: filepath.ToSlash(relativePath(s.Root, manifestPath)),
+			SHA256: hex.EncodeToString(sum[:]), EventCount: len(events), ByteCount: int64(len(journal)),
+			FirstSequence: first.Sequence, LastSequence: last.Sequence, AnchorPreviousHash: first.PreviousHash, LastHash: last.Hash,
+		}
+		if err := atomicBytes(archivePath, journal); err != nil {
+			return err
+		}
+		if err := atomicJSON(manifestPath, archive); err != nil {
 			return err
 		}
 		old := p.Revision
 		p.Revision++
 		p.UpdatedAt = s.Now().UTC()
-		e := domain.Event{Sequence: seq + 1, EventID: domain.NewID("event"), EventType: "ProjectionCheckpoint", AggregateID: p.ProjectID, OccurredAt: p.UpdatedAt, Actor: domain.Actor{Kind: "system"}, ExpectedRevision: old, Payload: eventEnvelope{Projection: p}, PreviousHash: prev}
+		e := domain.Event{Sequence: last.Sequence + 1, EventID: domain.NewID("event"), EventType: "ProjectionCheckpoint", AggregateID: p.ProjectID, OccurredAt: p.UpdatedAt, Actor: domain.Actor{Kind: "system"}, ExpectedRevision: old, Payload: eventEnvelope{Projection: p, Archive: &archive}, PreviousHash: last.Hash}
 		e.Hash = eventHash(e)
-		if err := appendEvent(s.EventsPath(), e); err != nil {
+		line, err := json.Marshal(e)
+		if err != nil {
+			return err
+		}
+		if err := atomicBytes(s.EventsPath(), append(line, '\n')); err != nil {
 			return err
 		}
 		if err := atomicJSON(s.ProjectPath(), p); err != nil {
@@ -175,6 +219,14 @@ func (s *Store) CreateCheckpoint() (string, *domain.Project, error) {
 		return nil
 	})
 	return path, result, err
+}
+
+func relativePath(root, path string) string {
+	rel, err := filepath.Rel(root, path)
+	if err != nil {
+		return path
+	}
+	return rel
 }
 
 func (s *Store) ProjectionDrift() ([]ProjectionDrift, *domain.Project, error) {

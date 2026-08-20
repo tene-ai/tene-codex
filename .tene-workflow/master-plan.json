@@ -21,7 +21,7 @@
     ]
   },
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 913,
+  "revision": 966,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -165,6 +165,14 @@
       "phase": "archived",
       "predecessor_ids": [
         "sprint_0000380x2dmqv18kkk1fr627v0"
+      ]
+    },
+    {
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "title": "Durable Journal Compaction",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380x5ytygknc3dgjzabepm"
       ]
     }
   ]

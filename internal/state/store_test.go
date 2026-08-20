@@ -4,9 +4,11 @@
 package state
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -149,8 +151,43 @@ func TestCompactAndClearPreserveSource(t *testing.T) {
 	if err := s.Initialize(p); err != nil {
 		t.Fatal(err)
 	}
+	for i := 0; i < 4; i++ {
+		if _, err := s.Mutate(nil, domain.Actor{Kind: "test"}, "TestChanged", p.ProjectID, map[string]int{"iteration": i}, func(p *domain.Project) error {
+			p.Name += "x"
+			return nil
+		}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	before, _ := os.Stat(s.EventsPath())
 	if _, err := s.Compact(); err != nil {
 		t.Fatal(err)
+	}
+	after, _ := os.Stat(s.EventsPath())
+	if after.Size() >= before.Size() {
+		t.Fatalf("active journal did not shrink: before=%d after=%d", before.Size(), after.Size())
+	}
+	events, err := s.VerifyJournal()
+	if err != nil || len(events) != 1 || events[0].EventType != "ProjectionCheckpoint" || events[0].Sequence != 6 {
+		t.Fatalf("unexpected compacted journal: %#v %v", events, err)
+	}
+	archives, err := s.VerifyArchivedSegments()
+	if err != nil || len(archives) != 1 || archives[0].EventCount != 5 || archives[0].LastSequence != 5 {
+		t.Fatalf("unexpected archive: %#v %v", archives, err)
+	}
+	replayed, err := s.Replay()
+	if err != nil || replayed.Name != "testxxxx" {
+		t.Fatalf("semantic replay changed: %#v %v", replayed, err)
+	}
+	if _, err := s.Mutate(nil, domain.Actor{Kind: "test"}, "AfterCompact", p.ProjectID, nil, func(p *domain.Project) error { p.Name = "after"; return nil }); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.Compact(); err != nil {
+		t.Fatal(err)
+	}
+	archives, err = s.VerifyArchivedSegments()
+	if err != nil || len(archives) != 2 {
+		t.Fatalf("repeated compaction did not retain both segments: %#v %v", archives, err)
 	}
 	if err := s.ClearDerived(); err != nil {
 		t.Fatal(err)
@@ -160,5 +197,79 @@ func TestCompactAndClearPreserveSource(t *testing.T) {
 	}
 	if _, err := s.VerifyJournal(); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestArchivedSegmentTamperFailsClosed(t *testing.T) {
+	s := New(t.TempDir())
+	p := domain.NewProject("project_test", "test", "standard", time.Now())
+	if err := s.Initialize(p); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := s.CreateCheckpoint(); err != nil {
+		t.Fatal(err)
+	}
+	archives, err := s.VerifyArchivedSegments()
+	if err != nil || len(archives) != 1 {
+		t.Fatalf("archive missing: %#v %v", archives, err)
+	}
+	path := filepath.Join(s.Root, filepath.FromSlash(archives[0].Path))
+	if err := os.WriteFile(path, []byte("tampered\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.VerifyArchivedSegments(); !errors.Is(err, ErrCorrupt) {
+		t.Fatalf("tampered archive accepted: %v", err)
+	}
+	activeBefore, _ := os.ReadFile(s.EventsPath())
+	if _, _, err := s.CreateCheckpoint(); !errors.Is(err, ErrCorrupt) {
+		t.Fatalf("compaction continued over corrupt history: %v", err)
+	}
+	activeAfter, _ := os.ReadFile(s.EventsPath())
+	if string(activeBefore) != string(activeAfter) {
+		t.Fatal("failed compaction changed active journal")
+	}
+}
+
+func TestCompactWriteFailurePreservesActiveJournal(t *testing.T) {
+	s := New(t.TempDir())
+	p := domain.NewProject("project_test", "test", "standard", time.Now())
+	if err := s.Initialize(p); err != nil {
+		t.Fatal(err)
+	}
+	before, _ := os.ReadFile(s.EventsPath())
+	if err := os.WriteFile(s.EventArchiveDir(), []byte("not-a-directory"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := s.CreateCheckpoint(); err == nil {
+		t.Fatal("archive write failure was accepted")
+	}
+	after, _ := os.ReadFile(s.EventsPath())
+	if string(before) != string(after) {
+		t.Fatal("failed archive write changed active journal")
+	}
+}
+
+func TestCompactedJournalRequiresValidArchiveAnchor(t *testing.T) {
+	s := New(t.TempDir())
+	p := domain.NewProject("project_test", "test", "standard", time.Now())
+	if err := s.Initialize(p); err != nil {
+		t.Fatal(err)
+	}
+	if _, _, err := s.CreateCheckpoint(); err != nil {
+		t.Fatal(err)
+	}
+	b, _ := os.ReadFile(s.EventsPath())
+	var event domain.Event
+	if err := json.Unmarshal(bytes.TrimSpace(b), &event); err != nil {
+		t.Fatal(err)
+	}
+	event.Payload = map[string]any{"projection": p}
+	event.Hash = eventHash(event)
+	line, _ := json.Marshal(event)
+	if err := os.WriteFile(s.EventsPath(), append(line, '\n'), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.VerifyJournal(); !errors.Is(err, ErrCorrupt) {
+		t.Fatalf("unanchored compacted journal accepted: %v", err)
 	}
 }

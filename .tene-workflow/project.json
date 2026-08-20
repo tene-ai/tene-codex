@@ -23,8 +23,8 @@
       "all implementation follows the fixed Sprint lifecycle"
     ]
   },
-  "revision": 913,
-  "updated_at": "2026-08-20T03:27:35.053101Z",
+  "revision": 966,
+  "updated_at": "2026-08-20T07:20:40.770254Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -554,6 +554,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Active projection is 4.3KB versus 2.9MB canonical state, excludes graph/evidence/history, retains all current resume fields and matches journal replay.",
       "last_loop_at": "2026-08-20T03:23:18.899204Z"
+    },
+    "sprint_0000380xznb6mpm5bx0xpxex6w": {
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "slug": "durable-journal-compaction",
+      "title": "Durable Journal Compaction",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380x5ytygknc3dgjzabepm"
+      ],
+      "intent_ids": [
+        "intent_0000380y046tkxxteemz74gg58"
+      ],
+      "task_ids": [
+        "task_0000380y0cqhsx7fjvbj0zwk94",
+        "task_0000380y0crx5qtznz6hsj9pw8"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction",
+      "archived_at": "2026-08-20T07:20:40.549657Z",
+      "approval_refs": [
+        "approval_0000380y0e9wamjzag3kcetp1w",
+        "approval_0000380y1bwwvg27jhtk9gc4ew"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Segmented archive, anchored active checkpoint, replay equality, repeated compact and tamper rejection match the PRD/design; automatic gap analysis resolved all 12 artifact-link gaps",
+      "last_loop_at": "2026-08-20T07:14:50.650272Z"
     }
   },
   "tasks": {
@@ -1138,6 +1168,41 @@
         "docs/release/semantic-contracts.json",
         "scripts/qa-active-projection-observations.py"
       ]
+    },
+    "task_0000380y0cqhsx7fjvbj0zwk94": {
+      "task_id": "task_0000380y0cqhsx7fjvbj0zwk94",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "title": "Implement immutable journal segments and anchored checkpoints",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "layer": "persistence",
+      "artifacts": [
+        "internal/state/replay.go",
+        "internal/state/store.go",
+        "internal/state/store_test.go"
+      ]
+    },
+    "task_0000380y0crx5qtznz6hsj9pw8": {
+      "task_id": "task_0000380y0crx5qtznz6hsj9pw8",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "title": "Verify archived chains in doctor and regression QA",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "layer": "infrastructure",
+      "artifacts": [
+        "internal/app/app.go",
+        "internal/app/app_test.go",
+        "docs/02-design/01-state-and-storage-schema.md",
+        "docs/release/semantic-contracts.json",
+        "scripts/requirements-audit.py",
+        "README.md",
+        "README-KR.md",
+        "scripts/qa-compaction-observations.py"
+      ]
     }
   },
   "intents": {
@@ -1374,6 +1439,39 @@
       "source_locator": "conversation:current",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T03:21:12.988302Z"
+    },
+    "intent_0000380y046tkxxteemz74gg58": {
+      "intent_id": "intent_0000380y046tkxxteemz74gg58",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Compaction must keep active workflow state bounded while preserving every original journal event in independently verifiable archives",
+      "rationale": "The current checkpoint-only implementation leaves the active journal unbounded and violates the durable-state retention contract",
+      "actors": [
+        "workflow user",
+        "Codex agent"
+      ],
+      "desired_outcomes": [
+        "bounded active journal",
+        "lossless audit history",
+        "fail-closed recovery"
+      ],
+      "non_goals": [
+        "deleting canonical history",
+        "external event database"
+      ],
+      "policies": [
+        "archive before replacement",
+        "verify checksum and hash chain"
+      ],
+      "data_invariants": [
+        "replayed projection remains semantically equal",
+        "event sequence continuity is retained"
+      ],
+      "source": "user",
+      "source_locator": "conversation:2026-08-20",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T07:11:50.886914Z"
     }
   },
   "acceptance_criteria": {
@@ -1677,6 +1775,13 @@
       "statement": "Active projection excludes graph and historical archives, is smaller than canonical project state, preserves current resume fields, and remains byte/semantic consistent through mutation, replay, doctor repair and archive.",
       "priority": "blocking",
       "observable": "Integration tests and final repository measurements show bounded active.json, healthy doctor projections, valid evidence and a passing final semantic audit."
+    },
+    "ac_0000380y046tkpdm8ey9panj70": {
+      "ac_id": "ac_0000380y046tkpdm8ey9panj70",
+      "intent_id": "intent_0000380y046tkxxteemz74gg58",
+      "statement": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata",
+      "priority": "blocking",
+      "observable": "active journal shrinks while replayed project state remains semantically equal"
     }
   },
   "gaps": {
@@ -1714,6 +1819,186 @@
       "fingerprint": "dc8085f38a7d57e194571209f9aa6f9323f6eca8f479a7f9bf448148ab8b9760",
       "detected_by": "loop-analyzer",
       "detected_at_revision": 849
+    },
+    "gap_0000380y0mhva83t6wjtsxne2m": {
+      "gap_id": "gap_0000380y0mhva83t6wjtsxne2m",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "unverified",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "task has no linked implementation artifact",
+      "subject_refs": [
+        "task_0000380y0crx5qtznz6hsj9pw8"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "2da5e8d146e49e4749a5af8226feb880dfb15638ed8dc6a078f05e4db8ab6443",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvabygnk06tkkbhm": {
+      "gap_id": "gap_0000380y0mhvabygnk06tkkbhm",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "scripts/requirements-audit.py"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "9c2aca42643215ef78fa81d3e2a20677bda727c2e08e608b5cb22590b3720d6c",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvarspj5e0em3mrc": {
+      "gap_id": "gap_0000380y0mhvarspj5e0em3mrc",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "internal/app/app_test.go"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "0116521117c6fb3f6fe568da9d8e8a4ce20895f3155d379e965a9d0fa8f35287",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvatx6xk2nfvz4m8": {
+      "gap_id": "gap_0000380y0mhvatx6xk2nfvz4m8",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "internal/app/app.go"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "a28750c452e3bf588a39eafca24f44926b08bc707a16f7c4814c2e97eb7d43ee",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvazk8rff5f994xg": {
+      "gap_id": "gap_0000380y0mhvazk8rff5f994xg",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "README.md"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "cb47e8fe3efe1793b8bb9dbc021c38db5dab105551c657f0d38534937d50cbc4",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvb38hqxr1q8b2pw": {
+      "gap_id": "gap_0000380y0mhvb38hqxr1q8b2pw",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "docs/release/semantic-contracts.json"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "ab7c5a9d88ae11c1933e9a3a703fd8a41c69e9d1f2037ab1c3903f9c18a4362c",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvb3dw7735xne46c": {
+      "gap_id": "gap_0000380y0mhvb3dw7735xne46c",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "README-KR.md"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "74363ea28b1d5959423279ee0e57971b717f93e328d85ff5b6a9c2cabce629ef",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvb5hjtjrcyby6p8": {
+      "gap_id": "gap_0000380y0mhvb5hjtjrcyby6p8",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "internal/state/store.go"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "6fc4df5027d636c2849e0ca9a8c9d5cf50c9bc297a8cb8ab6456b1cf498f478d",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvb8zmb9ff4t9vdw": {
+      "gap_id": "gap_0000380y0mhvb8zmb9ff4t9vdw",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "internal/state/replay.go"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "220b8f0b037b26edaba609cb3c26c6f43b16d120d5d9a44f4d3dce76090ae431",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvbceyfndjx71x1r": {
+      "gap_id": "gap_0000380y0mhvbceyfndjx71x1r",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "internal/state/store_test.go"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "6a8a65722c500da7d30cd45633e8117881dd09f87d34416b01aa3003caf767bc",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvbdvs4kmagb6n88": {
+      "gap_id": "gap_0000380y0mhvbdvs4kmagb6n88",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "mismatch",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "changed implementation artifact is not linked to a Sprint task",
+      "subject_refs": [
+        "docs/02-design/01-state-and-storage-schema.md"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "fc726a4700bdfd16b54f5387f5ff6dcc0144d62d65a09a0eb0e68c6334a44db1",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
+    },
+    "gap_0000380y0mhvbvztj5jmbzh774": {
+      "gap_id": "gap_0000380y0mhvbvztj5jmbzh774",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "category": "unverified",
+      "severity": "blocker",
+      "status": "resolved",
+      "description": "task has no linked implementation artifact",
+      "subject_refs": [
+        "task_0000380y0cqhsx7fjvbj0zwk94"
+      ],
+      "resolution": "automatic loop recheck no longer detects the condition",
+      "fingerprint": "7874f1210edc89b0c5254d05cf8621025b8c28b3580ee83cbde3115954344651",
+      "detected_by": "loop-analyzer",
+      "detected_at_revision": 933
     }
   },
   "waivers": {
@@ -2094,6 +2379,34 @@
       "approved_at": "2026-08-20T03:27:33.951079Z",
       "expires_at": "2026-08-20T05:27:32Z",
       "consumed_at": "2026-08-20T03:27:34.81251Z"
+    },
+    "approval_0000380y0e9wamjzag3kcetp1w": {
+      "approval_id": "approval_0000380y0e9wamjzag3kcetp1w",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "from": "design",
+      "to": "do",
+      "reason": "User instructed continued implementation of all remaining PRD and design requirements",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:12:26.053365Z",
+      "approved_at": "2026-08-20T07:12:35.5812Z",
+      "expires_at": "2026-08-20T09:12:25Z",
+      "consumed_at": "2026-08-20T07:12:36.509142Z"
+    },
+    "approval_0000380y1bwwvg27jhtk9gc4ew": {
+      "approval_id": "approval_0000380y1bwwvg27jhtk9gc4ew",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "from": "report",
+      "to": "archived",
+      "reason": "All blocking evidence, regression gates, archive integrity and report validation passed",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:20:30.925123Z",
+      "approved_at": "2026-08-20T07:20:39.614778Z",
+      "expires_at": "2026-08-20T09:20:30Z",
+      "consumed_at": "2026-08-20T07:20:40.549657Z"
     }
   },
   "evidence": {
@@ -10175,6 +10488,776 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T03:24:58.538042Z",
       "finished_at": "2026-08-20T03:24:58.541906Z"
+    },
+    "evidence_0000380y14nx688k8zsd0p8shm": {
+      "evidence_id": "evidence_0000380y14nx688k8zsd0p8shm",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8yj0sn9cddwneznw.json",
+      "sha256": "789c1615413be200e11729f25283c2941a61c7ed4f2fcc4b729a53391553bcff",
+      "size": 4058,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:32.659486Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8yj0sn9cddwneznw",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "active sequence above one without matching archive anchor is rejected; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y14r2cx71end5fy8kem": {
+      "evidence_id": "evidence_0000380y14r2cx71end5fy8kem",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8yj397z2f2cf6vyc.json",
+      "sha256": "e1835178ad84709831e6e5828ea285c18b32fcdd797bb25e195aed41c41b050d",
+      "size": 4100,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:33.766632Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8yj397z2f2cf6vyc",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "post-checkpoint mutation and repeated segment compaction pass in state tests; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y14t280yafchecrm25w": {
+      "evidence_id": "evidence_0000380y14t280yafchecrm25w",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8yj705xj0cm36344.json",
+      "sha256": "47bf82e0680d0fde2df4a2d7356a49f493dedcd4d7e5da74f05735eb7fdbc546",
+      "size": 4121,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:34.788283Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8yj705xj0cm36344",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y14vv8phb6z9wb073yr": {
+      "evidence_id": "evidence_0000380y14vv8phb6z9wb073yr",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8yjft4q2qrm0f4r8.json",
+      "sha256": "a08168f29a0e33598177f644fa50e7a9703b2153ac26c556142bb1268dc56ce4",
+      "size": 3953,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:35.700199Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8yjft4q2qrm0f4r8",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "initialized-only journal compacts to an anchored checkpoint; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y14y6bf7gnx20v74xwg": {
+      "evidence_id": "evidence_0000380y14y6bf7gnx20v74xwg",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8yjw66qjqh4yskv0.json",
+      "sha256": "8d9405ac4f0787dd81ba341de42228d488abe20dd41d86491a89fe252f718810",
+      "size": 4016,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:36.901321Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8yjw66qjqh4yskv0",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "archive-path write failure leaves active journal byte-identical; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y150w7jdc23spb3fcpg": {
+      "evidence_id": "evidence_0000380y150w7jdc23spb3fcpg",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8yks7z3mg7qd5zmw.json",
+      "sha256": "c3d8a5355c4f05ed379e8b5ea7df6f92cb04e2bb0ea6ef64c665626c942b5189",
+      "size": 4093,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:38.275549Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8yks7z3mg7qd5zmw",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived bytes fail checksum verification and block later compaction; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
+    },
+    "evidence_0000380y152yndbpra3h5b9c58": {
+      "evidence_id": "evidence_0000380y152yndbpra3h5b9c58",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380xznb6mpm5bx0xpxex6w-durable-journal-compaction/04-qa/observations/case_0000380y0q8ykvdnzv8ryy52w0.json",
+      "sha256": "2dd2781442552bbd731778d24ee6d0178849816e4643e2eee789a6aed24d5500",
+      "size": 4086,
+      "ac_ids": [
+        "ac_0000380y046tkpdm8ey9panj70"
+      ],
+      "created_at": "2026-08-20T07:18:39.339021Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y0q8ykvdnzv8ryy52w0",
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+      "state_revision": 949,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L2 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L3 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L4 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L5 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L6 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        },
+        {
+          "statement": "L7 durable compaction contract is satisfied",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "active journal shrank from 7542532 to 2134981 bytes; archive checksum verified; full build/reference/release gates passed",
+          "expected": "history is lossless and verifiable while active state is bounded and replayable"
+        }
+      ],
+      "tool": "durable-compaction-runner",
+      "tool_version": "tene-durable-compaction-runner/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:17:56.214381Z",
+      "finished_at": "2026-08-20T07:18:23.629584Z"
     }
   },
   "qa_runs": {
@@ -17177,6 +18260,319 @@
       "finished_at": "2026-08-20T03:25:13.771021Z",
       "state_revision": 896,
       "spec_hash": "2e3cd093236510ede714aae78912c6b786e27f7917ae3073cfe8ce43e8ad5422"
+    },
+    "run_0000380y0q8ygwksydmg9drv6m": {
+      "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+      "sprint_id": "sprint_0000380xznb6mpm5bx0xpxex6w",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380y0q8ykvdnzv8ryy52w0",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y152yndbpra3h5b9c58"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y0q8yj397z2f2cf6vyc",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y14r2cx71end5fy8kem"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y0q8yjft4q2qrm0f4r8",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y14vv8phb6z9wb073yr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y0q8yj0sn9cddwneznw",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y14nx688k8zsd0p8shm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y0q8yjw66qjqh4yskv0",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y14y6bf7gnx20v74xwg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y0q8yks7z3mg7qd5zmw",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y150w7jdc23spb3fcpg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y0q8yj705xj0cm36344",
+          "ac_ids": [
+            "ac_0000380y046tkpdm8ey9panj70"
+          ],
+          "title": "Compact rewrites the active journal to one replayable projection checkpoint and archives the prior bytes with checksum and chain metadata — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y14t280yafchecrm25w"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "active journal shrinks while replayed project state remains semantically equal",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T07:14:53.033215Z",
+      "finished_at": "2026-08-20T07:18:40.331008Z",
+      "state_revision": 949,
+      "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3"
     }
   },
   "graph": {

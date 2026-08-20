@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "durable-compaction-runner",
+  "run_id": "run_0000380y0q8ygwksydmg9drv6m",
+  "case_id": "case_0000380y0q8yj705xj0cm36344",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T07:17:56.214381Z",
+  "finished_at": "2026-08-20T07:18:23.629584Z",
+  "checkpoints": [
+    {
+      "name": "journal-archive-resume",
+      "kind": "cli-state-audit",
+      "before": {
+        "active_bytes": 7542532
+      },
+      "after": {
+        "active_bytes": 2134981,
+        "archive_sha256": "6c0642b93e12794ebd47a44c42a889c657ba7c7f0c174fae68130147488dbeec",
+        "archive_events": 952
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    },
+    {
+      "statement": "L2 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    },
+    {
+      "statement": "L3 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    },
+    {
+      "statement": "L4 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    },
+    {
+      "statement": "L5 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    },
+    {
+      "statement": "L6 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    },
+    {
+      "statement": "L7 durable compaction contract is satisfied",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "valid active checkpoint replays equal state and doctor verifies archived history; full build/reference/release gates passed",
+      "expected": "history is lossless and verifiable while active state is bounded and replayable"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "171738735b76411ec6d4fd9586f471b39868e32bcbe7fd4186d2afb2e69ce8a3",
+  "state_revision": 949,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "tene-durable-compaction-runner/1.0.0"
+}

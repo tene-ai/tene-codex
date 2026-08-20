@@ -109,6 +109,7 @@ Hooks provide lifecycle automation and defense in depth: restoring sprint contex
 - loop-check gaps and iteration history;
 - QA charters, evidence manifests, and gate verdicts;
 - compaction, recovery, migration, and archive operations.
+- checksummed immutable journal segments: `compact` bounds the active journal to a replayable checkpoint while `doctor` verifies the complete archived hash chain.
 
 Skills, subagents, and hooks must use this CLI instead of editing workflow state independently. It is implemented as a standalone Go binary so it can be portable and deterministic while remaining separate from the security-sensitive secret manager.
 

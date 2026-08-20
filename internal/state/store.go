@@ -15,6 +15,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/tene-ai/tene-codex/internal/domain"
@@ -36,12 +37,13 @@ type Store struct {
 
 func New(root string) *Store { return &Store{Root: root, Now: time.Now} }
 
-func (s *Store) Dir() string            { return filepath.Join(s.Root, DirName) }
-func (s *Store) ProjectPath() string    { return filepath.Join(s.Dir(), "project.json") }
-func (s *Store) ActivePath() string     { return filepath.Join(s.Dir(), "active.json") }
-func (s *Store) EventsPath() string     { return filepath.Join(s.Dir(), "events.ndjson") }
-func (s *Store) LockPath() string       { return filepath.Join(s.Dir(), ".lock") }
-func (s *Store) MasterPlanPath() string { return filepath.Join(s.Dir(), "master-plan.json") }
+func (s *Store) Dir() string             { return filepath.Join(s.Root, DirName) }
+func (s *Store) ProjectPath() string     { return filepath.Join(s.Dir(), "project.json") }
+func (s *Store) ActivePath() string      { return filepath.Join(s.Dir(), "active.json") }
+func (s *Store) EventsPath() string      { return filepath.Join(s.Dir(), "events.ndjson") }
+func (s *Store) EventArchiveDir() string { return filepath.Join(s.Dir(), "event-archive") }
+func (s *Store) LockPath() string        { return filepath.Join(s.Dir(), ".lock") }
+func (s *Store) MasterPlanPath() string  { return filepath.Join(s.Dir(), "master-plan.json") }
 
 func (s *Store) Exists() bool {
 	_, err := os.Stat(s.ProjectPath())
@@ -320,16 +322,30 @@ func activeProjection(p *domain.Project) map[string]any {
 }
 
 func (s *Store) VerifyJournal() ([]domain.Event, error) {
-	f, err := os.Open(s.EventsPath())
+	b, err := os.ReadFile(s.EventsPath())
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
+	firstSequence, previousHash := uint64(1), ""
+	var first domain.Event
+	line, _, _ := bytes.Cut(b, []byte{'\n'})
+	if json.Unmarshal(line, &first) == nil && first.Sequence > 1 {
+		var env eventEnvelope
+		raw, _ := json.Marshal(first.Payload)
+		if first.EventType != "ProjectionCheckpoint" || json.Unmarshal(raw, &env) != nil || env.Archive == nil || env.Archive.LastSequence+1 != first.Sequence || env.Archive.LastHash != first.PreviousHash {
+			return nil, fmt.Errorf("%w: compacted journal has no valid archive anchor", ErrCorrupt)
+		}
+		firstSequence, previousHash = first.Sequence, first.PreviousHash
+	}
+	return verifyEventBytes(b, firstSequence, previousHash)
+}
+
+func verifyEventBytes(b []byte, firstSequence uint64, previousHash string) ([]domain.Event, error) {
 	var events []domain.Event
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(bytes.NewReader(b))
 	scanner.Buffer(make([]byte, 64*1024), 8*1024*1024)
-	prev := ""
-	var seq uint64
+	prev := previousHash
+	seq := firstSequence - 1
 	for scanner.Scan() {
 		var e domain.Event
 		if err := json.Unmarshal(scanner.Bytes(), &e); err != nil {
@@ -345,6 +361,54 @@ func (s *Store) VerifyJournal() ([]domain.Event, error) {
 		return nil, err
 	}
 	return events, nil
+}
+
+// VerifyArchivedSegments independently validates archived bytes, checksums,
+// and hash chains instead of trusting only the active checkpoint pointer.
+func (s *Store) VerifyArchivedSegments() ([]JournalArchive, error) {
+	entries, err := os.ReadDir(s.EventArchiveDir())
+	if errors.Is(err, os.ErrNotExist) {
+		return []JournalArchive{}, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	var manifests []string
+	for _, entry := range entries {
+		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".manifest.json") {
+			manifests = append(manifests, filepath.Join(s.EventArchiveDir(), entry.Name()))
+		}
+	}
+	sort.Strings(manifests)
+	result := make([]JournalArchive, 0, len(manifests))
+	for _, path := range manifests {
+		b, err := os.ReadFile(path)
+		if err != nil {
+			return nil, err
+		}
+		var manifest JournalArchive
+		if err := json.Unmarshal(b, &manifest); err != nil {
+			return nil, fmt.Errorf("%w: invalid archive manifest %s: %v", ErrCorrupt, path, err)
+		}
+		segmentPath := manifest.Path
+		if !filepath.IsAbs(segmentPath) {
+			segmentPath = filepath.Join(s.Root, filepath.FromSlash(segmentPath))
+		}
+		segment, err := os.ReadFile(segmentPath)
+		if err != nil {
+			return nil, fmt.Errorf("%w: archived segment unavailable: %v", ErrCorrupt, err)
+		}
+		sum := sha256.Sum256(segment)
+		if hex.EncodeToString(sum[:]) != manifest.SHA256 || int64(len(segment)) != manifest.ByteCount {
+			return nil, fmt.Errorf("%w: archived segment checksum mismatch: %s", ErrCorrupt, manifest.Path)
+		}
+		events, chainErr := verifyEventBytes(segment, manifest.FirstSequence, manifest.AnchorPreviousHash)
+		if chainErr != nil || len(events) != manifest.EventCount || len(events) == 0 || events[len(events)-1].Sequence != manifest.LastSequence || events[len(events)-1].Hash != manifest.LastHash {
+			return nil, fmt.Errorf("%w: archived segment chain mismatch: %s", ErrCorrupt, manifest.Path)
+		}
+		result = append(result, manifest)
+	}
+	return result, nil
 }
 
 func (s *Store) ClearDerived() error {
@@ -376,17 +440,8 @@ func (s *Store) ClearDerived() error {
 }
 
 func (s *Store) Compact() (string, error) {
-	var out string
-	err := s.withLock(func() error {
-		p, err := s.Load()
-		if err != nil {
-			return err
-		}
-		name := fmt.Sprintf("snapshot-%020d.json", p.Revision)
-		out = filepath.Join(s.Dir(), "backups", name)
-		return atomicJSON(out, p)
-	})
-	return out, err
+	path, _, err := s.CreateCheckpoint()
+	return path, err
 }
 
 func (s *Store) lastEvent() (string, uint64, error) {

@@ -8,7 +8,7 @@ COMMANDS={
  "workflow":[["go","test","./internal/workflow"]], "document":[["go","test","./internal/document"]], "loopcheck":[["go","test","./internal/loopcheck"]], "qa":[["go","test","./internal/qaadapter","./internal/workflow","./internal/app","-run","QA|Observation|Evidence"]],
  "state":[["go","test","./internal/state"]], "context":[["go","test","./internal/tracecontext","./internal/app","-run","Context|Graph"]], "graph":[["go","test","./internal/tracecontext","-run","Graph|Impact"]], "codeintel":[["go","test","./internal/codeintel"]],
  "routing":[["go","run","./cmd/tene-routing-eval","evals/routing-corpus.json"]], "secret":[["go","test","./internal/secret"]], "hooks":[["python3","-m","unittest","tests/hooks_test.py"]], "references":[["npm","run","test:references"]],
- "playwright":[["npx","playwright","test","tests/e2e/reference-web.spec.ts"]], "release":[["./scripts/release-smoke.sh"]], "schema":[["@json-schemas"]], "plugin":[["@plugin"]]}
+ "playwright":[["npx","playwright","test","tests/e2e/reference-web.spec.ts"]], "release":[["./scripts/release-smoke.sh"]], "app-compact":[["go","test","./internal/app","-run","TestCLICompactBoundsJournalAndDoctorDetectsArchiveTamper"]], "schema":[["@json-schemas"]], "plugin":[["@plugin"]]}
 
 def audit_contract(root,identifier,contract):
     failures=[]; source=root/contract.get("source","")
