@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "codex-host-observer",
+  "run_id": "run_0000380ywpcdwsgqcz4623vg84",
+  "case_id": "case_0000380ywpcdwqcmam2n1cz1aw",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T11:26:22.638984Z",
+  "finished_at": "2026-08-20T11:26:22.651352Z",
+  "checkpoints": [
+    {
+      "name": "host",
+      "kind": "plugin-cli-stop-language",
+      "before": {
+        "variant": "recovery"
+      },
+      "after": {
+        "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed"
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 host contract",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    {
+      "statement": "L2 host contract",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    {
+      "statement": "L3 host contract",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    {
+      "statement": "L4 host contract",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    {
+      "statement": "L5 host contract",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    {
+      "statement": "L6 host contract",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    {
+      "statement": "L7 host contract",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "host Stop completed and direct output is valid advisory JSON; recovery path passed",
+      "expected": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "f3be6c2293c894a588537244c606c63cbd0177dd474696c530c68ec299a680ef",
+  "state_revision": 1364,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "codex-host/1"
+}

@@ -1,0 +1,20 @@
+# FAIL
+
+All five required documents contain some Korean and have valid machine markers. However, PRD, Plan, and Design include substantial English-authored sections, violating the requirement that authored phase content be Korean.
+
+| Document | Korean authored sections | Frontmatter | Markers | Machine-stable identifiers |
+|---|---|---|---|---|
+| [PRD](/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/00-prd/00-prd.md:1) | **No — mixed.** Most prose is Korean, but Decisions is English at lines 72–77. | Valid YAML; correct `document_type`, phase, project/sprint IDs | Valid; all 12 required markers occur exactly once | Valid |
+| [Plan](/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/01-plan/00-plan.md:1) | **No — mixed.** Decisions, work packages, verification, risks, and dependencies contain English-authored prose, notably lines 63–67 and 79–130. | Valid YAML and identity fields | Valid; all 12 required markers occur exactly once | Valid |
+| [Design](/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/02-design/00-design.md:1) | **No — mixed.** Decisions and several data, failure, security, and test bullets remain English, beginning at lines 66–70. | Valid YAML and identity fields | Valid; all 14 required markers occur exactly once | Valid |
+| [Loop Check](/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/03-analysis/00-loop-check.md:1) | **Yes.** Authored explanations are Korean; English headings and technical terms do not displace the Korean prose. | Valid YAML and identity fields | Valid; all 12 required markers occur exactly once | Valid |
+| [QA](/Users/kaykim/Documents/GitHub/agent-kay-it/tene-codex/docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/04-qa/00-qa-plan.md:1) | **Yes.** Authored explanations are Korean, with stable English technical labels and identifiers. | Valid YAML and identity fields | Valid; all 13 required markers occur exactly once | Valid |
+
+Machine-stability checks found:
+
+- No missing, duplicate, extra, or malformed `<!-- tene:section:* -->` markers.
+- All frontmatter parses as YAML and retains the expected phase, document type, project ID, and sprint ID.
+- No malformed `intent_*`, `ac_*`, `task_*`, `gap_*`, `run_*`, `case_*`, `evidence_*`, `approval_*`, `project_*`, or `sprint_*` identifiers.
+- Paths, commands such as `$tene:plan` and `go test ./...`, and code symbols such as `eligibleCriteria` remain literal and untranslated.
+
+The tene CLI validator itself could not execute because the read-only sandbox prevented Go from creating its temporary build directory. The marker requirements were therefore checked directly against the runtime contract in `internal/document/document.go`. No files were modified.

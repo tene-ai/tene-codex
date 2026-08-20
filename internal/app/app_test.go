@@ -178,6 +178,86 @@ func TestQAPlanVariantContract(t *testing.T) {
 	}
 }
 
+func TestQAPlanExcludesCriteriaOwnedByDeprecatedIntents(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init", "--name", "confirmed QA criteria")
+	execute(t, root, "sprint", "create", "--title", "Confirmed QA criteria")
+
+	_, oldCapture := execute(t, root, "intent", "capture", "--statement", "old behavior", "--actors", "user", "--outcomes", "visible result", "--ac", "old criterion", "--observable", "old result")
+	oldIntent := oldCapture.Result.(map[string]any)["intent"].(map[string]any)
+	oldIntentID := oldIntent["intent_id"].(string)
+	oldCriterionID := oldCapture.Result.(map[string]any)["criterion"].(map[string]any)["ac_id"].(string)
+	execute(t, root, "intent", "confirm", oldIntentID)
+	execute(t, root, "intent", "deprecate", oldIntentID)
+
+	_, currentCapture := execute(t, root, "intent", "capture", "--statement", "current behavior", "--actors", "user", "--outcomes", "visible result", "--ac", "current criterion", "--observable", "current result")
+	currentIntentID := currentCapture.Result.(map[string]any)["intent"].(map[string]any)["intent_id"].(string)
+	currentCriterionID := currentCapture.Result.(map[string]any)["criterion"].(map[string]any)["ac_id"].(string)
+	execute(t, root, "intent", "confirm", currentIntentID)
+
+	code, planned := execute(t, root, "qa", "plan")
+	if code != 0 {
+		t.Fatal(planned)
+	}
+	cases := planned.Result.(map[string]any)["cases"].([]any)
+	if len(cases) != len(qaVariants()) {
+		t.Fatalf("got %d cases, want %d for the sole confirmed criterion", len(cases), len(qaVariants()))
+	}
+	for _, raw := range cases {
+		criterionIDs := raw.(map[string]any)["ac_ids"].([]any)
+		if len(criterionIDs) != 1 || criterionIDs[0] != currentCriterionID || criterionIDs[0] == oldCriterionID {
+			t.Fatalf("deprecated criterion leaked into QA plan: %#v", criterionIDs)
+		}
+	}
+}
+
+func TestQAExecuteUsesDistinctArtifactPathsOnRepeat(t *testing.T) {
+	root := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(root, "tests"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "tests", "smoke_test.py"), []byte("import unittest\n\nclass Smoke(unittest.TestCase):\n    def test_ok(self):\n        self.assertTrue(True)\n"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	execute(t, root, "init", "--name", "repeat QA")
+	execute(t, root, "sprint", "create", "--title", "Repeat QA")
+	_, captured := execute(t, root, "intent", "capture", "--statement", "test execution", "--actors", "user", "--outcomes", "visible result", "--ac", "adapter succeeds", "--observable", "test passes")
+	intentID := captured.Result.(map[string]any)["intent"].(map[string]any)["intent_id"].(string)
+	execute(t, root, "intent", "confirm", intentID)
+	_, planned := execute(t, root, "qa", "plan")
+	caseID := planned.Result.(map[string]any)["cases"].([]any)[0].(map[string]any)["case_id"].(string)
+	for range 2 {
+		if code, result := execute(t, root, "qa", "execute", caseID, "--adapter", "python-test"); code != 0 {
+			t.Fatalf("execute failed: %d %#v", code, result)
+		}
+	}
+	p, err := state.New(root).Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	caseEvidence := p.QARuns[p.Sprints[p.ActiveSprintID].LastQAID].Cases[0].EvidenceIDs
+	if len(caseEvidence) != 1 {
+		t.Fatalf("got %d active evidence records, want 1", len(caseEvidence))
+	}
+	activeID := caseEvidence[0]
+	active := p.Evidence[activeID]
+	superseded := 0
+	for id, record := range p.Evidence {
+		if id != activeID && record.CaseID == caseID {
+			superseded++
+			if record.SupersededBy != activeID || record.URI == active.URI {
+				t.Fatalf("prior evidence was not safely superseded: %#v", record)
+			}
+		}
+	}
+	if superseded != 1 {
+		t.Fatalf("got %d superseded records, want 1", superseded)
+	}
+	if code, result := execute(t, root, "evidence", "verify"); code != 0 {
+		t.Fatalf("repeat execution invalidated evidence: %d %#v", code, result)
+	}
+}
+
 func TestRequestIDDeduplicatesAndRejectsReuse(t *testing.T) {
 	root := t.TempDir()
 	execute(t, root, "init", "--name", "dedup")
@@ -390,7 +470,7 @@ func TestCLICompleteSprintArchivesDocuments(t *testing.T) {
 			if layer == "L5" {
 				refs = append(refs, "observable", "variant:"+variant)
 			}
-			assertions = append(assertions, map[string]any{"statement": "verified " + layer, "passed": true, "layer": layer, "requirement_refs": refs, "actual": "verified", "expected": "verified"})
+			assertions = append(assertions, map[string]any{"statement": "verified " + layer, "passed": true, "layer": layer, "requirement_refs": refs, "actual": "observed boundary " + layer, "expected": "expected boundary " + layer})
 		}
 		observation := map[string]any{"schema_version": "1.0.0", "adapter": "test-observer", "run_id": plannedRun["run_id"], "case_id": caseID, "environment": plannedRun["environment"], "started_at": now, "finished_at": now.Add(time.Second), "redaction_status": "passed", "spec_hash": plannedRun["spec_hash"], "state_revision": plannedRun["state_revision"], "layers": []string{"L1", "L2", "L3", "L4", "L5", "L6", "L7"}, "tool_version": "test-1", "checkpoints": []map[string]any{{"name": "journey", "kind": "ui-api-data", "before": map[string]any{"state": "start"}, "after": map[string]any{"state": "done"}}}, "assertions": assertions}
 		b, _ := json.Marshal(observation)

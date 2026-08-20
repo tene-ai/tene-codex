@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene Design"
+  short_description: "Design code changes across system layers"
+  default_prompt: "Use $tene:design to produce implementation-level design for the active sprint."
+policy:
+  allow_implicit_invocation: true
+

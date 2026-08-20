@@ -1,27 +1,35 @@
 {
-  "active_sprint_id": "",
+  "active_sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
   "plan": {
-    "objective": "Deliver portable spec-driven Codex workflows with evidence-backed QA",
+    "objective": "Verify and harden the complete tene plugin and tene-workflow CLI against product intent, design contracts, installed-plugin behavior, and evidence-backed full-flow QA",
     "milestones": [
       "MVP semantic completeness",
-      "public marketplace release"
+      "public marketplace release",
+      "full implementation verification",
+      "tene namespace migration"
     ],
     "releases": [
-      "v0.1.0"
+      "v0.1.0",
+      "v0.1.x verification"
     ],
     "common_risks": [
       "false-pass evidence",
       "workflow fatigue",
-      "secret leakage"
+      "secret leakage",
+      "installed-source drift",
+      "plugin namespace incompatibility",
+      "host capability drift"
     ],
     "cross_sprint_invariants": [
       "blocking AC requires content-valid evidence",
       "secrets only cross the tene run child boundary",
-      "all implementation follows the fixed Sprint lifecycle"
+      "all implementation follows the fixed Sprint lifecycle",
+      "repository name may remain tene-codex while plugin identity is tene",
+      "each verification Sprint completes PRD-plan-design-loop-check-QA-report"
     ]
   },
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 1086,
+  "revision": 1652,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -198,6 +206,13 @@
       "predecessor_ids": [
         "sprint_0000380y2tr1qg8yzy7gc6dgm0"
       ]
+    },
+    {
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Plugin Identity and Installed Runtime Verification",
+      "milestone": "tene namespace migration",
+      "release": "v0.1.x verification",
+      "phase": "qa"
     }
   ]
 }

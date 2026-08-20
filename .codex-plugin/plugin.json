@@ -1,6 +1,6 @@
 {
-  "name": "tene-codex",
-  "version": "0.1.0",
+  "name": "tene",
+  "version": "0.1.1",
   "description": "Spec-driven sprint workflow, durable intent memory, and evidence-based QA for Codex.",
   "author": {
     "name": "Kay Kim",
@@ -19,7 +19,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "tene-codex",
+    "displayName": "tene",
     "shortDescription": "Spec-driven sprints and intent-based QA",
     "longDescription": "Turn coding conversations into durable PRD, plan, design, implementation, loop-check, QA, and report sprints with traceable evidence.",
     "developerName": "tene-ai",
@@ -38,4 +38,3 @@
     "brandColor": "#6256E0"
   }
 }
-

@@ -4,17 +4,17 @@
 
 | Skill | 명시 호출 | 책임 | 주요 core command |
 |---|---|---|---|
-| `tene-sprint` | `$tene-sprint` | init/create/resume/master/archive | `sprint`, `phase` |
-| `tene-prd` | `$tene-prd` | 대화에서 intent/AC/journey 확정 | `intent`, `document` |
-| `tene-plan` | `$tene-plan` | 작업·의존성·검증 계획 | `task`, `document` |
-| `tene-design` | `$tene-design` | 코드 조사와 상세 설계 | `graph`, `document` |
-| `tene-loop-check` | `$tene-loop-check` | spec↔code gap 반복 개선 | `loop`, `graph` |
-| `tene-qa` | `$tene-qa` | 7-layer QA/evidence/evaluate | `qa`, `evidence` |
-| `tene-report` | `$tene-report` | review/회고/report | `report` |
-| `tene-status` | `$tene-status` | 상태와 next action | `status`, `context` |
-| `tene-secrets` | `$tene-secrets` | secret-safe 실행 안내/위임 | `tene list/run` |
+| `sprint` | `$tene:sprint` | init/create/resume/master/archive | `sprint`, `phase` |
+| `prd` | `$tene:prd` | 대화에서 intent/AC/journey 확정 | `intent`, `document` |
+| `plan` | `$tene:plan` | 작업·의존성·검증 계획 | `task`, `document` |
+| `design` | `$tene:design` | 코드 조사와 상세 설계 | `graph`, `document` |
+| `loop-check` | `$tene:loop-check` | spec↔code gap 반복 개선 | `loop`, `graph` |
+| `qa` | `$tene:qa` | 7-layer QA/evidence/evaluate | `qa`, `evidence` |
+| `report` | `$tene:report` | review/회고/report | `report` |
+| `status` | `$tene:status` | 상태와 next action | `status`, `context` |
+| `secrets` | `$tene:secrets` | secret-safe 실행 안내/위임 | `tene list/run` |
 
-Codex에는 임의의 slash-command 시스템이 있다고 가정하지 않는다. 공식적인 explicit surface는 skill 이름 호출이며, UX 문서에서 `$tene-*`로 표기한다.
+Codex에는 임의의 slash-command 시스템이 있다고 가정하지 않는다. 공식적인 explicit surface는 skill 이름 호출이며, UX 문서에서 `$tene:*`로 표기한다.
 
 ## 2. 공통 SKILL contract
 
@@ -74,7 +74,7 @@ Router score:
 
 ## 5. `agents/openai.yaml`
 
-각 skill은 `display_name`, 짧은 `description`, `$skill-name`을 포함한 `default_prompt`를 갖는다. implicit invocation은 기본 활성화하되 `tene-secrets`는 명확한 secret/runtime cue가 있을 때만 선택되도록 description과 eval을 강화한다.
+각 skill은 `display_name`, 짧은 `description`, `$skill-name`을 포함한 `default_prompt`를 갖는다. implicit invocation은 기본 활성화하되 `secrets`는 명확한 secret/runtime cue가 있을 때만 선택되도록 description과 eval을 강화한다.
 
 ## 6. Cross-skill handoff
 

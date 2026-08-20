@@ -1,10 +1,6 @@
 #!/bin/sh
 set -eu
 
-if command -v tene-workflow >/dev/null 2>&1; then
-  exec tene-workflow "$@"
-fi
-
 plugin_root=${PLUGIN_ROOT:-$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)}
 os_name=$(uname -s | tr '[:upper:]' '[:lower:]')
 arch_name=$(uname -m)
@@ -31,7 +27,12 @@ if [ -x "$bundled" ]; then
 fi
 
 if [ -f "$plugin_root/go.mod" ] && command -v go >/dev/null 2>&1; then
-  exec go run "$plugin_root/cmd/tene-workflow" "$@"
+  cd "$plugin_root"
+  exec go run ./cmd/tene-workflow "$@"
+fi
+
+if command -v tene-workflow >/dev/null 2>&1; then
+  exec tene-workflow "$@"
 fi
 
 echo "tene-workflow binary not found for ${os_name}-${arch_name}" >&2

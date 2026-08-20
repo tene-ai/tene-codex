@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene Sprint"
+  short_description: "Manage durable spec-driven coding sprints"
+  default_prompt: "Use $tene:sprint to start or resume a spec-driven sprint."
+policy:
+  allow_implicit_invocation: true
+

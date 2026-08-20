@@ -1,0 +1,20 @@
+Fresh Codex host 관찰 요약
+실행 시점: 2026-08-20
+실행 환경: Codex CLI 0.148.0, ephemeral, read-only
+
+Selector와 invocation 관찰:
+- 설치 cache에서 정확히 9개 skill directory를 읽었다: design, loop-check, plan, prd, qa, report, secrets, sprint, status.
+- 설치된 `$tene:status` skill 지침을 실제로 선택하고 실행했다.
+- Installed `tene-workflow status --json` 호출이 exit code 0으로 성공했고 active Sprint phase `qa`를 반환했다.
+- 이전 namespace 또는 중복 prefix skill은 설치 inventory에 나타나지 않았다.
+
+Stop lifecycle 관찰:
+- 별도 ephemeral read-only Codex session에서 `$tene:status`를 호출한 뒤 assistant가 최종 응답을 반환했다.
+- Host process는 exit code 0으로 종료했다.
+- Invalid Stop output 오류가 나타나지 않았다.
+- Assistant 최종 응답 뒤 unintended continuation이 시작되지 않았다.
+- Workflow state를 변경하는 command는 실행하지 않았다.
+
+민감정보 처리:
+- 원본 host output에 포함될 수 있는 외부 connector 인증 진단은 이 artifact에서 제거했다.
+- Credential, environment dump 또는 authorization header를 보존하지 않았다.

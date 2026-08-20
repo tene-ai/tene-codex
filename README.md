@@ -24,7 +24,7 @@ go build -o dist/tene-workflow ./cmd/tene-workflow
 
 During plugin development, `scripts/tene-workflow` finds an installed binary, a bundled platform binary, or runs the source command with Go. Tagged releases are designed to package macOS and Linux binaries with the plugin files and SHA-256 checksums.
 
-After installing or linking the plugin in Codex, start with `$tene-sprint`, resume with `$tene-status`, and use `$tene-qa` for evidence-based verification. Codex requires users to review and trust plugin-bundled hooks before those hooks can run.
+After installing or linking the plugin in Codex, start with `$tene:sprint`, resume with `$tene:status`, and use `$tene:qa` for evidence-based verification. Codex requires users to review and trust plugin-bundled hooks before those hooks can run.
 
 Common core commands:
 
@@ -88,7 +88,7 @@ tene-codex combines four Codex-facing mechanisms with a deterministic local work
 
 ### Skills
 
-Skills provide the user-facing entry points for sprint management, PRD discovery, planning, design, loop checking, QA, reporting, status, and secret-safe execution. Users will be able to invoke them explicitly, such as `$tene-qa`, or trigger them from sufficiently clear natural-language requests.
+Skills provide the user-facing entry points for sprint management, PRD discovery, planning, design, loop checking, QA, reporting, status, and secret-safe execution. Users will be able to invoke them explicitly, such as `$tene:qa`, or trigger them from sufficiently clear natural-language requests.
 
 ### Subagents
 

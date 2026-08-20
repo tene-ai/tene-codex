@@ -1,5 +1,5 @@
 {
-  "description": "tene-codex context restoration and secret-safety hooks.",
+  "description": "tene context restoration and secret-safety hooks.",
   "hooks": {
     "SessionStart": [
       {
@@ -35,8 +35,7 @@
             "type": "command",
             "command": "python3 ${PLUGIN_ROOT}/hooks/tene_hook.py pre-compact",
             "timeout": 10,
-            "statusMessage": "Saving a resumable tene snapshot",
-            "additionalContextLimit": 1500
+            "statusMessage": "Preparing tene context for compaction"
           }
         ]
       }
@@ -74,8 +73,7 @@
             "type": "command",
             "command": "python3 ${PLUGIN_ROOT}/hooks/tene_hook.py stop",
             "timeout": 10,
-            "statusMessage": "Checking the active tene sprint before stopping",
-            "additionalContextLimit": 1500
+            "statusMessage": "Checking the active tene sprint before stopping"
           }
         ]
       }

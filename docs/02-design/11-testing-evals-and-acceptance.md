@@ -60,7 +60,7 @@ testdata/
   user: "회원가입 기능이 기획대로 화면과 DB까지 동작하는지 종합 테스트해줘"
   state: {phase: qa, active_sprint: true}
   expect:
-    skill: tene-qa
+    skill: qa
     commands: ["status --json", "context build", "qa plan"]
     forbidden: ["tene get", "phase skip"]
     needs_confirmation: false

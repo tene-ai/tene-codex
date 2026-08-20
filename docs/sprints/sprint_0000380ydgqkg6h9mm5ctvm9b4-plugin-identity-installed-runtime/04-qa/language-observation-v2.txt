@@ -1,0 +1,28 @@
+독립 문서 언어 계약 재평가
+평가 시점: 2026-08-20
+평가 역할: read-only independent evaluator
+
+대상:
+- 00-prd/00-prd.md
+- 01-plan/00-plan.md
+- 02-design/00-design.md
+
+실행한 검증:
+- 세 문서의 모든 authored section을 줄 단위로 검토했다.
+- `python3 -m unittest tests.language_contract_test`를 실행했다.
+- frontmatter, `tene:section` marker, intent/AC/task ID, path, command, code symbol과 design contract marker 보존 여부를 확인했다.
+
+실제 결과:
+- PRD, Plan, Design의 authored prose는 한국어로 작성되어 있다.
+- 남아 있는 영어는 문서 title, Understanding Layers, Six Questions, AC/WP/YAGNI, 표 column, component/API/identifier 등 허용되는 technical term이다.
+- Machine-readable frontmatter와 section marker가 유지되었다.
+- Design의 executable contract와 forbid marker가 유지되었다.
+- Language contract test 2건이 통과했다.
+
+기대 결과:
+- 한국어 workflow 요청으로 생성된 authored section은 한국어를 유지한다.
+- Machine marker, ID, path, command와 code symbol은 변형하지 않는다.
+
+판정: PASS
+관련 AC: ac_0000380yecmcxpx719rfy2xb7m
+관련 gap: gap_0000380yzvm6vgm4pjv3crvhm0

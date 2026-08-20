@@ -5,7 +5,7 @@
 Codex skill은 대화와 코드 조사를 잘하지만 장기 상태와 결정론적 gate의 source of truth가 되어서는 안 된다. `tene-workflow` core가 상태와 판정을 소유하고, Codex가 해석·조사·도구 실행을 맡는다.
 
 ```text
-User / Natural language / $tene-*
+User / Natural language / $tene:*
              │
       Codex Skill Router
              │ Context Pack + Policy

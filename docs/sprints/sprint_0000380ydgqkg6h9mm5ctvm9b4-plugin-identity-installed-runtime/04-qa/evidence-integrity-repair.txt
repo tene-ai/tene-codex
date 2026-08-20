@@ -1,0 +1,17 @@
+QA evidence 무결성 복구 기록
+검증 시점: 2026-08-20
+
+수정 내용:
+- 실제 variant와 layer를 실행하지 않고 결론을 생성하던 `scripts/qa-host-observe.py`를 제거했다.
+- `qa observe` 입력 검증에서 서로 다른 layer에 동일한 statement, actual, expected를 복제한 assertion을 거부하도록 했다.
+- 오류 코드는 `QA_OBSERVATION_DUPLICATE_LAYER_ASSERTION`이다.
+- 새 QA run은 run ID, case ID, specification hash와 state revision이 모두 일치하는 evidence만 인정하므로 이전 run의 synthetic observation은 새 run의 credit이 될 수 없다.
+
+실행 결과:
+- `go test ./internal/qaadapter ./internal/workflow ./internal/app`: PASS
+- `python3 -m unittest discover -s tests -p '*_test.py'`: 18 tests PASS
+- 복제 assertion 회귀 테스트 `TestReadObservationRejectsAssertionCopiedAcrossLayers`: PASS
+
+판정:
+- Synthetic evidence를 만들고 importer로 통과시키던 원인을 제거했다.
+- 기능 AC의 실제 통과 여부는 이 기록으로 대신하지 않으며, 다음 QA run에서 실제 observable을 별도로 검증한다.

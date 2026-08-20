@@ -1812,6 +1812,53 @@ func (rt *runtime) evidence(args []string) (any, uint64, error) {
 			return map[string]any{"valid": false, "invalid": bad}, p.Revision, &commandError{"QA_EVIDENCE_INVALID", "evidence verification failed", "Regenerate the invalid artifacts.", 3}
 		}
 		return map[string]any{"valid": true, "count": len(p.Evidence)}, p.Revision, nil
+	case "reconcile-overwrites":
+		winners := map[string]string{}
+		for id, record := range p.Evidence {
+			path := record.URI
+			if !filepath.IsAbs(path) {
+				path = filepath.Join(rt.root, path)
+			}
+			b, readErr := os.ReadFile(path)
+			if readErr != nil {
+				continue
+			}
+			sum := sha256.Sum256(b)
+			if hex.EncodeToString(sum[:]) == record.SHA256 {
+				if prior := winners[record.URI]; prior == "" || p.Evidence[prior].CreatedAt.Before(record.CreatedAt) {
+					winners[record.URI] = id
+				}
+			}
+		}
+		resolved := 0
+		r, err := s.Mutate(rt.expected, rt.actor(), "EvidenceOverwritesReconciled", p.ActiveSprintID, winners, func(p *domain.Project) error {
+			for id, record := range p.Evidence {
+				winner := winners[record.URI]
+				if winner != "" && winner != id && record.SupersededBy == "" {
+					record.SupersededBy = winner
+					resolved++
+				}
+			}
+			for _, run := range p.QARuns {
+				for i := range run.Cases {
+					kept := make([]string, 0, len(run.Cases[i].EvidenceIDs))
+					for _, evidenceID := range run.Cases[i].EvidenceIDs {
+						record := p.Evidence[evidenceID]
+						if record != nil && record.SupersededBy != "" {
+							kept = append(kept, record.SupersededBy)
+						} else {
+							kept = append(kept, evidenceID)
+						}
+					}
+					run.Cases[i].EvidenceIDs = unique(kept)
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return nil, 0, err
+		}
+		return map[string]any{"superseded": resolved, "verified_uris": len(winners)}, r.Revision, nil
 	default:
 		return nil, 0, usageErr("unknown evidence action")
 	}
@@ -1838,8 +1885,8 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		return qaadapter.Discover(rt.root), p.Revision, nil
 	case "plan":
 		run := &domain.QARun{RunID: domain.NewID("run"), SprintID: sp.SprintID, Status: "planned", Environment: qaadapter.EnvironmentFingerprint(rt.root), StartedAt: time.Now().UTC(), StateRevision: p.Revision, SpecHash: workflow.QASpecHash(p, sp)}
-		for _, ac := range p.Criteria {
-			if slices.Contains(sp.IntentIDs, ac.IntentID) && ac.Priority == "blocking" {
+		for _, ac := range domain.ConfirmedCriteria(p, sp) {
+			if ac.Priority == "blocking" {
 				for _, variant := range qaVariants() {
 					dispositions := map[string]string{"L1": "required", "L2": "required", "L3": "required", "L4": "required", "L5": "required", "L6": "required", "L7": "required"}
 					run.Cases = append(run.Cases, domain.QACase{CaseID: domain.NewID("case"), CriterionIDs: []string{ac.CriterionID}, Title: ac.Statement + " — " + variant, Variant: variant, Layers: []string{"L1", "L2", "L3", "L4", "L5", "L6", "L7"}, Status: "pending", Actor: "project user", Preconditions: append([]string(nil), ac.Preconditions...), Steps: []domain.QAStep{{Action: qaVariantAction(variant), ExpectedUI: ac.Observable, ExpectedData: strings.Join(ac.Expected, "; "), ObserverIDs: []string{"interface", "boundary", "persistence"}}}, ForbiddenOutcomes: append([]string(nil), ac.Forbidden...), RequiredLayers: dispositions, Risk: "high"})
@@ -1965,12 +2012,13 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			return nil, 0, err
 		}
-		path := filepath.Join(dir, caseID+"-"+slugify(*adapter)+".json")
+		id := domain.NewID("evidence")
+		// Keep prior evidence bytes immutable when a case is executed again.
+		path := filepath.Join(dir, caseID+"-"+slugify(*adapter)+"-"+id+".json")
 		if err := os.WriteFile(path, artifact, 0644); err != nil {
 			return nil, 0, err
 		}
 		sum := sha256.Sum256(artifact)
-		id := domain.NewID("evidence")
 		capability, _ := qaadapter.CapabilityByName(rt.root, *adapter)
 		assertions := []domain.EvidenceAssertion{}
 		for _, layer := range capability.Layers {
@@ -1983,12 +2031,23 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 			statusValue = "failed"
 		}
 		r, err := s.Mutate(rt.expected, rt.actor(), "QAAdapterExecuted", id, execution, func(p *domain.Project) error {
+			for _, prior := range p.Evidence {
+				if prior.RunID == run.RunID && prior.CaseID == caseID && prior.Kind == ev.Kind && prior.Tool == ev.Tool && prior.SupersededBy == "" {
+					prior.SupersededBy = id
+				}
+			}
 			p.Evidence[id] = ev
 			rr := p.QARuns[sp.LastQAID]
 			for i := range rr.Cases {
 				if rr.Cases[i].CaseID == caseID {
 					rr.Cases[i].Status = statusValue
-					rr.Cases[i].EvidenceIDs = unique(append(rr.Cases[i].EvidenceIDs, id))
+					kept := rr.Cases[i].EvidenceIDs[:0]
+					for _, evidenceID := range rr.Cases[i].EvidenceIDs {
+						if prior := p.Evidence[evidenceID]; prior == nil || prior.SupersededBy == "" {
+							kept = append(kept, evidenceID)
+						}
+					}
+					rr.Cases[i].EvidenceIDs = unique(append(kept, id))
 				}
 			}
 			return nil
@@ -2303,6 +2362,9 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 func invalidEvidence(root string, p *domain.Project) []string {
 	var bad []string
 	for id, e := range p.Evidence {
+		if e.SupersededBy != "" {
+			continue
+		}
 		path := e.URI
 		if !filepath.IsAbs(path) {
 			path = filepath.Join(root, path)

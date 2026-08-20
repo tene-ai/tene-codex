@@ -108,8 +108,8 @@ def run_stack(name, config):
                              "after": {"stack": name, "phase": "qa", "artifact": config["artifact"]}}],
             "assertions": [{"statement": f"{layer} portable {case['variant']} contract passed", "passed": True,
                             "layer": layer, "requirement_refs": ["observable", "variant:" + case["variant"]],
-                            "actual": f"isolated {name} public CLI processes preserved state, documents and gates",
-                            "expected": "same public workflow and document contract across stacks"} for layer in LAYERS],
+                            "actual": f"isolated {name} {layer} boundary preserved its state, document or gate contract",
+                            "expected": f"{layer} public workflow boundary behaves consistently across stacks"} for layer in LAYERS],
             "redaction_status": "passed", "spec_hash": run["spec_hash"], "state_revision": run["state_revision"],
             "layers": LAYERS, "tool_version": "portable-public-cli/1.0.0",
         }

@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene Plan"
+  short_description: "Plan traceable implementation work"
+  default_prompt: "Use $tene:plan to create the implementation plan for the active sprint."
+policy:
+  allow_implicit_invocation: true
+

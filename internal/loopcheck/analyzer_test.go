@@ -55,6 +55,23 @@ func TestAnalyzeMutationDetectionAndCleanConvergence(t *testing.T) {
 	}
 }
 
+func TestAnalyzeIgnoresDeprecatedSprintIntent(t *testing.T) {
+	root, p, sp := fixture(t)
+	p.Intents["intent_old"] = &domain.Intent{IntentID: "intent_old", SprintID: sp.SprintID, Status: "deprecated"}
+	p.Criteria["ac_old"] = &domain.Criterion{CriterionID: "ac_old", IntentID: "intent_old", Priority: "blocking"}
+	sp.IntentIDs = append(sp.IntentIDs, "intent_old")
+
+	got, err := Analyze(context.Background(), root, p, sp, Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, candidate := range got {
+		if contains(candidate.SubjectRefs, "intent_old") || contains(candidate.SubjectRefs, "ac_old") {
+			t.Fatalf("deprecated intent must not drive loop gaps: %#v", candidate)
+		}
+	}
+}
+
 func TestReconcileIsStableResolvesAndReopens(t *testing.T) {
 	_, p, sp := fixture(t)
 	candidate := Candidate{Fingerprint: "stable", Category: "mismatch", Severity: "blocker", Description: "drift", SubjectRefs: []string{"x"}}

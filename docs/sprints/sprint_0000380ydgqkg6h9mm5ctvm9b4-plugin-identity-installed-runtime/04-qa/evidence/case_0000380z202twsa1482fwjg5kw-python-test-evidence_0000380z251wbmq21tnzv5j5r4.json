@@ -1,0 +1,17 @@
+{
+  "adapter": "python-test",
+  "command": [
+    "/usr/local/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "*_test.py"
+  ],
+  "started_at": "2026-08-20T12:06:58.28262Z",
+  "finished_at": "2026-08-20T12:07:00.293371Z",
+  "passed": true,
+  "output": "..................\n----------------------------------------------------------------------\nRan 18 tests in 1.855s\n\nOK\n"
+}

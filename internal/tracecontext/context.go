@@ -253,12 +253,9 @@ func sortedStrings(in []string) []string {
 }
 func sortedCriteria(p *domain.Project, sp *domain.Sprint) []string {
 	var out []string
-	for id, ac := range p.Criteria {
-		if contains(sp.IntentIDs, ac.IntentID) {
-			out = append(out, id)
-		}
+	for _, ac := range domain.ConfirmedCriteria(p, sp) {
+		out = append(out, ac.CriterionID)
 	}
-	sort.Strings(out)
 	return out
 }
 func safeProvenance(locator string) bool {

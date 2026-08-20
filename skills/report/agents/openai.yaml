@@ -1,0 +1,7 @@
+interface:
+  display_name: "tene Report"
+  short_description: "Review and archive sprint outcomes"
+  default_prompt: "Use $tene:report to produce the traceable report for the active sprint."
+policy:
+  allow_implicit_invocation: true
+

@@ -24,7 +24,7 @@ go build -o dist/tene-workflow ./cmd/tene-workflow
 
 Plugin 개발 중에는 `scripts/tene-workflow`가 설치된 binary, bundle에 포함된 platform binary 또는 Go source command를 순서대로 찾습니다. Tag release는 macOS와 Linux binary, plugin 파일과 SHA-256 checksum을 함께 package하도록 설계했습니다.
 
-Codex에 plugin을 설치하거나 link한 다음 `$tene-sprint`로 시작하고, `$tene-status`로 재개하며, `$tene-qa`로 evidence 기반 검증을 수행합니다. Plugin에 포함된 hook은 Codex에서 사용자가 내용을 검토하고 trust해야 실행됩니다.
+Codex에 plugin을 설치하거나 link한 다음 `$tene:sprint`로 시작하고, `$tene:status`로 재개하며, `$tene:qa`로 evidence 기반 검증을 수행합니다. Plugin에 포함된 hook은 Codex에서 사용자가 내용을 검토하고 trust해야 실행됩니다.
 
 주요 core command:
 
@@ -87,7 +87,7 @@ tene-codex는 네 가지 Codex 연동 요소와 결정론적인 local workflow e
 
 ### Skills
 
-Skills는 Sprint 관리, PRD 탐색, plan, design, loop check, QA, report, status와 secret-safe 실행을 위한 사용자 진입점입니다. 사용자는 `$tene-qa`처럼 명시적으로 호출하거나, 충분히 명확한 자연어 요청으로 필요한 skill을 실행할 수 있습니다.
+Skills는 Sprint 관리, PRD 탐색, plan, design, loop check, QA, report, status와 secret-safe 실행을 위한 사용자 진입점입니다. 사용자는 `$tene:qa`처럼 명시적으로 호출하거나, 충분히 명확한 자연어 요청으로 필요한 skill을 실행할 수 있습니다.
 
 ### Subagents
 

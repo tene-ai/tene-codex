@@ -204,6 +204,7 @@ type Evidence struct {
 	Environment     string              `json:"environment,omitempty"`
 	StartedAt       *time.Time          `json:"started_at,omitempty"`
 	FinishedAt      *time.Time          `json:"finished_at,omitempty"`
+	SupersededBy    string              `json:"superseded_by,omitempty"`
 }
 
 type EvidenceAssertion struct {

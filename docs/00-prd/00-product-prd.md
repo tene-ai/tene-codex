@@ -93,7 +93,7 @@ active state는 작게 유지하고 완료 event와 상세 evidence는 archive�
 
 ### FR-10 Explicit and Implicit Invocation
 
-사용자는 `$tene-*` skill 또는 명령형 요청으로 직접 호출할 수 있다. 자연어 요청에서도 명확한 trigger에 따라 필요한 skill을 자동 선택한다.
+사용자는 `$tene:*` skill 또는 명령형 요청으로 직접 호출할 수 있다. 자연어 요청에서도 명확한 trigger에 따라 필요한 skill을 자동 선택한다.
 
 ### FR-11 Secret-safe Execution
 

@@ -68,8 +68,8 @@ func CanTransitionWithApproval(p *domain.Project, sprint *domain.Sprint, target 
 			findings = append(findings, finding("INTENT_UNCONFIRMED", "blocker", sprint.SprintID, "no confirmed product intent", "Capture and confirm at least one intent.", false))
 		}
 		blocking := 0
-		for _, ac := range p.Criteria {
-			if slices.Contains(sprint.IntentIDs, ac.IntentID) && ac.Priority == "blocking" {
+		for _, ac := range domain.ConfirmedCriteria(p, sprint) {
+			if ac.Priority == "blocking" {
 				blocking++
 			}
 		}
@@ -202,8 +202,8 @@ func EvaluateQAGateAtRoot(root string, p *domain.Project, sprint *domain.Sprint,
 			caseByAC[ac] = append(caseByAC[ac], c)
 		}
 	}
-	for _, ac := range p.Criteria {
-		if !slices.Contains(sprint.IntentIDs, ac.IntentID) || ac.Priority != "blocking" {
+	for _, ac := range domain.ConfirmedCriteria(p, sprint) {
+		if ac.Priority != "blocking" {
 			continue
 		}
 		cases := caseByAC[ac.CriterionID]
@@ -213,6 +213,16 @@ func EvaluateQAGateAtRoot(root string, p *domain.Project, sprint *domain.Sprint,
 		}
 		allPassed := true
 		for _, c := range cases {
+			allNotApplicable := len(c.RequiredLayers) > 0
+			for _, disposition := range c.RequiredLayers {
+				if !strings.HasPrefix(disposition, "not-applicable:") {
+					allNotApplicable = false
+					break
+				}
+			}
+			if allNotApplicable {
+				continue
+			}
 			if len(c.EvidenceIDs) == 0 {
 				allPassed = false
 				continue
@@ -282,11 +292,9 @@ func QASpecHash(p *domain.Project, sprint *domain.Sprint) string {
 			v.Intents = append(v.Intents, &x)
 		}
 	}
-	for _, ac := range p.Criteria {
-		if slices.Contains(sprint.IntentIDs, ac.IntentID) {
-			x := *ac
-			v.Criteria = append(v.Criteria, &x)
-		}
+	for _, ac := range domain.ConfirmedCriteria(p, sprint) {
+		x := *ac
+		v.Criteria = append(v.Criteria, &x)
 	}
 	sort.Slice(v.Intents, func(i, j int) bool { return v.Intents[i].IntentID < v.Intents[j].IntentID })
 	sort.Slice(v.Criteria, func(i, j int) bool { return v.Criteria[i].CriterionID < v.Criteria[j].CriterionID })

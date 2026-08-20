@@ -1,27 +1,1814 @@
 {
-  "active_sprint_id": "",
+  "acceptance_criteria": {
+    "ac_0000380ydn6r8d6vhd7q59m5mm": {
+      "ac_id": "ac_0000380ydn6r8d6vhd7q59m5mm",
+      "intent_id": "intent_0000380ydn6r99ja8cyhpttebc",
+      "statement": "Skill selection exposes concise tene-qualified names",
+      "priority": "blocking",
+      "observable": "A fresh Codex session lists \\u0024tene:plan and all nine \\u0024tene:\u003cphase\u003e skills and does not list \\u0024tene-codex:* or \\u0024tene:tene-*"
+    },
+    "ac_0000380ydn7pqtqhk2993wffg8": {
+      "ac_id": "ac_0000380ydn7pqtqhk2993wffg8",
+      "intent_id": "intent_0000380ydn7ppsehvfk2qq2n2r",
+      "statement": "Installed plugin completes a real workflow entry and preserves state",
+      "priority": "blocking",
+      "observable": "From a clean local install a new session invokes \\u0024tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy"
+    },
+    "ac_0000380ydppfarshvvnhww980w": {
+      "ac_id": "ac_0000380ydppfarshvvnhww980w",
+      "intent_id": "intent_0000380ydppfay2szegwvaqsqm",
+      "statement": "Skill selection exposes concise tene-qualified names",
+      "priority": "blocking",
+      "observable": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*"
+    },
+    "ac_0000380ydpq9vae1we5cfzkw78": {
+      "ac_id": "ac_0000380ydpq9vae1we5cfzkw78",
+      "intent_id": "intent_0000380ydpq9tm54tgwpqnfd30",
+      "statement": "Installed plugin completes a real workflow entry and preserves state",
+      "priority": "blocking",
+      "observable": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy"
+    },
+    "ac_0000380yeckc1p516k1yvt3q3r": {
+      "ac_id": "ac_0000380yeckc1p516k1yvt3q3r",
+      "intent_id": "intent_0000380yeckc0mm5dsr9j59h6m",
+      "statement": "Stop hook completes without invalid JSON errors",
+      "priority": "blocking",
+      "observable": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation"
+    },
+    "ac_0000380yecmcxpx719rfy2xb7m": {
+      "ac_id": "ac_0000380yecmcxpx719rfy2xb7m",
+      "intent_id": "intent_0000380yecmcwb7v4ttjm9bbrm",
+      "statement": "Phase documents follow the active user conversation language",
+      "priority": "blocking",
+      "observable": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid"
+    }
+  },
+  "active_sprint": {
+    "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+    "slug": "plugin-identity-installed-runtime",
+    "title": "Plugin Identity and Installed Runtime Verification",
+    "milestone": "tene namespace migration",
+    "release": "v0.1.x verification",
+    "phase": "qa",
+    "intent_ids": [
+      "intent_0000380ydn6r99ja8cyhpttebc",
+      "intent_0000380ydn7ppsehvfk2qq2n2r",
+      "intent_0000380ydppfay2szegwvaqsqm",
+      "intent_0000380ydpq9tm54tgwpqnfd30",
+      "intent_0000380yeckc0mm5dsr9j59h6m",
+      "intent_0000380yecmcwb7v4ttjm9bbrm"
+    ],
+    "task_ids": [
+      "task_0000380ydvzc0pjsatbyeff3yc",
+      "task_0000380ydwcs0gd3wr3vy2wcdr",
+      "task_0000380ydwdvfe6vc2ajcpd7g8",
+      "task_0000380ydwexgf4pewweg3pj8g",
+      "task_0000380yed20cf2ayn6vfmkn9w",
+      "task_0000380yed2vtrspn07jwg36sr"
+    ],
+    "document_root": "docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime",
+    "approval_refs": [
+      "approval_0000380ye337smc4smwbzkccam"
+    ],
+    "last_qa_status": "failed",
+    "last_qa_id": "run_0000380z202tx0dwz90g22c0x0",
+    "loop_iteration": 7,
+    "max_loop_iterations": 8,
+    "last_loop_outcome": "repair",
+    "last_loop_summary": "QA 중 새 evidence guard가 portable smoke의 다층 복제 fixture를 탐지해 layer별 actual/expected로 수정했고 release smoke 7단계를 재통과했다.",
+    "last_loop_at": "2026-08-20T12:05:25.704458Z"
+  },
+  "active_sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+  "approvals": {
+    "approval_0000380ye337smc4smwbzkccam": {
+      "approval_id": "approval_0000380ye337smc4smwbzkccam",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "from": "design",
+      "to": "do",
+      "reason": "Implement the confirmed tene namespace migration, confirmed-only criterion filtering, and installed-runtime verification defined in the validated design",
+      "requester": "codex",
+      "approver": "user",
+      "status": "consumed",
+      "requested_at": "2026-08-20T09:11:42.460971Z",
+      "approved_at": "2026-08-20T09:13:32.356388Z",
+      "expires_at": "2026-08-21T09:15:00Z",
+      "consumed_at": "2026-08-20T09:14:32.811085Z"
+    }
+  },
+  "checkpoint": {
+    "last_loop_outcome": "repair",
+    "last_qa_status": "failed",
+    "loop_iteration": 7,
+    "phase": "qa"
+  },
+  "intents": {
+    "intent_0000380ydn6r99ja8cyhpttebc": {
+      "intent_id": "intent_0000380ydn6r99ja8cyhpttebc",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "revision": 2,
+      "status": "deprecated",
+      "statement": "Codex users discover and invoke the product as plugin tene with concise phase skills such as \\u0024tene:plan while the repository remains named tene-codex",
+      "rationale": "The product identity is tene and repository/provider naming must not leak into the user-facing skill namespace",
+      "actors": [
+        "Codex user",
+        "plugin maintainer"
+      ],
+      "desired_outcomes": [
+        "selector shows \\u0024tene:plan",
+        "all nine skills use \\u0024tene:\u003cphase\u003e",
+        "repository remains tene-codex"
+      ],
+      "non_goals": [
+        "rename Git repository",
+        "rename provider organization",
+        "preserve obsolete selector aliases"
+      ],
+      "policies": [
+        "plugin namespace is tene",
+        "skill names are concise phase names",
+        "old namespace must not remain discoverable"
+      ],
+      "business_rules": [
+        "plugin manifest name defines namespace",
+        "skill frontmatter name defines suffix"
+      ],
+      "ux_states": [
+        "plugin installed",
+        "skill searched",
+        "skill selected",
+        "skill invoked"
+      ],
+      "data_invariants": [
+        "source staged and installed metadata agree",
+        "project workflow state survives plugin update and uninstall"
+      ],
+      "constraints": [
+        "Codex host discovery is validated as a black box",
+        "new version and fresh conversation are required"
+      ],
+      "assumptions": [
+        "qualified short skill names avoid ambiguity"
+      ],
+      "open_questions": [
+        "exact next patch version"
+      ],
+      "source": "user",
+      "source_locator": "user:2026-08-20-plugin-name-request"
+    },
+    "intent_0000380ydn7ppsehvfk2qq2n2r": {
+      "intent_id": "intent_0000380ydn7ppsehvfk2qq2n2r",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "revision": 2,
+      "status": "deprecated",
+      "statement": "The staged and locally installed tene plugin executes the bundled tene-workflow CLI and all skill handoffs with behavior identical to the source checkout",
+      "rationale": "Source-only tests do not prove the installed product actually works",
+      "actors": [
+        "Codex user",
+        "release maintainer"
+      ],
+      "desired_outcomes": [
+        "fresh installation works",
+        "upgrade preserves project state",
+        "uninstall preserves repository state"
+      ],
+      "non_goals": [
+        "public marketplace submission",
+        "remote MCP implementation",
+        "App Server implementation"
+      ],
+      "policies": [
+        "installed-source drift is blocking",
+        "checksum validation precedes binary execution",
+        "project state is never removed by uninstall"
+      ],
+      "business_rules": [
+        "source staged and installed contracts must match"
+      ],
+      "ux_states": [
+        "package staged",
+        "plugin installed",
+        "new session started",
+        "skill invoked",
+        "plugin upgraded",
+        "plugin removed"
+      ],
+      "data_invariants": [
+        "installed bundle contains nine skills and executable launcher",
+        "workflow state remains valid across lifecycle"
+      ],
+      "constraints": [
+        "host UI selector is external black-box evidence"
+      ],
+      "assumptions": [
+        "local marketplace and Codex CLI are available"
+      ],
+      "open_questions": [
+        "host restart mechanism available to automated QA"
+      ],
+      "source": "user",
+      "source_locator": "docs/02-design/10-plugin-package-and-marketplace.md"
+    },
+    "intent_0000380ydppfay2szegwvaqsqm": {
+      "intent_id": "intent_0000380ydppfay2szegwvaqsqm",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Codex users discover and invoke the product as plugin tene with concise phase skills such as $tene:plan while the repository remains named tene-codex",
+      "rationale": "The product identity is tene and repository/provider naming must not leak into the user-facing skill namespace",
+      "actors": [
+        "Codex user",
+        "plugin maintainer"
+      ],
+      "desired_outcomes": [
+        "selector shows $tene:plan",
+        "all nine skills use $tene:\u003cphase\u003e",
+        "repository remains tene-codex"
+      ],
+      "non_goals": [
+        "rename Git repository",
+        "rename provider organization",
+        "preserve obsolete selector aliases"
+      ],
+      "policies": [
+        "plugin namespace is tene",
+        "skill names are concise phase names",
+        "old namespace must not remain discoverable"
+      ],
+      "business_rules": [
+        "plugin manifest name defines namespace",
+        "skill frontmatter name defines suffix"
+      ],
+      "ux_states": [
+        "plugin installed",
+        "skill searched",
+        "skill selected",
+        "skill invoked"
+      ],
+      "data_invariants": [
+        "source staged and installed metadata agree",
+        "project workflow state survives plugin update and uninstall"
+      ],
+      "constraints": [
+        "Codex host discovery is validated as a black box",
+        "new version and fresh conversation are required"
+      ],
+      "assumptions": [
+        "qualified short skill names avoid ambiguity"
+      ],
+      "open_questions": [
+        "exact next patch version"
+      ],
+      "source": "user",
+      "source_locator": "user:2026-08-20-plugin-name-request",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T09:08:25.855066Z"
+    },
+    "intent_0000380ydpq9tm54tgwpqnfd30": {
+      "intent_id": "intent_0000380ydpq9tm54tgwpqnfd30",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "The staged and locally installed tene plugin executes the bundled tene-workflow CLI and all skill handoffs with behavior identical to the source checkout",
+      "rationale": "Source-only tests do not prove the installed product actually works",
+      "actors": [
+        "Codex user",
+        "release maintainer"
+      ],
+      "desired_outcomes": [
+        "fresh installation works",
+        "upgrade preserves project state",
+        "uninstall preserves repository state"
+      ],
+      "non_goals": [
+        "public marketplace submission",
+        "remote MCP implementation",
+        "App Server implementation"
+      ],
+      "policies": [
+        "installed-source drift is blocking",
+        "checksum validation precedes binary execution",
+        "project state is never removed by uninstall"
+      ],
+      "business_rules": [
+        "source staged and installed contracts must match"
+      ],
+      "ux_states": [
+        "package staged",
+        "plugin installed",
+        "new session started",
+        "skill invoked",
+        "plugin upgraded",
+        "plugin removed"
+      ],
+      "data_invariants": [
+        "installed bundle contains nine skills and executable launcher",
+        "workflow state remains valid across lifecycle"
+      ],
+      "constraints": [
+        "host UI selector is external black-box evidence"
+      ],
+      "assumptions": [
+        "local marketplace and Codex CLI are available"
+      ],
+      "open_questions": [
+        "host restart mechanism available to automated QA"
+      ],
+      "source": "user",
+      "source_locator": "docs/02-design/10-plugin-package-and-marketplace.md",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T09:08:26.360153Z"
+    },
+    "intent_0000380yeckc0mm5dsr9j59h6m": {
+      "intent_id": "intent_0000380yeckc0mm5dsr9j59h6m",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Active Sprint Stop hooks return valid Codex Stop-event JSON and never surface an invalid output failure",
+      "rationale": "Advisory workflow status must not break the host turn lifecycle",
+      "actors": [
+        "Codex user",
+        "plugin maintainer"
+      ],
+      "desired_outcomes": [
+        "no Stop hook JSON error",
+        "active sprint warning remains visible without unintended continuation"
+      ],
+      "non_goals": [
+        "force every active Sprint turn to continue indefinitely"
+      ],
+      "policies": [
+        "event-specific official Codex hook schema is authoritative",
+        "advisory hook exits successfully with valid JSON"
+      ],
+      "business_rules": [
+        "Stop output uses common Stop fields rather than hookSpecificOutput.additionalContext"
+      ],
+      "ux_states": [
+        "assistant finishes",
+        "Stop hook runs",
+        "status advisory appears",
+        "turn ends normally"
+      ],
+      "data_invariants": [
+        "hook does not mutate workflow state"
+      ],
+      "constraints": [
+        "Codex hook contract can change and needs compatibility tests"
+      ],
+      "assumptions": [
+        "current local manual matches installed Codex behavior"
+      ],
+      "open_questions": [
+        "none"
+      ],
+      "source": "user",
+      "source_locator": "user:2026-08-20-stop-hook-error",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T09:14:24.743655Z"
+    },
+    "intent_0000380yecmcwb7v4ttjm9bbrm": {
+      "intent_id": "intent_0000380yecmcwb7v4ttjm9bbrm",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "tene writes authored Sprint documents in the language currently used by the user unless the user explicitly requests another language",
+      "rationale": "Workflow documents are user-facing collaboration artifacts and should remain linguistically consistent with the conversation",
+      "actors": [
+        "tene user",
+        "Codex agent"
+      ],
+      "desired_outcomes": [
+        "Korean conversation produces Korean authored documents",
+        "explicit language overrides are respected",
+        "code identifiers remain unchanged"
+      ],
+      "non_goals": [
+        "translate archived history",
+        "translate code symbols or required machine markers"
+      ],
+      "policies": [
+        "current user language is the default document language",
+        "explicit user override wins",
+        "machine-readable IDs and markers remain stable"
+      ],
+      "business_rules": [
+        "skills preserve conversation language across PRD Plan Design Analysis QA and Report"
+      ],
+      "ux_states": [
+        "user requests work in Korean",
+        "phase document is scaffolded",
+        "agent authors Korean content",
+        "next skill continues Korean"
+      ],
+      "data_invariants": [
+        "document language preference is carried in context without changing schema markers"
+      ],
+      "constraints": [
+        "mixed-language technical terms and identifiers may remain original"
+      ],
+      "assumptions": [
+        "dominant language can be inferred from the current user request"
+      ],
+      "open_questions": [
+        "none"
+      ],
+      "source": "user",
+      "source_locator": "user:2026-08-20-document-language",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T09:14:25.223425Z"
+    }
+  },
+  "last_qa_run": {
+    "run_id": "run_0000380z202tx0dwz90g22c0x0",
+    "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+    "status": "failed",
+    "environment": "local:1382c4208946a24a",
+    "cases": [
+      {
+        "case_id": "case_0000380z202txhvc98zxqc29g0",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — happy",
+        "variant": "happy",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "evidenced",
+        "evidence_ids": [
+          "evidence_0000380z243pjcwwh89zcgfzz4",
+          "evidence_0000380z2gz6b6jg7yrvzt9sa8"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete the primary user and data journey",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:정상 discovery에는 failure 또는 retry 경계가 없다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txxk3gt2k3sjrw4",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — alternate",
+        "variant": "alternate",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z249hqt4vfhymq66bb4"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete a valid alternate or back-navigation journey",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:대체 selector 선택은 장애 주입 경로가 아니다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twd199vkak760er",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — empty",
+        "variant": "empty",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise empty initial and no-result states",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다",
+          "L2": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다",
+          "L3": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다",
+          "L4": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다",
+          "L5": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다",
+          "L6": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다",
+          "L7": "not-applicable:independent-evaluator:selector AC에 별도 empty domain state가 없으며 legacy 부재는 validation에서 검증한다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txxhrc9990s2trw",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — validation",
+        "variant": "validation",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z24ffw5k03195dyrzhg"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Submit invalid or boundary input and confirm no forbidden write",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twr3cxmqrnj74tg",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — permission",
+        "variant": "permission",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise least-privilege denial and authorized recovery",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다",
+          "L2": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다",
+          "L3": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다",
+          "L4": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다",
+          "L5": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다",
+          "L6": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다",
+          "L7": "not-applicable:independent-evaluator:selector namespace에는 auth 또는 RBAC 정책이 없다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txkn48mef7xsj0g",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — failure",
+        "variant": "failure",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z24nk8853evnpep61z0"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:stale cache 실패는 host와 runtime 경계다",
+          "L2": "not-applicable:independent-evaluator:stale cache 실패는 host와 runtime 경계다",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tw5wb2w0b2gg5s0",
+        "ac_ids": [
+          "ac_0000380ydppfarshvvnhww980w"
+        ],
+        "title": "Skill selection exposes concise tene-qualified names — recovery",
+        "variant": "recovery",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z24vk6rngd21ejcgctg"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Retry or roll back after failure and verify idempotent recovery",
+            "expected_ui": "A fresh Codex session lists $tene:plan and all nine $tene:\u003cphase\u003e skills and does not list $tene-codex:* or $tene:tene-*",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:cache 재설치 recovery는 host와 runtime 경계다",
+          "L2": "not-applicable:independent-evaluator:cache 재설치 recovery는 host와 runtime 경계다",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twsa1482fwjg5kw",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — happy",
+        "variant": "happy",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "evidenced",
+        "evidence_ids": [
+          "evidence_0000380z251wbmq21tnzv5j5r4",
+          "evidence_0000380z2h0n87qjb7tjv7j8qr"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete the primary user and data journey",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:정상 clean install에는 failure 또는 retry 경계가 없다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tx1qbejaajhnr8w",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — alternate",
+        "variant": "alternate",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z258dtj0ec04jmnrkqg"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete a valid alternate or back-navigation journey",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:upgrade journey는 static/unit 단독 경계가 아니다",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twhdw5zmbsz9rf4",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — empty",
+        "variant": "empty",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z25f81sa7pha6xq0k8r"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise empty initial and no-result states",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:uninstall 상태 관찰은 runtime/state 경계다",
+          "L2": "not-applicable:independent-evaluator:uninstall 상태 관찰은 runtime/state 경계다",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twk9s16m9bmw7pw",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — validation",
+        "variant": "validation",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z25p091mqj6kk8wk9w8"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Submit invalid or boundary input and confirm no forbidden write",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tw5ehrxx9t935kc",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — permission",
+        "variant": "permission",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise least-privilege denial and authorized recovery",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다",
+          "L2": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다",
+          "L3": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다",
+          "L4": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다",
+          "L5": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다",
+          "L6": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다",
+          "L7": "not-applicable:independent-evaluator:installed lifecycle AC에는 사용자 권한 또는 RBAC 경계가 없다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tw7v2xsbkjhpe6c",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — failure",
+        "variant": "failure",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z26emedhzfsnk73m8mg"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txkx232tktqbc74",
+        "ac_ids": [
+          "ac_0000380ydpq9vae1we5cfzkw78"
+        ],
+        "title": "Installed plugin completes a real workflow entry and preserves state — recovery",
+        "variant": "recovery",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z26m6jcw037536dqt58"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Retry or roll back after failure and verify idempotent recovery",
+            "expected_ui": "From a clean local install a new session invokes $tene:sprint and the bundled CLI returns healthy status; upgrade and uninstall leave repository workflow state healthy",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:재설치 recovery는 static/unit 단독 경계가 아니다",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txf5g4wfsfpb2jg",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — happy",
+        "variant": "happy",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "evidenced",
+        "evidence_ids": [
+          "evidence_0000380z26ssv5mx7dztxr8p6r",
+          "evidence_0000380z2h23rxnc5q3a8kj8pc"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete the primary user and data journey",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:정상 Stop 종료에는 failure 또는 retry 경계가 없다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txegqchvn7secqw",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — alternate",
+        "variant": "alternate",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z26z6tnrkme7zn5dmjc"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete a valid alternate or back-navigation journey",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:inactive Sprint 정상 종료에는 failure 또는 retry 경계가 없다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txbka9afy8jy5c8",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — empty",
+        "variant": "empty",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z274gny409ns9802j3w"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise empty initial and no-result states",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tw1b2sd6em15a3g",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — validation",
+        "variant": "validation",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z27mkzjxc8g9z7kbkdw"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Submit invalid or boundary input and confirm no forbidden write",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txxvzjvjm5mdj70",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — permission",
+        "variant": "permission",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise least-privilege denial and authorized recovery",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다",
+          "L2": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다",
+          "L3": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다",
+          "L4": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다",
+          "L5": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다",
+          "L6": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다",
+          "L7": "not-applicable:independent-evaluator:Stop hook에는 auth 또는 RBAC 정책이 없다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tx2fntxkxkbm764",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — failure",
+        "variant": "failure",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z27sceb9ghvv4aew480"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "required",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txgr45n6p172j5w",
+        "ac_ids": [
+          "ac_0000380yeckc1p516k1yvt3q3r"
+        ],
+        "title": "Stop hook completes without invalid JSON errors — recovery",
+        "variant": "recovery",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Retry or roll back after failure and verify idempotent recovery",
+            "expected_ui": "With an active Sprint, invoking the Stop handler returns schema-valid Stop JSON, exit code 0, no invalid-output error, and does not start an unintended continuation",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다",
+          "L2": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다",
+          "L3": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다",
+          "L4": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다",
+          "L5": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다",
+          "L6": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다",
+          "L7": "not-applicable:independent-evaluator:Stop hook은 stateless advisory이며 별도 persisted recovery journey가 없다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twbr15n6c3zge6m",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — happy",
+        "variant": "happy",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "evidenced",
+        "evidence_ids": [
+          "evidence_0000380z27y4z96ybkmqjw2a44",
+          "evidence_0000380z2h3jtfx7aaccggvdg4"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete the primary user and data journey",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "not-applicable:independent-evaluator:한국어 정상 작성에는 deployed runtime 또는 failure 경계가 없다",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:한국어 정상 작성에는 deployed runtime 또는 failure 경계가 없다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twn6x0p5fnq0wng",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — alternate",
+        "variant": "alternate",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z282xyk8ad9n5jqy8dg"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Complete a valid alternate or back-navigation journey",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "not-applicable:independent-evaluator:명시적 언어 override에는 deployed runtime 또는 failure 경계가 없다",
+          "L5": "required",
+          "L6": "not-applicable:independent-evaluator:명시적 언어 override에는 deployed runtime 또는 failure 경계가 없다",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202txx9yeb58xke25m",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — empty",
+        "variant": "empty",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise empty initial and no-result states",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다",
+          "L2": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다",
+          "L3": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다",
+          "L4": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다",
+          "L5": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다",
+          "L6": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다",
+          "L7": "not-applicable:independent-evaluator:authored phase document가 없는 empty 상태는 언어 observable이 아니다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202twmvtj4v7hzmxhm",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — validation",
+        "variant": "validation",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z287pt1fhs66edatd2r"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Submit invalid or boundary input and confirm no forbidden write",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "not-applicable:independent-evaluator:문서 marker validation에는 deployed runtime 경계가 없다",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tw7jmkqztrcw08m",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — permission",
+        "variant": "permission",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Exercise least-privilege denial and authorized recovery",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다",
+          "L2": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다",
+          "L3": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다",
+          "L4": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다",
+          "L5": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다",
+          "L6": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다",
+          "L7": "not-applicable:independent-evaluator:문서 언어 선택에는 권한 정책이 없다"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tx2te9b8e505chw",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — failure",
+        "variant": "failure",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z28cekdpcnqf7gv9jtm"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "not-applicable:independent-evaluator:문서 언어 drift 탐지는 deployed runtime 경계가 없다",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      },
+      {
+        "case_id": "case_0000380z202tx94aaakcetteg8",
+        "ac_ids": [
+          "ac_0000380yecmcxpx719rfy2xb7m"
+        ],
+        "title": "Phase documents follow the active user conversation language — recovery",
+        "variant": "recovery",
+        "layers": [
+          "L1",
+          "L2",
+          "L3",
+          "L4",
+          "L5",
+          "L6",
+          "L7"
+        ],
+        "status": "failed",
+        "evidence_ids": [
+          "evidence_0000380z28h1psw502vwjattww"
+        ],
+        "actor": "project user",
+        "steps": [
+          {
+            "action": "Retry or roll back after failure and verify idempotent recovery",
+            "expected_ui": "A Korean workflow request produces Korean authored sections in every new phase document while frontmatter markers paths commands and code identifiers remain valid",
+            "observer_ids": [
+              "interface",
+              "boundary",
+              "persistence"
+            ]
+          }
+        ],
+        "required_layers": {
+          "L1": "required",
+          "L2": "required",
+          "L3": "required",
+          "L4": "not-applicable:independent-evaluator:문서 언어 recovery는 deployed runtime 경계가 없다",
+          "L5": "required",
+          "L6": "required",
+          "L7": "required"
+        },
+        "risk": "high"
+      }
+    ],
+    "started_at": "2026-08-20T12:05:38.862295Z",
+    "finished_at": "2026-08-20T12:08:01.855076Z",
+    "state_revision": 1554,
+    "spec_hash": "f3be6c2293c894a588537244c606c63cbd0177dd474696c530c68ec299a680ef"
+  },
   "master_plan": {
-    "objective": "Deliver portable spec-driven Codex workflows with evidence-backed QA",
+    "objective": "Verify and harden the complete tene plugin and tene-workflow CLI against product intent, design contracts, installed-plugin behavior, and evidence-backed full-flow QA",
     "milestones": [
       "MVP semantic completeness",
-      "public marketplace release"
+      "public marketplace release",
+      "full implementation verification",
+      "tene namespace migration"
     ],
     "releases": [
-      "v0.1.0"
+      "v0.1.0",
+      "v0.1.x verification"
     ],
     "common_risks": [
       "false-pass evidence",
       "workflow fatigue",
-      "secret leakage"
+      "secret leakage",
+      "installed-source drift",
+      "plugin namespace incompatibility",
+      "host capability drift"
     ],
     "cross_sprint_invariants": [
       "blocking AC requires content-valid evidence",
       "secrets only cross the tene run child boundary",
-      "all implementation follows the fixed Sprint lifecycle"
+      "all implementation follows the fixed Sprint lifecycle",
+      "repository name may remain tene-codex while plugin identity is tene",
+      "each verification Sprint completes PRD-plan-design-loop-check-QA-report"
     ]
   },
+  "open_gaps": {},
   "profile": "strict",
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 1086,
-  "schema_version": "1.0.0"
+  "revision": 1652,
+  "schema_version": "1.0.0",
+  "tasks": {
+    "task_0000380ydvzc0pjsatbyeff3yc": {
+      "task_id": "task_0000380ydvzc0pjsatbyeff3yc",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Migrate plugin and nine skill identities to tene:\u003cphase\u003e",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380ydppfarshvvnhww980w"
+      ],
+      "layer": "interface",
+      "artifacts": [
+        ".agents/plugins/marketplace.json",
+        ".codex-plugin/plugin.json",
+        "tests/plugin_identity_test.py",
+        "skills/design/SKILL.md",
+        "skills/design/agents/openai.yaml",
+        "skills/loop-check/SKILL.md",
+        "skills/loop-check/agents/openai.yaml",
+        "skills/plan/SKILL.md",
+        "skills/plan/agents/openai.yaml",
+        "skills/prd/SKILL.md",
+        "skills/prd/agents/openai.yaml",
+        "skills/qa/SKILL.md",
+        "skills/qa/agents/openai.yaml",
+        "skills/report/SKILL.md",
+        "skills/report/agents/openai.yaml",
+        "skills/secrets/SKILL.md",
+        "skills/secrets/agents/openai.yaml",
+        "skills/sprint/SKILL.md",
+        "skills/sprint/agents/openai.yaml",
+        "skills/status/SKILL.md",
+        "skills/status/agents/openai.yaml"
+      ]
+    },
+    "task_0000380ydwcs0gd3wr3vy2wcdr": {
+      "task_id": "task_0000380ydwcs0gd3wr3vy2wcdr",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Update router prompts docs and evals for concise canonical skill IDs",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380ydppfarshvvnhww980w"
+      ],
+      "depends_on": [
+        "task_0000380ydvzc0pjsatbyeff3yc"
+      ],
+      "layer": "business",
+      "artifacts": [
+        "README.md",
+        "README-KR.md",
+        "cmd/tene-routing-eval/main.go",
+        "internal/router/router.go",
+        "internal/router/router_test.go",
+        "evals/routing-corpus.json",
+        "docs/00-prd/00-product-prd.md",
+        "docs/00-prd/01-sprint-workflow-requirements.md",
+        "docs/00-prd/03-plugin-architecture.md",
+        "docs/00-prd/06-skills-commands-triggers.md",
+        "docs/01-plan/00-master-implementation-plan.md",
+        "docs/01-plan/02-verification-and-release-plan.md",
+        "docs/02-design/00-system-architecture.md",
+        "docs/02-design/04-skill-contracts-and-routing.md",
+        "docs/02-design/10-plugin-package-and-marketplace.md",
+        "docs/02-design/11-testing-evals-and-acceptance.md",
+        "docs/release/marketplace-submission.md",
+        "docs/release/requirements-traceability.json",
+        "docs/release/semantic-contracts.json"
+      ]
+    },
+    "task_0000380ydwdvfe6vc2ajcpd7g8": {
+      "task_id": "task_0000380ydwdvfe6vc2ajcpd7g8",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Build and verify staged and locally installed plugin lifecycle",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380ydpq9vae1we5cfzkw78"
+      ],
+      "depends_on": [
+        "task_0000380ydvzc0pjsatbyeff3yc"
+      ],
+      "layer": "infrastructure",
+      "artifacts": [
+        "scripts/tene-workflow",
+        "scripts/release-smoke.sh",
+        ".codex-plugin/plugin.json",
+        "internal/app/app.go",
+        "internal/app/app_test.go",
+        "internal/domain/types.go",
+        "references/cli.md",
+        "tests/plugin_identity_test.py",
+        "internal/qaadapter/qaadapter.go",
+        "internal/qaadapter/qaadapter_test.go",
+        "scripts/portable-workflow-smoke.py",
+        "docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/04-qa/release-smoke-observation-v3.txt",
+        "internal/workflow/workflow.go",
+        "internal/workflow/workflow_test.go",
+        "docs/reviews/tene-implementation-completeness-review.md"
+      ]
+    },
+    "task_0000380ydwexgf4pewweg3pj8g": {
+      "task_id": "task_0000380ydwexgf4pewweg3pj8g",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Exclude criteria owned by deprecated intents from context and QA planning",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380ydpq9vae1we5cfzkw78"
+      ],
+      "layer": "business",
+      "artifacts": [
+        "internal/app/app.go",
+        "internal/domain/criteria.go",
+        "internal/domain/criteria_test.go",
+        "internal/tracecontext/context.go",
+        "internal/workflow/workflow.go",
+        "internal/loopcheck/analyzer.go",
+        "internal/loopcheck/analyzer_test.go",
+        "internal/app/app_test.go"
+      ]
+    },
+    "task_0000380yed20cf2ayn6vfmkn9w": {
+      "task_id": "task_0000380yed20cf2ayn6vfmkn9w",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Repair Stop hook output contract and add host-schema regression tests",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380yeckc1p516k1yvt3q3r"
+      ],
+      "layer": "interface",
+      "artifacts": [
+        "hooks/tene_hook.py",
+        "tests/hooks_test.py",
+        "hooks/hooks.json"
+      ]
+    },
+    "task_0000380yed2vtrspn07jwg36sr": {
+      "task_id": "task_0000380yed2vtrspn07jwg36sr",
+      "sprint_id": "sprint_0000380ydgqkg6h9mm5ctvm9b4",
+      "title": "Enforce conversation-language continuity across all phase skills and templates",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380yecmcxpx719rfy2xb7m"
+      ],
+      "layer": "interface",
+      "artifacts": [
+        "references/workflow.md",
+        "tests/language_contract_test.py",
+        "docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/00-prd/00-prd.md",
+        "docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/01-plan/00-plan.md",
+        "docs/sprints/sprint_0000380ydgqkg6h9mm5ctvm9b4-plugin-identity-installed-runtime/02-design/00-design.md",
+        "skills/design/SKILL.md",
+        "skills/loop-check/SKILL.md",
+        "skills/plan/SKILL.md",
+        "skills/prd/SKILL.md",
+        "skills/qa/SKILL.md",
+        "skills/report/SKILL.md",
+        "skills/secrets/SKILL.md",
+        "skills/sprint/SKILL.md",
+        "skills/status/SKILL.md"
+      ]
+    }
+  },
+  "waivers": {}
 }

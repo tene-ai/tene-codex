@@ -95,6 +95,11 @@ func TestQAGateRequiresEveryVariantAndMatchingEvidence(t *testing.T) {
 	if got := EvaluateQAGate(p, sp, run); !Blocking(got) {
 		t.Fatal("pending recovery case must block")
 	}
+	run.Cases[1].RequiredLayers = map[string]string{"L5": "not-applicable:independent-evaluator:no recovery boundary"}
+	if got := EvaluateQAGate(p, sp, run); Blocking(got) {
+		t.Fatalf("fully not-applicable case should not require synthetic evidence: %#v", got)
+	}
+	run.Cases[1].RequiredLayers = map[string]string{"L5": "required"}
 	run.Cases[1].EvidenceIDs = []string{"ev-recovery"}
 	p.Evidence["ev-recovery"] = validEvidence("ev-recovery", run, run.Cases[1], now)
 	if got := EvaluateQAGate(p, sp, run); Blocking(got) {

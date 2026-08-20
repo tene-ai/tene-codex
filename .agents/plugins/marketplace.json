@@ -2,11 +2,11 @@
   "name": "tene-ai",
   "plugins": [
     {
-      "name": "tene-codex",
+      "name": "tene",
       "source": {"source": "local", "path": "./"},
       "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
       "category": "Developer Tools",
-      "interface": {"displayName": "tene-codex"}
+      "interface": {"displayName": "tene"}
     }
   ]
 }

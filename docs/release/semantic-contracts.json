@@ -14,8 +14,8 @@
     "FR-11": {"source":"docs/00-prd/00-product-prd.md","symbols":[["internal/secret/runner.go","func Run"],["hooks/tene_hook.py","DENIED"]],"commands":["secret","hooks"]}
   },
   "product_acceptance": {
-    "AC-PRODUCT-01": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/workflow/workflow.go","WF_INVALID_TRANSITION"],["skills/tene-sprint/SKILL.md","status --json"]],"commands":["workflow","routing"]},
-    "AC-PRODUCT-02": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/state/replay.go","Replay"],["skills/tene-status/SKILL.md","context build"]],"commands":["state","context"]},
+    "AC-PRODUCT-01": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/workflow/workflow.go","WF_INVALID_TRANSITION"],["skills/sprint/SKILL.md","status --json"]],"commands":["workflow","routing"]},
+    "AC-PRODUCT-02": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/state/replay.go","Replay"],["skills/status/SKILL.md","context build"]],"commands":["state","context"]},
     "AC-PRODUCT-03": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/codeintel/codeintel.go","type Component struct"],["internal/codeintel/reference_matrix_test.go","TestReferenceProjectMatrix"]],"commands":["codeintel","references"]},
     "AC-PRODUCT-04": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["internal/workflow/workflow.go","EvaluateQAGateAtRoot"],["internal/app/app_test.go","TestQA"]],"commands":["workflow","qa"]},
     "AC-PRODUCT-05": {"source":"docs/00-prd/08-mvp-roadmap-and-acceptance.md","symbols":[["tests/e2e/reference-web.spec.ts","success crosses UI API and persistence"],["testdata/reference-nextjs/runtime/journey.mjs","runCheckoutJourney"]],"commands":["references","playwright"]},
@@ -35,7 +35,7 @@
     "WP-09":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/loopcheck/analyzer.go","func Reconcile"]],"commands":["loopcheck"]},
     "WP-10":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/qaadapter/qaadapter.go","func Discover"]],"commands":["qa"]},
     "WP-11":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/secret/runner.go","func Run"]],"commands":["secret"]},
-    "WP-12":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/router/router.go","tene-sprint"]],"commands":["routing"]},
+    "WP-12":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["internal/router/router.go","sprint"]],"commands":["routing"]},
     "WP-13":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[[".codex-plugin/plugin.json","tene"]],"commands":["plugin"]},
     "WP-14":{"source":"docs/01-plan/01-work-breakdown-and-dependencies.md","symbols":[["scripts/package-plugin.sh","PACKAGE_TARGETS"]],"commands":["release"]}
   }

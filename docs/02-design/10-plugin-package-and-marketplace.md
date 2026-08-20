@@ -9,7 +9,7 @@ tene/
 ├── LICENSE
 ├── CHANGELOG.md, PRIVACY.md, TERMS.md, SECURITY.md, SUPPORT.md
 ├── skills/
-│   ├── tene-sprint/{SKILL.md,agents/openai.yaml,references/}
+│   ├── sprint/{SKILL.md,agents/openai.yaml,references/}
 │   └── ...
 ├── references/{schemas,security,workflow}/
 ├── scripts/{invoke-core,doctor}
@@ -38,7 +38,7 @@ tene/
 
 1. Marketplace/plugin install이 bundle을 plugin directory에 배치한다.
 2. Codex가 skill을 discover한다.
-3. 최초 `$tene-sprint`가 bundled binary platform/sha256을 검사한다.
+3. 최초 `$tene:sprint`가 bundled binary platform/sha256을 검사한다.
 4. 프로젝트 mutation 전에 `tene-workflow doctor --json` 결과를 보여준다.
 5. init은 `.tene-workflow`, docs skeleton, optional AGENTS managed block과 `.gitignore` patch를 각각 명시한다.
 

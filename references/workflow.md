@@ -16,6 +16,10 @@ Before any phase work:
 4. Perform the phase work and validate its artifact.
 5. Run `phase transition <next> --dry-run --json` before committing the transition.
 
+## Conversation language
+
+Write authored PRD, plan, design, loop-check, QA, and report content in the language currently used by the user. An explicit user language request overrides inference. Preserve machine-readable frontmatter, section markers, IDs, paths, commands, API names, and code symbols exactly; technical terms may remain in their established form. Carry the language choice across phase handoffs and context compaction. Do not translate archived history unless the user explicitly requests it.
+
 Never edit `.tene-workflow/*.json` or `events.ndjson` directly. Markdown under `docs/sprints/` is user-editable, but validate it through the CLI.
 
 Blocking non-security gaps may cross a phase gate only through a separately requested and approved active waiver with explicit reason, requester, approver, scope, and future expiry. Security and evidence-integrity gaps are never waivable. Revocation or expiry restores the block immediately.

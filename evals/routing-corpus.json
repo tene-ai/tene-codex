@@ -2,15 +2,15 @@
   "schema_version": "1.0.0",
   "positive_suffixes": ["해줘", "진행해줘", "please", "and show the result"],
   "skills": {
-    "tene-sprint": {"phase":"prd", "stems":["새 기능 sprint 시작", "전체 workflow master plan 생성", "작업을 여러 스프린트로 나눠", "현재 sprint archive", "resume sprint workflow"]},
-    "tene-prd": {"phase":"prd", "stems":["요구사항과 acceptance criteria 정리", "기능 기획 의도와 정책 정리", "사용자 문제를 PRD로 구체화", "define product requirements and acceptance criteria", "아이디어의 예외 케이스와 요구사항 발견"]},
-    "tene-plan": {"phase":"plan", "stems":["구현 계획과 task 분해", "작업 계획의 dependency 정리", "병렬 작업과 의존성 순서 계획", "create implementation plan and work breakdown", "task 분해와 검증 계획"]},
-    "tene-design": {"phase":"design", "stems":["아키텍처와 처리 로직 설계", "interface와 data flow design", "API contract와 DB schema 설계", "변경할 symbol의 architecture trace", "데이터 흐름과 인터페이스 정해"]},
-    "tene-loop-check": {"phase":"loop-check", "stems":["PRD 문서대로 구현됐는지 gap 확인", "설계대로인지 100% 반복 검증", "빠진 요구와 code mismatch 비교", "iterate spec code gap verification", "regression gap 반복 수정"]},
-    "tene-qa": {"phase":"qa", "stems":["Playwright로 UX 흐름 QA 테스트", "사용자 journey와 데이터 처리 흐름 종합 테스트", "e2e evidence를 QA evaluate", "Chrome user journey test and observe data", "기획 의도대로 QA 검증"]},
-    "tene-report": {"phase":"report", "stems":["작업 결과와 변경 파일 report 작성", "sprint 회고와 이월 작업 정리", "구현 파일과 evidence 리포트", "generate retrospective report of changed files", "이전 sprint 연계 작업 결과 설명"]},
-    "tene-status": {"phase":"design", "stems":["현재 status와 다음 할 일 보여", "어디까지 했는지 진행 상황 알려", "blocker와 next action 보여", "resume current workflow status", "이어서 작업할 현재 단계 알려"]},
-    "tene-secrets": {"phase":"qa", "stems":["API key secret을 tene로 안전하게 실행", "credential 환경 변수 주입해서 test run", ".env 비밀정보 없이 command 실행", "inject token with secret-safe runtime", "credentials를 tene run으로 관리"]}
+    "sprint": {"phase":"prd", "stems":["새 기능 sprint 시작", "전체 workflow master plan 생성", "작업을 여러 스프린트로 나눠", "현재 sprint archive", "resume sprint workflow"]},
+    "prd": {"phase":"prd", "stems":["요구사항과 acceptance criteria 정리", "기능 기획 의도와 정책 정리", "사용자 문제를 PRD로 구체화", "define product requirements and acceptance criteria", "아이디어의 예외 케이스와 요구사항 발견"]},
+    "plan": {"phase":"plan", "stems":["구현 계획과 task 분해", "작업 계획의 dependency 정리", "병렬 작업과 의존성 순서 계획", "create implementation plan and work breakdown", "task 분해와 검증 계획"]},
+    "design": {"phase":"design", "stems":["아키텍처와 처리 로직 설계", "interface와 data flow design", "API contract와 DB schema 설계", "변경할 symbol의 architecture trace", "데이터 흐름과 인터페이스 정해"]},
+    "loop-check": {"phase":"loop-check", "stems":["PRD 문서대로 구현됐는지 gap 확인", "설계대로인지 100% 반복 검증", "빠진 요구와 code mismatch 비교", "iterate spec code gap verification", "regression gap 반복 수정"]},
+    "qa": {"phase":"qa", "stems":["Playwright로 UX 흐름 QA 테스트", "사용자 journey와 데이터 처리 흐름 종합 테스트", "e2e evidence를 QA evaluate", "Chrome user journey test and observe data", "기획 의도대로 QA 검증"]},
+    "report": {"phase":"report", "stems":["작업 결과와 변경 파일 report 작성", "sprint 회고와 이월 작업 정리", "구현 파일과 evidence 리포트", "generate retrospective report of changed files", "이전 sprint 연계 작업 결과 설명"]},
+    "status": {"phase":"design", "stems":["현재 status와 다음 할 일 보여", "어디까지 했는지 진행 상황 알려", "blocker와 next action 보여", "resume current workflow status", "이어서 작업할 현재 단계 알려"]},
+    "secrets": {"phase":"qa", "stems":["API key secret을 tene로 안전하게 실행", "credential 환경 변수 주입해서 test run", ".env 비밀정보 없이 command 실행", "inject token with secret-safe runtime", "credentials를 tene run으로 관리"]}
   },
   "negative_prompts": [
     "애자일이 뭐야?", "일반적인 설명만 해줘", "코드 변경 없이 계획이 뭐야?", "tene 없이 한 줄 수정", "what is agile?", "give a general explanation", "translate this sentence", "hello", "README 문법을 설명해줘", "Go slice가 뭐야?", "날씨를 알려줘", "이 함수 이름 뜻이 뭐야?", "SQL join 개념 설명", "without tene make no workflow changes", "개념만 설명해줘", "write a poem", "summarize the pasted paragraph", "현재 시간을 알려줘", "2 더하기 2", "license 종류를 설명해줘"

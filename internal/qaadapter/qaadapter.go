@@ -200,6 +200,21 @@ func ReadObservation(root, path string) (Observation, []byte, error) {
 			return o, nil, fmt.Errorf("QA_OBSERVATION_ASSERTION_INVALID: %s", a.Statement)
 		}
 	}
+	// A single self-authored conclusion copied across architectural layers does
+	// not prove that those boundaries were observed. Require layer-specific
+	// actual/expected descriptions when an external observation claims more
+	// than one layer.
+	seenAssertion := map[string]string{}
+	for _, a := range o.Assertions {
+		// Statement labels are author-controlled and can be changed to "L1 ...",
+		// "L2 ..." while copying the same claimed observation. The observable
+		// actual/expected pair must differ across claimed layer boundaries.
+		signature := strings.Join([]string{a.Actual, a.Expected}, "\x00")
+		if layer, ok := seenAssertion[signature]; ok && layer != a.Layer {
+			return o, nil, fmt.Errorf("QA_OBSERVATION_DUPLICATE_LAYER_ASSERTION: identical assertion copied across %s and %s", layer, a.Layer)
+		}
+		seenAssertion[signature] = a.Layer
+	}
 	return o, b, nil
 }
 func contains(values []string, want string) bool {

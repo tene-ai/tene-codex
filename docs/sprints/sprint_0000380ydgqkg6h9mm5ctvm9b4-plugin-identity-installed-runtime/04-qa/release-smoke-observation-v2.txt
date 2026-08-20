@@ -1,0 +1,1 @@
+PASS — `./scripts/release-smoke.sh` ran exactly once and exited with code 0. All seven required stage-passed lines were directly observed. No repository files were changed.

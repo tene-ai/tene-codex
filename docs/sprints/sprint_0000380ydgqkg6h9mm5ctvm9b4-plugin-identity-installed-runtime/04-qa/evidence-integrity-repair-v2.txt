@@ -1,0 +1,19 @@
+QA evidence 무결성 복구 재검증
+검증 시점: 2026-08-20
+
+알려진 false-pass 패턴:
+- Layer별 statement label만 `L1 host contract`, `L2 host contract`처럼 바꾸고 동일한 actual/expected 결론을 복제했다.
+
+최종 방어선:
+- `qa observe` importer는 서로 다른 layer에서 동일한 actual/expected pair가 반복되면 `QA_OBSERVATION_DUPLICATE_LAYER_ASSERTION`으로 거부한다.
+- Statement label 차이는 중복 판정을 우회할 수 없다.
+- 회귀 테스트는 서로 다른 `L1 host contract`와 `L2 host contract` statement에 동일 actual/expected를 넣어 실제 발견 패턴을 재현하고 거부를 확인한다.
+- 새 QA run의 run ID, case ID, specification hash, state revision identity gate가 이전 run evidence의 재사용을 차단한다.
+
+실행 결과:
+- `go test ./internal/qaadapter ./internal/workflow ./internal/app`: PASS
+- `python3 -m unittest discover -s tests -p '*_test.py'`: 18 tests PASS
+
+판정:
+- 알려진 synthetic multi-layer false-pass 생성 및 import 원인을 제거했다.
+- 기능 AC는 다음 새 QA run의 실제 observable로 별도 검증한다.

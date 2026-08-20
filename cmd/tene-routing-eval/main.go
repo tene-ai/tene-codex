@@ -58,7 +58,7 @@ func main() {
 		m := metric{}
 		for i := 0; i < 5; i++ {
 			m.ExplicitTotal++
-			d := router.Route("use $"+name+" now", true, s.Phase)
+			d := router.Route("use $tene:"+name+" now", true, s.Phase)
 			if d.SelectedSkill == name && d.Explicit && d.Mode == "selected" {
 				m.ExplicitPassed++
 			}
@@ -79,7 +79,7 @@ func main() {
 				m.FalsePositive++
 			}
 		}
-		if s.Phase != "" && name != "tene-sprint" && name != "tene-status" && name != "tene-secrets" {
+		if s.Phase != "" && name != "sprint" && name != "status" && name != "secrets" {
 			for _, stem := range s.Stems {
 				for _, wrong := range []domain.Phase{domain.PhasePRD, domain.PhasePlan, domain.PhaseDesign, domain.PhaseQA, domain.PhaseReport} {
 					if wrong == s.Phase {
@@ -96,7 +96,7 @@ func main() {
 		for _, p := range c.MultiIntentPrompts {
 			m.MultiTotal++
 			d := router.Route(p, true, s.Phase)
-			if d.SelectedSkill == "tene-sprint" && d.Mode == "proposed" {
+			if d.SelectedSkill == "sprint" && d.Mode == "proposed" {
 				m.MultiPassed++
 			}
 		}

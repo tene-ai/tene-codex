@@ -36,17 +36,17 @@ type rule struct {
 	intent, artifact, action []string
 }
 
-var explicitRE = regexp.MustCompile(`(?i)\$?(tene-(?:sprint|prd|plan|design|loop-check|qa|report|status|secrets))\b`)
+var explicitRE = regexp.MustCompile(`(?i)\$tene:(sprint|prd|plan|design|loop-check|qa|report|status|secrets)\b`)
 var rules = []rule{
-	{"tene-sprint", "", []string{"sprint 시작", "스프린트 시작", "workflow master plan", "워크플로 마스터 플랜", "master plan", "마스터 플랜", "여러 스프린트", "sprint archive", "스프린트 아카이브", "resume sprint workflow"}, []string{"master plan"}, []string{"시작", "생성", "나눠", "archive", "resume"}},
-	{"tene-prd", domain.PhasePRD, []string{"요구사항", "기획 의도", "기획", "사용자 문제", "아이디어", "acceptance criteria", "requirement", "product intent", "policy", "정책", "예외 케이스"}, []string{"prd", "acceptance criteria", "ac"}, []string{"정리", "구체화", "discover", "define", "질문"}},
-	{"tene-plan", domain.PhasePlan, []string{"구현 계획", "작업 계획", "계획", "plan", "task 분해", "dependency", "의존성", "implementation plan", "work breakdown", "병렬"}, []string{"plan", "task", "dependency"}, []string{"세워", "나눠", "순서", "plan", "schedule"}},
-	{"tene-design", domain.PhaseDesign, []string{"처리 로직", "아키텍처", "architecture", "design", "data flow", "데이터 흐름", "interface", "인터페이스", "symbol", "api contract", "db schema"}, []string{"design", "adr", "schema", "contract"}, []string{"설계", "design", "정해", "trace"}},
-	{"tene-loop-check", domain.PhaseLoopCheck, []string{"문서대로", "설계대로", "빠진 요구", "반복 검증", "gap", "불일치", "100%", "spec code", "regression"}, []string{"prd", "design", "diff", "gap"}, []string{"확인", "비교", "수정", "iterate", "검증"}},
-	{"tene-qa", domain.PhaseQA, []string{"qa", "종합 테스트", "ux 흐름", "사용자 journey", "user journey", "playwright", "chrome", "e2e", "데이터 처리 흐름", "data journey"}, []string{"test", "evidence", "qa", "playwright"}, []string{"테스트", "검증", "evaluate", "observe"}},
-	{"tene-report", domain.PhaseReport, []string{"작업 결과", "회고", "report", "리포트", "변경 파일", "이월", "retrospective", "구현 파일"}, []string{"report", "evidence", "changed files"}, []string{"작성", "정리", "설명", "generate"}},
-	{"tene-status", "", []string{"어디까지", "이어서", "현재 단계", "진행 상황", "next action", "status", "blocker", "다음 할 일", "resume"}, []string{"status", "state", "context"}, []string{"보여", "알려", "계속", "resume"}},
-	{"tene-secrets", "", []string{"secret", "비밀정보", "api key", "credential", "token", ".env", "환경 변수", "environment variable", "credentials"}, []string{"tene", ".env", "secret"}, []string{"실행", "run", "inject", "주입", "관리"}},
+	{"sprint", "", []string{"sprint 시작", "스프린트 시작", "workflow master plan", "워크플로 마스터 플랜", "master plan", "마스터 플랜", "여러 스프린트", "sprint archive", "스프린트 아카이브", "resume sprint workflow"}, []string{"master plan"}, []string{"시작", "생성", "나눠", "archive", "resume"}},
+	{"prd", domain.PhasePRD, []string{"요구사항", "기획 의도", "기획", "사용자 문제", "아이디어", "acceptance criteria", "requirement", "product intent", "policy", "정책", "예외 케이스"}, []string{"prd", "acceptance criteria", "ac"}, []string{"정리", "구체화", "discover", "define", "질문"}},
+	{"plan", domain.PhasePlan, []string{"구현 계획", "작업 계획", "계획", "plan", "task 분해", "dependency", "의존성", "implementation plan", "work breakdown", "병렬"}, []string{"plan", "task", "dependency"}, []string{"세워", "나눠", "순서", "plan", "schedule"}},
+	{"design", domain.PhaseDesign, []string{"처리 로직", "아키텍처", "architecture", "design", "data flow", "데이터 흐름", "interface", "인터페이스", "symbol", "api contract", "db schema"}, []string{"design", "adr", "schema", "contract"}, []string{"설계", "design", "정해", "trace"}},
+	{"loop-check", domain.PhaseLoopCheck, []string{"문서대로", "설계대로", "빠진 요구", "반복 검증", "gap", "불일치", "100%", "spec code", "regression"}, []string{"prd", "design", "diff", "gap"}, []string{"확인", "비교", "수정", "iterate", "검증"}},
+	{"qa", domain.PhaseQA, []string{"qa", "종합 테스트", "ux 흐름", "사용자 journey", "user journey", "playwright", "chrome", "e2e", "데이터 처리 흐름", "data journey"}, []string{"test", "evidence", "qa", "playwright"}, []string{"테스트", "검증", "evaluate", "observe"}},
+	{"report", domain.PhaseReport, []string{"작업 결과", "회고", "report", "리포트", "변경 파일", "이월", "retrospective", "구현 파일"}, []string{"report", "evidence", "changed files"}, []string{"작성", "정리", "설명", "generate"}},
+	{"status", "", []string{"어디까지", "이어서", "현재 단계", "진행 상황", "next action", "status", "blocker", "다음 할 일", "resume"}, []string{"status", "state", "context"}, []string{"보여", "알려", "계속", "resume"}},
+	{"secrets", "", []string{"secret", "비밀정보", "api key", "credential", "token", ".env", "환경 변수", "environment variable", "credentials"}, []string{"tene", ".env", "secret"}, []string{"실행", "run", "inject", "주입", "관리"}},
 }
 
 func Route(text string, active bool, phase domain.Phase) Decision {
@@ -83,7 +83,7 @@ func Route(text string, active bool, phase domain.Phase) Decision {
 			score += .25
 			reasons = append(reasons, "phase compatible")
 		}
-		if !active && r.skill == "tene-sprint" {
+		if !active && r.skill == "sprint" {
 			score += .25
 			reasons = append(reasons, "no active sprint")
 		}
@@ -106,10 +106,10 @@ func Route(text string, active bool, phase domain.Phase) Decision {
 		}
 	}
 	if intentful > 1 && multiCue(lower) {
-		return Decision{Mode: "proposed", SelectedSkill: "tene-sprint", Candidates: cs, NeedsConfirmation: true, MutationAllowed: false, RequiredActions: []string{"status --json", "coordinate phase skills"}, ForbiddenActions: []string{"phase skip", "implicit approval"}, Reason: "multiple intents require sprint orchestration"}
+		return Decision{Mode: "proposed", SelectedSkill: "sprint", Candidates: cs, NeedsConfirmation: true, MutationAllowed: false, RequiredActions: []string{"status --json", "coordinate phase skills"}, ForbiddenActions: []string{"phase skip", "implicit approval"}, Reason: "multiple intents require sprint orchestration"}
 	}
 	if len(strong) > 1 {
-		return Decision{Mode: "proposed", SelectedSkill: "tene-sprint", Candidates: cs, NeedsConfirmation: true, MutationAllowed: false, RequiredActions: []string{"status --json", "coordinate phase skills"}, ForbiddenActions: []string{"phase skip", "implicit approval"}, Reason: "multiple intents require sprint orchestration"}
+		return Decision{Mode: "proposed", SelectedSkill: "sprint", Candidates: cs, NeedsConfirmation: true, MutationAllowed: false, RequiredActions: []string{"status --json", "coordinate phase skills"}, ForbiddenActions: []string{"phase skip", "implicit approval"}, Reason: "multiple intents require sprint orchestration"}
 	}
 	margin := 1.0
 	if len(cs) > 1 {

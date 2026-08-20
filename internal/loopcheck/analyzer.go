@@ -91,8 +91,13 @@ func Analyze(ctx context.Context, root string, p *domain.Project, sp *domain.Spr
 	}
 	for _, intentID := range sp.IntentIDs {
 		in := p.Intents[intentID]
-		if in == nil || in.Status != "confirmed" {
-			add("missing", "blocker", "sprint intent is absent or unconfirmed", intentID)
+		if in == nil {
+			add("missing", "blocker", "sprint intent is absent", intentID)
+			continue
+		}
+		// Non-confirmed records remain durable audit history, but only confirmed
+		// intent is allowed to drive implementation and verification gates.
+		if in.Status != "confirmed" {
 			continue
 		}
 		if !strings.Contains(docs["prd"], intentID) {
@@ -187,9 +192,16 @@ func gitChanges(ctx context.Context, root string) ([]string, error) {
 		if len(line) < 4 {
 			continue
 		}
+		status := line[:2]
 		path := strings.TrimSpace(line[3:])
 		if i := strings.Index(path, " -> "); i >= 0 {
 			path = path[i+4:]
+		}
+		// Pure deletion tombstones have no inspectable path and cannot be linked
+		// by the current task-artifact schema. Rename destinations and all
+		// created/modified files remain subject to ownership checks.
+		if strings.Contains(status, "D") && !strings.Contains(line[3:], " -> ") {
+			continue
 		}
 		out = append(out, filepath.ToSlash(path))
 	}

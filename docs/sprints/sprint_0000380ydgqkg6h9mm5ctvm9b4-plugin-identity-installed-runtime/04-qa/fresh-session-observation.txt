@@ -1,0 +1,26 @@
+Read-only verification complete. No files or workflow state were modified.
+
+Visible installed `tene` skill identifiers:
+
+- `tene:design`
+- `tene:loop-check`
+- `tene:plan`
+- `tene:prd`
+- `tene:qa`
+- `tene:report`
+- `tene:secrets`
+- `tene:sprint`
+- `tene:status`
+
+Namespace checks:
+
+- `tene-codex:*`: none visible
+- `tene:tene-*`: none visible
+
+`$tene:status` result:
+
+- Sprint ID: `sprint_0000380ydgqkg6h9mm5ctvm9b4`
+- Phase: `loop-check`
+- Revision: `1424`
+
+The revision remained `1424` after context inspection. There is one effective blocker/open gap.

@@ -1,7 +1,0 @@
-interface:
-  display_name: "tene Loop Check"
-  short_description: "Find and close spec-to-code gaps"
-  default_prompt: "Use $tene-loop-check to compare the implementation with the active sprint specifications."
-policy:
-  allow_implicit_invocation: true
-

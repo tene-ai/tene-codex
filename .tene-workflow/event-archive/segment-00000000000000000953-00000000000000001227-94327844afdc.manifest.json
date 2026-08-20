@@ -1,0 +1,11 @@
+{
+  "path": ".tene-workflow/event-archive/segment-00000000000000000953-00000000000000001227-94327844afdc.ndjson",
+  "manifest_path": ".tene-workflow/event-archive/segment-00000000000000000953-00000000000000001227-94327844afdc.manifest.json",
+  "sha256": "94327844afdc7f9a0016c3442369f6bd5182252a8aa6fad3e1b3eeb56721db3c",
+  "event_count": 275,
+  "byte_count": 2840622,
+  "first_sequence": 953,
+  "last_sequence": 1227,
+  "anchor_previous_hash": "1710d21da6d8b2309cb32de769cc8d7f5d8d9743fb23eaf670263b5a8bd8d54e",
+  "last_hash": "551a16476b94909ba28ecfee514b53cdafea329df1115388bb0be75627cbe6ce"
+}

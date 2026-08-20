@@ -19,15 +19,15 @@ tene/
 ├── .codex-plugin/
 │   └── plugin.json
 ├── skills/
-│   ├── tene-sprint/
-│   ├── tene-prd/
-│   ├── tene-plan/
-│   ├── tene-design/
-│   ├── tene-loop-check/
-│   ├── tene-qa/
-│   ├── tene-report/
-│   ├── tene-status/
-│   └── tene-secrets/
+│   ├── sprint/
+│   ├── prd/
+│   ├── plan/
+│   ├── design/
+│   ├── loop-check/
+│   ├── qa/
+│   ├── report/
+│   ├── status/
+│   └── secrets/
 ├── scripts/
 │   └── tene-workflow             # portable core CLI launcher/binary
 ├── references/
@@ -91,7 +91,7 @@ Skill asks/interprets
 예시:
 
 ```text
-$tene-prd
+$tene:prd
   1. status --json
   2. intent interview
   3. write PRD draft

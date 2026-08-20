@@ -22,11 +22,11 @@
 
 Positive:
 
-1. `$tene-sprint` creates/scaffolds a strict Sprint and shows the next legal phase.
-2. “요구사항과 acceptance criteria 정리해줘” routes to `tene-prd` in PRD.
-3. `$tene-status` resumes an active Sprint after a new session without mutation.
-4. “Playwright로 UX와 데이터 흐름 QA해줘” routes to `tene-qa` and requires evidence.
-5. `$tene-secrets` rejects direct values and guides execution through `tene run`.
+1. `$tene:sprint` creates/scaffolds a strict Sprint and shows the next legal phase.
+2. “요구사항과 acceptance criteria 정리해줘” routes to `prd` in PRD.
+3. `$tene:status` resumes an active Sprint after a new session without mutation.
+4. “Playwright로 UX와 데이터 흐름 QA해줘” routes to `qa` and requires evidence.
+5. `$tene:secrets` rejects direct values and guides execution through `tene run`.
 
 Negative:
 

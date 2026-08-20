@@ -111,7 +111,7 @@ Gate:
 
 - `.codex-plugin/plugin.json`
 - 9개 skills와 `agents/openai.yaml`, references, deterministic wrapper scripts
-- implicit trigger eval, explicit `$tene-*` invocation
+- implicit trigger eval, explicit `$tene:*` invocation
 - optional stop/session hook는 지원 surface 확인 후 defense-in-depth로만 제공
 
 Gate:
@@ -163,3 +163,57 @@ UI나 remote service보다 이 경로를 먼저 완성한다. 어느 단계도 �
 - QA depth: AC별 실행된 layer, journey/data-flow coverage
 - Secret safety: 평문 secret artifact/log incident 수(목표 0)
 - Context efficiency: pack token 예산 초과율과 stale context 포함률
+
+## 7. 구현 완료 심층 검증 Master Plan
+
+이 검증 트랙은 기존 구현 Sprint의 `passed` 기록을 그대로 완료 근거로 재사용하지 않는다. `docs/00-prd`의 제품 의도와 `docs/02-design`의 실행 계약을 현재 source checkout, staged package, 로컬 설치본에서 다시 관찰하고, 각 Sprint가 독립적으로 `PRD → Plan → Design → Do → Loop Check → QA → Report → Archive`를 완주한다. 저장소 이름은 `tene-codex`로 유지하되 제품과 Codex plugin identity는 `tene`로 취급한다.
+
+### Verification Sprint V1 — Plugin identity와 설치본 runtime
+
+- 목적: plugin namespace를 `tene`로, skill suffix를 `sprint|prd|plan|design|loop-check|qa|report|status|secrets`로 정의해 선택 UI와 explicit invocation이 `$tene:plan` 형태로 나타나도록 한다.
+- 검증: source/staged/local-installed manifest와 skill metadata의 일치, fresh install/update/uninstall 후 discovery, explicit/implicit routing, bundled `tene-workflow` checksum·실행.
+- 선행조건: 없음. 이후 모든 Sprint의 설치본 검증 기준이 된다.
+
+### Verification Sprint V2 — Workflow·state·document lifecycle
+
+- 목적: master/Sprint/task/approval/waiver, fixed phase machine, 문서 scaffold·sync·validation, event replay·projection·compact·doctor·migration을 public CLI 경계에서 검증한다.
+- 검증: 허용/차단 transition 전수, stale revision·request id·lock·crash·tamper·recovery, authored/freeform 보존, archive continuity.
+- 선행조건: V1.
+
+### Verification Sprint V3 — Intent·graph·context·loop analysis
+
+- 목적: candidate/confirm/supersede intent, AC→task→artifact traceability, provider fallback, 4 Layers·Six Questions, impact/context freshness와 deterministic gap lifecycle을 검증한다.
+- 검증: seeded missing/mismatch/unverified/orphan/forbidden drift, duplicate 없는 reopen/resolve, iteration budget, unknown provider의 정직한 보존.
+- 선행조건: V2.
+
+### Verification Sprint V4 — QA·evidence·report integrity
+
+- 목적: confirmed intent에서 생성한 happy/alternate/empty/validation/permission/failure/retry/recovery charter가 재현 가능한 evidence와 blocker verdict로 이어지는지 검증한다.
+- 검증: native adapter와 observation import, UI/CLI→business→persistence/runtime chain, hash·freshness·redaction·identity tamper, independent evaluation, late report change의 loop-check 재개.
+- 선행조건: V3.
+
+### Verification Sprint V5 — tene secret runtime boundary
+
+- 목적: 비밀값이 model, workflow state, graph, 문서, 로그, evidence에 들어오지 않고 child process 경계에서만 사용되는지 적대적으로 검증한다.
+- 검증: metadata-only preflight, allow/deny command matrix, missing/denied/child-failure/leak fail-closed, artifact quarantine. 모든 credential-required 실행은 `$tene:secrets` 규칙으로 수행한다.
+- 선행조건: V2, V4. Security/evidence-integrity finding은 waiver하지 않는다.
+
+### Verification Sprint V6 — Portability와 reference full-flow
+
+- 목적: Go CLI, Next.js full-stack, Python API+worker에서 동일한 workflow/document/QA contract가 source와 staged/local-installed plugin 모두에서 작동함을 증명한다.
+- 검증: clean repo lifecycle, provider degradation, UI/API/data 또는 CLI/service/file·queue journey, restart/resume, seeded defect와 regression selection.
+- 선행조건: V1~V5.
+
+### Verification Sprint V7 — Release·host compatibility 최종 감사
+
+- 목적: validator, skill eval, Codex capability probe, hooks/subagents의 선택적 경계, package checksum/SBOM/provenance, install/update/uninstall과 project-state 보존을 최종 확인한다.
+- 검증: 9개 skill별 positive/adjacent-negative/multi-intent/phase-conflict/한영 corpus, explicit invocation 100%, 정의된 routing threshold, clean-profile smoke, 최종 AC-PRODUCT-01~08 traceability report.
+- 선행조건: V1~V6. App Server·remote MCP는 PRD상 post-MVP이므로 구현 필수로 오인하지 않고 명시된 capability만 검증한다.
+
+### 공통 중단 조건과 판정 정책
+
+- blocking AC는 content-valid evidence가 모두 통과할 때만 완료다.
+- source와 설치본이 다르면 설치본 성공만으로 source를 통과시키지 않고 `installed-source drift` gap을 만든다.
+- 각 changed production/configuration artifact는 task 소유권과 AC를 연결한다.
+- accepted non-security gap만 승인자·범위·사유·만료가 있는 waiver 또는 owner·target Sprint가 있는 deferred item으로 남길 수 있다.
+- 각 Sprint report는 이전 Sprint, 실제 변경 파일/심볼, 4 Layers, Six Questions, QA evidence, 운영 영향과 다음 Sprint를 기록한다.

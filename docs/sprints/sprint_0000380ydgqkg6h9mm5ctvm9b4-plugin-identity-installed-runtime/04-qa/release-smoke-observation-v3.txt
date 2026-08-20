@@ -1,0 +1,15 @@
+실행 명령: ./scripts/release-smoke.sh
+실행 시점: 2026-08-20
+종료 코드: 0
+
+실제 출력:
+stage package-manifest-sbom passed
+stage bundled-cli passed
+stage routing-explicit-implicit passed
+stage tampered-binary-rejection passed
+stage portable-workflow-matrix passed
+stage update-remove-simulation passed
+stage project-state-preservation passed
+release smoke passed
+
+초기 실행에서는 portable workflow fixture가 동일 actual/expected를 L1-L7에 복제해 새 evidence integrity guard에 거부되었다. Fixture를 layer별 실제 경계 설명으로 수정한 뒤 전체 release smoke를 다시 실행했고 모든 stage와 최종 결과가 통과했다.

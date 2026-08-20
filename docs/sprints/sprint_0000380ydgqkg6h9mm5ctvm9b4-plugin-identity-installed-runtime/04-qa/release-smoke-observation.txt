@@ -1,0 +1,20 @@
+Command: `./scripts/release-smoke.sh`
+Invocations: exactly once
+Exit code: `0`
+
+Observed output:
+
+- Go module-cache permission warning
+- `release smoke passed`
+
+Required stages:
+
+- Package manifest/SBOM: **FAIL — not directly observed**
+- Bundled CLI: **FAIL — not directly observed**
+- Explicit and implicit routing: **FAIL — not directly observed**
+- Tampered binary rejection: **FAIL — not directly observed**
+- Portable workflow matrix: **FAIL — not directly observed**
+- Update/remove simulation: **FAIL — not directly observed**
+- Project state preservation: **FAIL — not directly observed**
+
+Overall: **FAIL by the requested evidence standard**, despite the script exiting successfully, because none of the individual stages emitted directly observable results. No repository files were intentionally changed.

@@ -54,7 +54,7 @@
 
 ## 4. Skill evaluation set
 
-- 명시 호출: 각 `$tene-*` skill 5개씩 happy/error/resume fixture
+- 명시 호출: 각 `$tene:*` skill 5개씩 happy/error/resume fixture
 - 자연어 positive: 한국어/영어, 직접 키워드/의미 기반 표현
 - hard negative: 일반적인 “계획 알려줘”, “상태 보여줘”, secret과 무관한 환경변수 질문
 - collision: prd vs plan, loop-check vs qa, status vs report

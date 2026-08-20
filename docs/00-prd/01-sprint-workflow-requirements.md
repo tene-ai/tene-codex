@@ -131,7 +131,7 @@ Task status는 `pending | ready | in_progress | blocked | done | deferred | canc
 
 ## 6. Session Resume 로직
 
-새 session 또는 `$tene-status` 호출 시:
+새 session 또는 `$tene:status` 호출 시:
 
 1. `.tene-workflow/project.yaml` schema 확인
 2. `active.json` 읽기

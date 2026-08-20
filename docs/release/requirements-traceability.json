@@ -5,17 +5,17 @@
     "FR-02":["internal/workflow/workflow.go","internal/workflow/workflow_test.go"],
     "FR-03":["internal/domain/types.go","internal/tracecontext/graph.go","internal/app/app_test.go"],
     "FR-04":["internal/document/document.go","internal/document/document_test.go"],
-    "FR-05":["internal/codeintel/codeintel.go","internal/app/app.go","skills/tene-loop-check/SKILL.md"],
+    "FR-05":["internal/codeintel/codeintel.go","internal/app/app.go","skills/loop-check/SKILL.md"],
     "FR-06":["internal/qaadapter/qaadapter.go","tests/e2e/reference-web.spec.ts","references/qa.md"],
     "FR-07":["internal/workflow/workflow.go","internal/app/app_test.go","schemas/evidence.schema.json"],
     "FR-08":["internal/state/replay.go","internal/state/replay_test.go","internal/tracecontext/context.go"],
-    "FR-09":["internal/state/replay.go","skills/tene-status/SKILL.md"],
+    "FR-09":["internal/state/replay.go","skills/status/SKILL.md"],
     "FR-10":["internal/router/router.go","evals/routing-corpus.json","cmd/tene-routing-eval/main.go"],
     "FR-11":["internal/secret/runner.go","internal/secret/runner_test.go","hooks/tene_hook.py"]
   },
   "product_acceptance":{
     "AC-PRODUCT-01":["internal/workflow/workflow_test.go","docs/sprints/_archive"],
-    "AC-PRODUCT-02":["internal/state/replay_test.go","skills/tene-status/SKILL.md"],
+    "AC-PRODUCT-02":["internal/state/replay_test.go","skills/status/SKILL.md"],
     "AC-PRODUCT-03":["internal/codeintel/reference_matrix_test.go","testdata/reference-polyglot"],
     "AC-PRODUCT-04":["internal/workflow/workflow_test.go","internal/app/app_test.go"],
     "AC-PRODUCT-05":["tests/e2e/reference-web.spec.ts","testdata/reference-web/main.go"],
@@ -32,10 +32,10 @@
     "WP-06":["internal/tracecontext/graph.go"],
     "WP-07":["internal/tracecontext/context.go"],
     "WP-08":["internal/codeintel/codeintel.go"],
-    "WP-09":["skills/tene-loop-check/SKILL.md","internal/app/app.go"],
+    "WP-09":["skills/loop-check/SKILL.md","internal/app/app.go"],
     "WP-10":["internal/qaadapter/qaadapter.go",".codex/agents/tene-evaluator.toml"],
     "WP-11":["internal/secret/runner.go"],
-    "WP-12":["skills/tene-sprint/SKILL.md","evals/routing-corpus.json"],
+    "WP-12":["skills/sprint/SKILL.md","evals/routing-corpus.json"],
     "WP-13":[".codex-plugin/plugin.json",".agents/plugins/marketplace.json"],
     "WP-14":["scripts/package-plugin.sh","scripts/release-smoke.sh",".github/workflows/release.yml"]
   }

@@ -74,6 +74,14 @@ def additional(event: str, text: str) -> None:
     }))
 
 
+def advisory(text: str) -> None:
+    """Emit the common hook output accepted by Stop-style events."""
+    print(json.dumps({
+        "continue": True,
+        "systemMessage": text,
+    }))
+
+
 def session_start(data: dict) -> None:
     cwd = data.get("cwd") or os.getcwd()
     status = workflow_json(cwd, "status")
@@ -86,11 +94,14 @@ def session_start(data: dict) -> None:
     additional("SessionStart", (
         "tene-codex has an active sprint. Resume it before implementation. "
         f"Sprint={sprint.get('sprint_id')} phase={sprint.get('phase')} "
-        f"revision={status.get('revision')}. Run $tene-status for the phase context."
+        f"revision={status.get('revision')}. Run $tene:status for the phase context."
     ))
 
 
 def pre_tool(data: dict) -> None:
+    tool_name = str(data.get("tool_name", "")).lower()
+    if tool_name not in {"bash", "shell", "exec_command", "functions.exec_command"}:
+        return
     raw = json.dumps(data.get("tool_input", {}), ensure_ascii=False)
     if any(pattern.search(raw) for pattern in DENIED):
         print(json.dumps({
@@ -107,15 +118,15 @@ def pre_tool(data: dict) -> None:
 
 def pre_compact(data: dict) -> None:
     cwd = data.get("cwd") or os.getcwd()
-    snapshot = workflow_json(cwd, "compact")
-    if snapshot and snapshot.get("ok"):
-        additional("PreCompact", "tene-codex saved a workflow snapshot. Reload $tene-status after compaction.")
+    status = workflow_json(cwd, "status")
+    if status and status.get("ok") and status.get("result", {}).get("active_sprint"):
+        advisory("tene workflow state is already durable. Reload $tene:status after compaction.")
 
 
 def post_tool(data: dict) -> None:
     raw = json.dumps(data.get("tool_response", data.get("tool_output", {})), ensure_ascii=False)
     if LEAK.search(raw):
-        additional("PostToolUse", "SECURITY BLOCKER: tool output matched the secret leakage policy. Do not persist or quote it; rotate affected credentials and rerun through $tene-secrets.")
+        additional("PostToolUse", "SECURITY BLOCKER: tool output matched the secret leakage policy. Do not persist or quote it; rotate affected credentials and rerun through $tene:secrets.")
 
 
 def subagent_start(data: dict) -> None:
@@ -136,7 +147,7 @@ def stop(data: dict) -> None:
         return
     sprint = status.get("result", {}).get("active_sprint")
     if sprint and sprint.get("phase") not in ("archived", None):
-        additional("Stop", (
+        advisory((
             f"Active tene sprint {sprint.get('sprint_id')} remains in {sprint.get('phase')}. "
             "The state is resumable; report the current gate and next action rather than implying the sprint is archived."
         ))
