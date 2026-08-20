@@ -1,0 +1,1 @@
+{"schema_version":"1.0.0","overall_passed":true,"repository_types":["greenfield-web","mature-monolith","polyglot-services"],"mature_layers":4,"polyglot_files":4,"polyglot_explicit_unknown_categories":5,"vault_files_indexed":0,"playwright":{"passed":3,"failed":0},"full_check":"passed","race":"passed","redaction_status":"passed"}

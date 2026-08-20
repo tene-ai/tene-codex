@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -35,5 +36,33 @@ func TestRejectsOutsidePath(t *testing.T) {
 	_, err := Analyze(context.Background(), t.TempDir(), []string{"../secret"}, false)
 	if err == nil {
 		t.Fatal("expected error")
+	}
+}
+
+func TestPolyglotFallbackKeepsUnknownSixQuestions(t *testing.T) {
+	root := t.TempDir()
+	for path, body := range map[string]string{"web/ui.ts": "export const submit = () => fetch('/api')", "worker/job.py": "def consume(message): pass", ".tene/vault.py": "SECRET='never index'"} {
+		full := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(full), 0755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(full, []byte(body), 0644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	r, err := Analyze(context.Background(), root, nil, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(r.Files) != 2 || len(r.Components) != 2 {
+		t.Fatalf("files=%+v components=%+v", r.Files, r.Components)
+	}
+	for _, c := range r.Components {
+		if c.Provider != "filesystem" || len(c.Unknown) < 5 || len(c.Inputs) == 0 || len(c.Outputs) == 0 || len(c.Effects) == 0 {
+			t.Fatalf("not uncertainty-honest: %+v", c)
+		}
+		if strings.Contains(c.File, ".tene") {
+			t.Fatal("vault indexed")
+		}
 	}
 }

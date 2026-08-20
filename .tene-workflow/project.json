@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 410,
-  "updated_at": "2026-08-20T01:13:24.845873Z",
+  "revision": 436,
+  "updated_at": "2026-08-20T01:17:45.501189Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -268,6 +268,35 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Secret and evidence attack matrix has zero open gaps.",
       "last_loop_at": "2026-08-20T01:12:03.197469Z"
+    },
+    "sprint_0000380wqhfdnwqjvftv68ge7g": {
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "slug": "reference-project-matrix",
+      "title": "Reference Project Portability Matrix",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wpmvv19m87t6xa4xydr"
+      ],
+      "intent_ids": [
+        "intent_0000380wqhjfnbjh3xxzpkhg1c"
+      ],
+      "task_ids": [
+        "task_0000380wqkxry81kry1arvgd1r"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wqhfdnwqjvftv68ge7g-reference-project-matrix",
+      "archived_at": "2026-08-20T01:17:45.433684Z",
+      "approval_refs": [
+        "approval_0000380wqm133n0q0xfddzb1z8",
+        "approval_0000380wqv2xy9gqn0918cz2bg"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wqpcqrrqsk8bjf4j3p4",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wqhfdnwqjvftv68ge7g-reference-project-matrix/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Three repository types pass and degraded semantics remain explicit.",
+      "last_loop_at": "2026-08-20T01:16:21.65151Z"
     }
   },
   "tasks": {
@@ -597,6 +626,16 @@
         "ac_0000380wpzdhvb233dyvmvz19w"
       ],
       "layer": "Persistence,Infrastructure"
+    },
+    "task_0000380wqkxry81kry1arvgd1r": {
+      "task_id": "task_0000380wqkxry81kry1arvgd1r",
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "title": "Implement portable code analysis and three-project matrix",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wqhjfq5y4p9jcbajkpm"
+      ],
+      "layer": "Interface,Business Logic,Persistence,Infrastructure"
     }
   },
   "intents": {
@@ -707,6 +746,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T01:10:07.063297Z"
+    },
+    "intent_0000380wqhjfnbjh3xxzpkhg1c": {
+      "intent_id": "intent_0000380wqhjfnbjh3xxzpkhg1c",
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "The same tene architecture analysis remains useful and uncertainty-honest across greenfield web, mature monolith, and polyglot service repositories.",
+      "rationale": "Portability is a blocking product outcome, not an inferred property of unit tests in this repository.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T01:15:40.833726Z"
     }
   },
   "acceptance_criteria": {
@@ -940,6 +990,13 @@
       "statement": "Evidence containing secret patterns, changed hashes, missing files, or redaction failure can never pass QA or doctor.",
       "priority": "blocking",
       "observable": "Evidence registration rejects leak patterns, verify/doctor reject tampered or missing artifacts, and QA requires criterion-linked redaction-safe evidence for every blocking case."
+    },
+    "ac_0000380wqhjfq5y4p9jcbajkpm": {
+      "ac_id": "ac_0000380wqhjfq5y4p9jcbajkpm",
+      "intent_id": "intent_0000380wqhjfnbjh3xxzpkhg1c",
+      "statement": "Three reference repository types are analyzed with layer coverage, Six Questions, secret-vault exclusion, and explicit degraded-provider unknowns.",
+      "priority": "blocking",
+      "observable": "The reference matrix test passes for greenfield web, a four-layer mature monolith, and a polyglot frontend/backend/worker/infra app; non-Go components expose five explicit unknown categories and .tene is absent."
     }
   },
   "gaps": {
@@ -1085,6 +1142,34 @@
       "approved_at": "2026-08-20T01:13:24.25371Z",
       "expires_at": "2026-08-21T12:00:00Z",
       "consumed_at": "2026-08-20T01:13:24.773051Z"
+    },
+    "approval_0000380wqm133n0q0xfddzb1z8": {
+      "approval_id": "approval_0000380wqm133n0q0xfddzb1z8",
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed complete continuous implementation.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:15:44.049564Z",
+      "approved_at": "2026-08-20T01:15:50.17741Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:15:50.770529Z"
+    },
+    "approval_0000380wqv2xy9gqn0918cz2bg": {
+      "approval_id": "approval_0000380wqv2xy9gqn0918cz2bg",
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "from": "report",
+      "to": "archived",
+      "reason": "Three-project portability matrix and QA passed.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:17:39.679156Z",
+      "approved_at": "2026-08-20T01:17:44.936012Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:17:45.433684Z"
     }
   },
   "evidence": {
@@ -1348,6 +1433,19 @@
         "ac_0000380wpzdhvb233dyvmvz19w"
       ],
       "created_at": "2026-08-20T01:12:47.897911Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380wqs9etpy3mtjrpy4dp8": {
+      "evidence_id": "evidence_0000380wqs9etpy3mtjrpy4dp8",
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "kind": "reference-matrix",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wqhfdnwqjvftv68ge7g-reference-project-matrix/04-qa/evidence/reference-matrix.json",
+      "sha256": "45865a3b79e91da5159a8d47d96bc7eb11921ebd3dfcf8f19e9ba2b10b5b9d3f",
+      "size": 330,
+      "ac_ids": [
+        "ac_0000380wqhjfq5y4p9jcbajkpm"
+      ],
+      "created_at": "2026-08-20T01:17:10.253204Z",
       "redaction_status": "passed"
     }
   },
@@ -5084,6 +5182,142 @@
       ],
       "started_at": "2026-08-20T01:12:04.434862Z",
       "finished_at": "2026-08-20T01:12:59.808539Z"
+    },
+    "run_0000380wqpcqrrqsk8bjf4j3p4": {
+      "run_id": "run_0000380wqpcqrrqsk8bjf4j3p4",
+      "sprint_id": "sprint_0000380wqhfdnwqjvftv68ge7g",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380wqpcqrncfmc4a9gymdr",
+          "ac_ids": [
+            "ac_0000380wqhjfq5y4p9jcbajkpm"
+          ],
+          "title": "Three reference repository types are analyzed with layer coverage, Six Questions, secret-vault exclusion, and explicit degraded-provider unknowns. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wqs9etpy3mtjrpy4dp8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "The reference matrix test passes for greenfield web, a four-layer mature monolith, and a polyglot frontend/backend/worker/infra app; non-Go components expose five explicit unknown categories and .tene is absent.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wqpcqs2w2s10ma44668",
+          "ac_ids": [
+            "ac_0000380wqhjfq5y4p9jcbajkpm"
+          ],
+          "title": "Three reference repository types are analyzed with layer coverage, Six Questions, secret-vault exclusion, and explicit degraded-provider unknowns. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wqs9etpy3mtjrpy4dp8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "The reference matrix test passes for greenfield web, a four-layer mature monolith, and a polyglot frontend/backend/worker/infra app; non-Go components expose five explicit unknown categories and .tene is absent.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wqpcqragjm1s1vvwn38",
+          "ac_ids": [
+            "ac_0000380wqhjfq5y4p9jcbajkpm"
+          ],
+          "title": "Three reference repository types are analyzed with layer coverage, Six Questions, secret-vault exclusion, and explicit degraded-provider unknowns. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wqs9etpy3mtjrpy4dp8"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "The reference matrix test passes for greenfield web, a four-layer mature monolith, and a polyglot frontend/backend/worker/infra app; non-Go components expose five explicit unknown categories and .tene is absent.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T01:16:22.780434Z",
+      "finished_at": "2026-08-20T01:17:21.404394Z"
     }
   },
   "graph": {

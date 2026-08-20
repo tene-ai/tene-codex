@@ -122,7 +122,7 @@ func Analyze(ctx context.Context, root string, requested []string, changed bool)
 		return report, err
 	}
 	for _, path := range paths {
-		if filepath.Ext(path) != ".go" || strings.HasSuffix(path, "_test.go") {
+		if strings.HasSuffix(path, "_test.go") {
 			continue
 		}
 		info, err := os.Stat(filepath.Join(root, filepath.FromSlash(path)))
@@ -132,6 +132,11 @@ func Analyze(ctx context.Context, root string, requested []string, changed bool)
 		}
 		layer, reason, confidence := classify(path)
 		report.Files = append(report.Files, File{ID: "file:" + path, Path: path, Layer: layer, LayerReason: reason, Confidence: confidence})
+		if filepath.Ext(path) != ".go" {
+			report.Components = append(report.Components, Component{ID: "file-component:" + path, Name: filepath.Base(path), Kind: "file", Locator: path, File: path, PrimaryLayer: layer, LayerReason: reason, Imports: []string{}, References: []string{}, Calls: []string{}, Inputs: []string{"unknown: language semantic provider unavailable"}, Outputs: []string{"unknown: language semantic provider unavailable"}, Effects: []string{"unknown: runtime observation required"}, Unknown: []string{"declarations", "imports and references", "callers and callees", "input and output shapes", "side effects"}, Provider: "filesystem", Confidence: .4})
+			report.Diagnostics = append(report.Diagnostics, "degraded filesystem analysis for "+path+": semantic provider unavailable; Six Questions remain explicit unknowns")
+			continue
+		}
 		fset := token.NewFileSet()
 		file, err := parser.ParseFile(fset, filepath.Join(root, filepath.FromSlash(path)), nil, parser.SkipObjectResolution)
 		if err != nil {
@@ -227,12 +232,12 @@ func sourcePaths(ctx context.Context, root string, requested []string, changed b
 		}
 		if d.IsDir() {
 			n := d.Name()
-			if n == ".git" || n == ".tene-workflow" || n == "vendor" || n == "node_modules" || n == "dist" {
+			if n == ".git" || n == ".tene" || n == ".tene-workflow" || n == "vendor" || n == "node_modules" || n == "dist" {
 				return filepath.SkipDir
 			}
 			return nil
 		}
-		if filepath.Ext(path) == ".go" {
+		if sourceExtension(filepath.Ext(path)) {
 			rel, _ := filepath.Rel(root, path)
 			out = append(out, filepath.ToSlash(rel))
 		}
@@ -241,12 +246,20 @@ func sourcePaths(ctx context.Context, root string, requested []string, changed b
 	return clean(out), err
 }
 
+func sourceExtension(ext string) bool {
+	switch strings.ToLower(ext) {
+	case ".go", ".js", ".jsx", ".ts", ".tsx", ".py", ".java", ".kt", ".rb", ".rs", ".php", ".cs", ".swift":
+		return true
+	}
+	return false
+}
+
 func classify(path string) (string, string, float64) {
 	p := strings.ToLower(filepath.ToSlash(path))
 	rules := []struct {
 		keys          []string
 		layer, reason string
-	}{{[]string{"cmd/", "controller", "route", "handler", "ui/"}, "Interface", "entry-point path/name"}, {[]string{"repository", "storage", "state/", "database", "cache", "queue", "client"}, "Persistence", "data boundary path/name"}, {[]string{".github/", "infra/", "deploy", "config", "server", "auth"}, "Infrastructure", "runtime path/name"}, {[]string{"domain/", "service", "usecase", "workflow/", "internal/"}, "Business Logic", "processing-rule path/name"}}
+	}{{[]string{"cmd/", "controller", "route", "handler", "ui/", "frontend/", "api."}, "Interface", "entry-point path/name"}, {[]string{"repository", "storage", "store", "state/", "database", "cache", "queue", "client"}, "Persistence", "data boundary path/name"}, {[]string{".github/", "infra/", "deploy", "config", "server", "auth"}, "Infrastructure", "runtime path/name"}, {[]string{"domain/", "service", "usecase", "workflow/", "worker/", "internal/"}, "Business Logic", "processing-rule path/name"}}
 	for _, r := range rules {
 		for _, k := range r.keys {
 			if strings.Contains(p, k) {
