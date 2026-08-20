@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 471,
-  "updated_at": "2026-08-20T01:24:55.638429Z",
+  "revision": 504,
+  "updated_at": "2026-08-20T01:34:27.638245Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -324,6 +324,36 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Release artifact, Marketplace materials, tamper and migration contracts have no open gaps.",
       "last_loop_at": "2026-08-20T01:23:32.721445Z"
+    },
+    "sprint_0000380wrs5bseqwkpkg84mdwg": {
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "slug": "final-traceability-audit",
+      "title": "Final Requirements Traceability Audit",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wr84t6p1hb89mf2wbkc"
+      ],
+      "intent_ids": [
+        "intent_0000380wrs7a7t859epzgtpes4"
+      ],
+      "task_ids": [
+        "task_0000380ws2batz7mzrqx7ckc28",
+        "task_0000380ws2cbmapxm83cpwrq74"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wrs5bseqwkpkg84mdwg-final-traceability-audit",
+      "archived_at": "2026-08-20T01:34:27.529002Z",
+      "approval_refs": [
+        "approval_0000380ws2fbr5tk2stx9w18rg",
+        "approval_0000380wskrxs5qf51r3rw0agc"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wscknmw8qbazrxrzsar",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wrs5bseqwkpkg84mdwg-final-traceability-audit/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 8,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "All 33 required IDs map to existing implementation and four residual gaps were repaired.",
+      "last_loop_at": "2026-08-20T01:31:10.065149Z"
     }
   },
   "tasks": {
@@ -683,6 +713,26 @@
         "ac_0000380wr8jmksakse7nx1mv4w"
       ],
       "layer": "Business Logic,Persistence"
+    },
+    "task_0000380ws2batz7mzrqx7ckc28": {
+      "task_id": "task_0000380ws2batz7mzrqx7ckc28",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "title": "Implement machine requirements audit and host capability probes",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wrs7a76scmce852d2ar"
+      ],
+      "layer": "Interface,Business Logic,Persistence,Infrastructure"
+    },
+    "task_0000380ws2cbmapxm83cpwrq74": {
+      "task_id": "task_0000380ws2cbmapxm83cpwrq74",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "title": "Run global residual audit and final acceptance suite",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wrs7a76scmce852d2ar"
+      ],
+      "layer": "Interface,Business Logic,Persistence,Infrastructure"
     }
   },
   "intents": {
@@ -815,6 +865,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T01:21:21.177255Z"
+    },
+    "intent_0000380wrs7a7t859epzgtpes4": {
+      "intent_id": "intent_0000380wrs7a7t859epzgtpes4",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Every required FR, product AC, and work package has a verified implementation and evidence locator, with no hidden open work.",
+      "rationale": "Completion must be proved against the authored PRD, plan and design rather than inferred from prior sprint reports.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T01:28:21.654318Z"
     }
   },
   "acceptance_criteria": {
@@ -1069,6 +1130,13 @@
       "statement": "The published schema support window is explicit and unsupported downgrade/cross-major inputs fail closed without mutation.",
       "priority": "blocking",
       "observable": "0.9 to 1.0 migration and backup pass; 0.8 and 2.0 plans are unsupported and apply leaves bytes unchanged; the inherited migration debt is resolved with release evidence."
+    },
+    "ac_0000380wrs7a76scmce852d2ar": {
+      "ac_id": "ac_0000380wrs7a76scmce852d2ar",
+      "intent_id": "intent_0000380wrs7a7t859epzgtpes4",
+      "statement": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes.",
+      "priority": "blocking",
+      "observable": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass."
     }
   },
   "gaps": {
@@ -1275,6 +1343,34 @@
       "approved_at": "2026-08-20T01:24:55.15785Z",
       "expires_at": "2026-08-21T12:00:00Z",
       "consumed_at": "2026-08-20T01:24:55.585544Z"
+    },
+    "approval_0000380ws2fbr5tk2stx9w18rg": {
+      "approval_id": "approval_0000380ws2fbr5tk2stx9w18rg",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed complete continuous implementation and final 100 percent closure.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:28:25.020797Z",
+      "approved_at": "2026-08-20T01:30:34.733247Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:30:35.624171Z"
+    },
+    "approval_0000380wskrxs5qf51r3rw0agc": {
+      "approval_id": "approval_0000380wskrxs5qf51r3rw0agc",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "from": "report",
+      "to": "archived",
+      "reason": "All required FR AC and WP coverage, evidence, state and full QA gates passed.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:33:08.444478Z",
+      "approved_at": "2026-08-20T01:34:26.663381Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:34:27.529002Z"
     }
   },
   "evidence": {
@@ -1565,6 +1661,19 @@
         "ac_0000380wr8jmksakse7nx1mv4w"
       ],
       "created_at": "2026-08-20T01:24:13.078259Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380wsfzbj2j1zzj93j7tzr": {
+      "evidence_id": "evidence_0000380wsfzbj2j1zzj93j7tzr",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "kind": "final-traceability",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wrs5bseqwkpkg84mdwg-final-traceability-audit/04-qa/evidence/final-audit-summary.json",
+      "sha256": "83c0e16218b0b4da6f8ab0b6717342eb4e8627454694900ccaeed9b089ff5b1f",
+      "size": 713,
+      "ac_ids": [
+        "ac_0000380wrs7a76scmce852d2ar"
+      ],
+      "created_at": "2026-08-20T01:32:06.201081Z",
       "redaction_status": "passed"
     }
   },
@@ -5699,6 +5808,310 @@
       ],
       "started_at": "2026-08-20T01:23:33.507651Z",
       "finished_at": "2026-08-20T01:24:25.092737Z"
+    },
+    "run_0000380wscknmw8qbazrxrzsar": {
+      "run_id": "run_0000380wscknmw8qbazrxrzsar",
+      "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380wscknnwed261674e26m",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wscknmmqmvkmhtxd6vc",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wscknnc7g30ssrjwsxm",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wscknnhh2epk7whs71w",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wscknmd66cgxz62wbrw",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wscknmrx6q59y4y42zr",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wscknm306n41dk1wpyw",
+          "ac_ids": [
+            "ac_0000380wrs7a76scmce852d2ar"
+          ],
+          "title": "A machine-readable final audit covers FR-01..11, AC-PRODUCT-01..08 and WP-01..14; every locator exists, state has zero open/deferred gaps and unfinished tasks, all repository gates pass, and doctor reports current Codex/plugin capability probes. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wsfzbj2j1zzj93j7tzr"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "requirements-audit reports complete coverage and no missing locators; final state after archive has no active sprint/open gaps/unfinished tasks; make check/race/e2e/validators/doctor/evidence all pass.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T01:31:11.066215Z",
+      "finished_at": "2026-08-20T01:32:18.084058Z"
     }
   },
   "graph": {

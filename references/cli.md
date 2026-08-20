@@ -3,6 +3,7 @@
 ```text
 tene-workflow init --name NAME --profile standard
 tene-workflow sprint create --title TITLE [--slug SLUG] [--max-iterations N]
+tene-workflow master create|status|validate
 tene-workflow sprint start ID
 tene-workflow status --json
 tene-workflow route --text TEXT [--phase PHASE] [--active auto|true|false]

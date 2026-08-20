@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "sprint_id": "sprint_0000380wrs5bseqwkpkg84mdwg",
+  "state_revision": 504,
+  "active_sprint_id": "",
+  "coverage": {
+    "functional_requirements": 11,
+    "product_acceptance": 8,
+    "work_packages": 14
+  },
+  "missing": [],
+  "open_gaps": [],
+  "unfinished_tasks": [],
+  "unverified_blocking_criteria": [],
+  "invalid_archived_sprints": [],
+  "evidence_count": 21,
+  "evidence_valid": true,
+  "projection_drift": false,
+  "master_plan_valid": true,
+  "passed": true
+}

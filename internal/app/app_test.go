@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -54,6 +55,34 @@ func TestEvidenceRejectsCredentialAndCanaryPatternsBeforeMutation(t *testing.T) 
 				t.Fatal("poisoned evidence mutated state")
 			}
 		})
+	}
+}
+
+func TestMasterPlanStatusAndDependencyValidation(t *testing.T) {
+	root := t.TempDir()
+	if c, _ := execute(t, root, "init", "--name", "master"); c != 0 {
+		t.Fatal(c)
+	}
+	if c, _ := execute(t, root, "sprint", "create", "--title", "One"); c != 0 {
+		t.Fatal(c)
+	}
+	if c, e := execute(t, root, "master", "validate"); c != 0 {
+		t.Fatalf("%d %+v", c, e)
+	}
+	if c, e := execute(t, root, "master", "status"); c != 0 || e.Result.(map[string]any)["project_id"] == nil {
+		t.Fatalf("%d %+v", c, e)
+	}
+}
+
+func TestQAPlanVariantContract(t *testing.T) {
+	want := []string{"happy", "alternate", "empty", "validation", "permission", "failure", "recovery"}
+	if got := qaVariants(); !slices.Equal(got, want) {
+		t.Fatalf("%v", got)
+	}
+	for _, v := range want {
+		if qaVariantAction(v) == "" {
+			t.Fatalf("missing action for %s", v)
+		}
 	}
 }
 

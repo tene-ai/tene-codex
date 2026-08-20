@@ -87,6 +87,8 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		result, revision, err = rt.route(args[1:])
 	case "sprint":
 		result, revision, err = rt.sprint(args[1:])
+	case "master":
+		result, revision, err = rt.master(args[1:])
 	case "phase":
 		result, revision, err = rt.phase(args[1:])
 	case "approval":
@@ -128,6 +130,84 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		return rt.fail(err)
 	}
 	return rt.success(result, revision)
+}
+
+func (rt *runtime) master(args []string) (any, uint64, error) {
+	if len(args) == 0 {
+		return nil, 0, usageErr("use master create|status|validate")
+	}
+	p, err := state.New(rt.root).Load()
+	if err != nil {
+		return nil, 0, err
+	}
+	view := map[string]any{"project_id": p.ProjectID, "active_sprint_id": p.ActiveSprintID, "revision": p.Revision, "sprints": sortedSprints(p)}
+	switch args[0] {
+	case "create", "status":
+		return view, p.Revision, nil
+	case "validate":
+		findings := validateMaster(p)
+		if workflow.Blocking(findings) {
+			return map[string]any{"valid": false, "findings": findings}, p.Revision, &commandError{"MASTER_INVALID", "master plan dependencies are invalid", "Repair missing, self-referential, or cyclic dependencies.", 3}
+		}
+		return map[string]any{"valid": true, "findings": findings, "master": view}, p.Revision, nil
+	default:
+		return nil, 0, usageErr("use master create|status|validate")
+	}
+}
+
+func validateMaster(p *domain.Project) []domain.Finding {
+	var fs []domain.Finding
+	for id, sp := range p.Sprints {
+		for _, d := range sp.Predecessors {
+			if d == id || p.Sprints[d] == nil {
+				fs = append(fs, domain.Finding{Code: "MASTER_SPRINT_DEP_INVALID", Severity: "blocker", SubjectRefs: []string{id, d}, Message: "sprint predecessor is missing or self-referential", Remediation: "Reference an existing distinct sprint."})
+			}
+		}
+	}
+	for id, t := range p.Tasks {
+		for _, d := range t.DependsOn {
+			if d == id || p.Tasks[d] == nil {
+				fs = append(fs, domain.Finding{Code: "MASTER_TASK_DEP_INVALID", Severity: "blocker", SubjectRefs: []string{id, d}, Message: "task dependency is missing or self-referential", Remediation: "Reference an existing distinct task."})
+			}
+		}
+	}
+	if cycleMap(p.Sprints, func(s *domain.Sprint) []string { return s.Predecessors }) {
+		fs = append(fs, domain.Finding{Code: "MASTER_SPRINT_CYCLE", Severity: "blocker", Message: "sprint predecessor graph contains a cycle", Remediation: "Remove a cyclic predecessor edge."})
+	}
+	if cycleMap(p.Tasks, func(t *domain.Task) []string { return t.DependsOn }) {
+		fs = append(fs, domain.Finding{Code: "MASTER_TASK_CYCLE", Severity: "blocker", Message: "task dependency graph contains a cycle", Remediation: "Remove a cyclic task dependency."})
+	}
+	return fs
+}
+func cycleMap[T any](items map[string]*T, deps func(*T) []string) bool {
+	state := map[string]int{}
+	var visit func(string) bool
+	visit = func(id string) bool {
+		if state[id] == 1 {
+			return true
+		}
+		if state[id] == 2 {
+			return false
+		}
+		x := items[id]
+		if x == nil {
+			return false
+		}
+		state[id] = 1
+		for _, d := range deps(x) {
+			if visit(d) {
+				return true
+			}
+		}
+		state[id] = 2
+		return false
+	}
+	for id := range items {
+		if visit(id) {
+			return true
+		}
+	}
+	return false
 }
 
 func (rt *runtime) route(args []string) (any, uint64, error) {
@@ -1378,9 +1458,9 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 		run := &domain.QARun{RunID: domain.NewID("run"), SprintID: sp.SprintID, Status: "planned", Environment: "local", StartedAt: time.Now().UTC()}
 		for _, ac := range p.Criteria {
 			if slices.Contains(sp.IntentIDs, ac.IntentID) && ac.Priority == "blocking" {
-				for _, variant := range []string{"happy", "error", "recovery"} {
+				for _, variant := range qaVariants() {
 					dispositions := map[string]string{"L1": "required", "L2": "required", "L3": "required", "L4": "not-applicable: capability dependent", "L5": "required", "L6": "required", "L7": "required"}
-					run.Cases = append(run.Cases, domain.QACase{CaseID: domain.NewID("case"), CriterionIDs: []string{ac.CriterionID}, Title: ac.Statement + " — " + variant, Variant: variant, Layers: []string{"L1", "L2", "L3", "L5", "L6", "L7"}, Status: "pending", Actor: "project user", Preconditions: append([]string(nil), ac.Preconditions...), Steps: []domain.QAStep{{Action: "Exercise the observable acceptance journey", ExpectedUI: ac.Observable, ExpectedData: strings.Join(ac.Expected, "; "), ObserverIDs: []string{"interface", "boundary", "persistence"}}}, ForbiddenOutcomes: append([]string(nil), ac.Forbidden...), RequiredLayers: dispositions, Risk: "high"})
+					run.Cases = append(run.Cases, domain.QACase{CaseID: domain.NewID("case"), CriterionIDs: []string{ac.CriterionID}, Title: ac.Statement + " — " + variant, Variant: variant, Layers: []string{"L1", "L2", "L3", "L5", "L6", "L7"}, Status: "pending", Actor: "project user", Preconditions: append([]string(nil), ac.Preconditions...), Steps: []domain.QAStep{{Action: qaVariantAction(variant), ExpectedUI: ac.Observable, ExpectedData: strings.Join(ac.Expected, "; "), ObserverIDs: []string{"interface", "boundary", "persistence"}}}, ForbiddenOutcomes: append([]string(nil), ac.Forbidden...), RequiredLayers: dispositions, Risk: "high"})
 				}
 			}
 		}
@@ -1593,6 +1673,13 @@ func (rt *runtime) qa(args []string) (any, uint64, error) {
 	}
 }
 
+func qaVariants() []string {
+	return []string{"happy", "alternate", "empty", "validation", "permission", "failure", "recovery"}
+}
+func qaVariantAction(v string) string {
+	return map[string]string{"happy": "Complete the primary user and data journey", "alternate": "Complete a valid alternate or back-navigation journey", "empty": "Exercise empty initial and no-result states", "validation": "Submit invalid or boundary input and confirm no forbidden write", "permission": "Exercise least-privilege denial and authorized recovery", "failure": "Induce a downstream failure and observe user-visible and data-consistency behavior", "recovery": "Retry or roll back after failure and verify idempotent recovery"}[v]
+}
+
 func (rt *runtime) report(args []string) (any, uint64, error) {
 	if len(args) == 0 {
 		return nil, 0, usageErr("report action required")
@@ -1731,7 +1818,7 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 			}
 		}
 	}
-	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }()}}, p.Revision, nil
+	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }(), "codex": projectconfig.ProbeCodex(rt.root)}}, p.Revision, nil
 }
 
 func invalidEvidence(root string, p *domain.Project) []string {
@@ -2097,6 +2184,6 @@ Usage:
   tene-workflow [--root PATH] [--json] <command>
 
 Commands:
-  init, status, route, sprint, phase, approval, task, intent, document, graph, context,
+  init, status, route, master, sprint, phase, approval, task, intent, document, graph, context,
   loop, waiver, evidence, qa, report, secret, migrate, doctor, compact, clear, version`
 }

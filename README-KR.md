@@ -141,7 +141,7 @@ tene-codex는 제품 기획 의도를 실행 가능한 QA 입력으로 취급합
 
 QA는 프로젝트의 기존 test, API 검사, Playwright, Codex browser 기능, Chrome 연동, database·queue observer, log, trace, screenshot과 manual checkpoint를 결합할 수 있습니다. Evidence manifest는 모든 blocking acceptance criterion을 재현 가능한 관찰 결과와 연결합니다. 평균 점수로 blocking criterion을 상쇄할 수 없으며, 모든 blocking criterion이 유효한 evidence와 함께 통과해야 Sprint를 archive할 수 있습니다.
 
-`graph understand`는 명시적으로 요청할 때 기존 CodeGraph index를 사용하고, 그 외에는 범위가 제한된 Go AST 분석으로 fallback합니다. 각 선언의 정의 위치, import/reference, call/use, 입력 shape, 출력/side effect, Understanding Layer, provider와 confidence를 구체화합니다. `qa capabilities`는 native/Playwright runner를 발견하고, `qa execute`는 발견된 allowlist adapter만 허용합니다. Codex browser나 Chrome 도구가 생성한 UX/API/data 관찰은 `qa observe`가 schema 검증 후 evidence로 가져옵니다.
+`graph understand`는 명시적으로 요청할 때 기존 CodeGraph index를 사용하고, Go에는 제한된 AST, 비-Go source에는 uncertainty-honest filesystem fallback을 사용합니다. 알 수 없는 definition/reference/call/input/output/side effect는 추측하지 않고 explicit unknown으로 남깁니다. `qa capabilities`는 native/Playwright runner를 발견하고, `qa execute`는 발견된 allowlist adapter만 허용합니다. Codex browser나 Chrome 도구가 생성한 UX/API/data 관찰은 `qa observe`가 schema 검증 후 evidence로 가져옵니다.
 
 저장소에는 greenfield web, mature monolith, polyglot service reference project가 포함됩니다. `npm run test:e2e`는 greenfield UI/API/persistence journey를 실행하고, reference matrix는 4개 layer와 지원되지 않는 언어의 정직한 unknown fallback을 검증합니다.
 

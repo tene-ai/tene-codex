@@ -24,7 +24,7 @@ Go를 선택하는 이유는 기존 tene CLI와 배포 방식·보안 관행을 
 
 - 기본 workflow profile은 `standard`다. feature/bug/refactor는 전체 사이클, 작은 문서·주석 작업은 축약 사이클을 허용한다.
 - `strict`는 모든 코드 변경에 전체 사이클과 최종 사람 승인을 요구한다.
-- `light`는 PRD/Plan/Design을 하나의 spec 문서로 축약하지만 intent와 QA evidence는 생략하지 않는다.
+- `light`는 승인과 자동화 부담을 줄이지만 PRD/Plan/Design의 고정 phase와 intent/QA evidence는 생략하지 않는다. 문서 본문은 간결하게 작성할 수 있어도 cycle은 유지한다.
 - `off`는 자동 제안만 끄며 명시적 skill 호출은 유지한다.
 - blocking acceptance criterion의 pass 비율만 100%여야 archive할 수 있다. 점수 평균으로 blocker를 상쇄하지 않는다.
 
@@ -163,4 +163,3 @@ UI나 remote service보다 이 경로를 먼저 완성한다. 어느 단계도 �
 - QA depth: AC별 실행된 layer, journey/data-flow coverage
 - Secret safety: 평문 secret artifact/log incident 수(목표 0)
 - Context efficiency: pack token 예산 초과율과 stale context 포함률
-
