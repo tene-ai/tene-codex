@@ -27,6 +27,36 @@ func execute(t *testing.T, root string, args ...string) (int, envelope) {
 	return code, env
 }
 
+func TestEvidenceRejectsCredentialAndCanaryPatternsBeforeMutation(t *testing.T) {
+	patterns := []string{"TENE_TEST_CANARY_0123456789", "ghp_12345678901234567890", "token=plaintext-value"}
+	for _, value := range patterns {
+		t.Run(value[:min(8, len(value))], func(t *testing.T) {
+			root := t.TempDir()
+			if code, _ := execute(t, root, "init", "--name", "security"); code != 0 {
+				t.Fatal(code)
+			}
+			if code, _ := execute(t, root, "sprint", "create", "--title", "Security"); code != 0 {
+				t.Fatal(code)
+			}
+			path := filepath.Join(root, "poisoned.txt")
+			if err := os.WriteFile(path, []byte(value), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			code, got := execute(t, root, "evidence", "register", "--path", path)
+			if code != 6 || len(got.Errors) == 0 || got.Errors[0].Code != "SEC_EVIDENCE_LEAK" {
+				t.Fatalf("code=%d result=%+v", code, got)
+			}
+			p, err := state.New(root).Load()
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(p.Evidence) != 0 {
+				t.Fatal("poisoned evidence mutated state")
+			}
+		})
+	}
+}
+
 func completeDocument(t *testing.T, root, relativePath string) {
 	t.Helper()
 	path := filepath.Join(root, filepath.FromSlash(relativePath))

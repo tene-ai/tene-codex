@@ -21,7 +21,11 @@ DENIED = (
     re.compile(r"(?<![\w-])tene\s+export(?:\s|$|[\"'])", re.I),
     re.compile(r"(?<![\w-])(?:env|printenv)(?:\s|$|[\"'])", re.I),
     re.compile(r"(?:^|[\s'\"/])\.tene(?:/|\\)", re.I),
+    re.compile(r"(?:^|[\s'\"/])\.env(?:$|[\s'\"])", re.I),
+    re.compile(r"(?i)(?:api[_-]?key|token|password|secret)\s*=\s*[^\s$][^\s]*"),
 )
+
+LEAK = re.compile(r"(?i)(?:TENE_(?:TEST_)?CANARY[-_A-Za-z0-9]{8,}|(?:sk|ghp|github_pat|xox[baprs])[-_A-Za-z0-9]{16,}|bearer\s+[A-Za-z0-9._~+/-]{12,})")
 
 
 def read_input() -> dict:
@@ -108,6 +112,12 @@ def pre_compact(data: dict) -> None:
         additional("PreCompact", "tene-codex saved a workflow snapshot. Reload $tene-status after compaction.")
 
 
+def post_tool(data: dict) -> None:
+    raw = json.dumps(data.get("tool_response", data.get("tool_output", {})), ensure_ascii=False)
+    if LEAK.search(raw):
+        additional("PostToolUse", "SECURITY BLOCKER: tool output matched the secret leakage policy. Do not persist or quote it; rotate affected credentials and rerun through $tene-secrets.")
+
+
 def subagent_start(data: dict) -> None:
     cwd = data.get("cwd") or os.getcwd()
     status = workflow_json(cwd, "status")
@@ -138,6 +148,7 @@ def main() -> int:
     actions = {
         "session-start": session_start,
         "pre-tool": pre_tool,
+        "post-tool": post_tool,
         "pre-compact": pre_compact,
         "subagent-start": subagent_start,
         "stop": stop,

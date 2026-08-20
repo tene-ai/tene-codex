@@ -131,16 +131,39 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 }
 
 func (rt *runtime) route(args []string) (any, uint64, error) {
-	fs := flag.NewFlagSet("route", flag.ContinueOnError); fs.SetOutput(io.Discard)
+	fs := flag.NewFlagSet("route", flag.ContinueOnError)
+	fs.SetOutput(io.Discard)
 	input := fs.String("text", "", "")
 	phase := fs.String("phase", "", "")
 	activeFlag := fs.String("active", "auto", "")
-	if err := fs.Parse(args); err != nil { return nil,0,err }
-	if *input=="" { *input=strings.Join(fs.Args()," ") }; if strings.TrimSpace(*input)=="" { return nil,0,usageErr("route --text is required") }
-	active:=false; ph:=domain.Phase(*phase); rev:=uint64(0)
-	if p,err:=state.New(rt.root).Load(); err==nil { rev=p.Revision; if p.ActiveSprintID!="" {active=true; if sp:=p.Sprints[p.ActiveSprintID];sp!=nil&&ph==""{ph=sp.Phase}} }
-	if *activeFlag=="true" {active=true}; if *activeFlag=="false" {active=false}
-	return router.Route(*input,active,ph),rev,nil
+	if err := fs.Parse(args); err != nil {
+		return nil, 0, err
+	}
+	if *input == "" {
+		*input = strings.Join(fs.Args(), " ")
+	}
+	if strings.TrimSpace(*input) == "" {
+		return nil, 0, usageErr("route --text is required")
+	}
+	active := false
+	ph := domain.Phase(*phase)
+	rev := uint64(0)
+	if p, err := state.New(rt.root).Load(); err == nil {
+		rev = p.Revision
+		if p.ActiveSprintID != "" {
+			active = true
+			if sp := p.Sprints[p.ActiveSprintID]; sp != nil && ph == "" {
+				ph = sp.Phase
+			}
+		}
+	}
+	if *activeFlag == "true" {
+		active = true
+	}
+	if *activeFlag == "false" {
+		active = false
+	}
+	return router.Route(*input, active, ph), rev, nil
 }
 
 func (rt *runtime) global(args []string) []string {
@@ -2036,7 +2059,7 @@ func looksSecret(b []byte) bool {
 			return true
 		}
 	}
-	return false
+	return secret.DetectLeak(b)
 }
 func discoverRoot() string {
 	cwd, _ := os.Getwd()

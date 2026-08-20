@@ -1,7 +1,7 @@
 {
   "active_sprint_id": "",
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 376,
+  "revision": 410,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -66,6 +66,14 @@
       "sprint_id": "sprint_0000380wney2n4hv4wct0skz4w",
       "title": "Skill Routing and Eval Completion",
       "phase": "archived"
+    },
+    {
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "title": "Secret Boundary and Adversarial QA",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wney2n4hv4wct0skz4w"
+      ]
     }
   ]
 }

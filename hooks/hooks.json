@@ -41,6 +41,20 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Read|WebFetch|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${PLUGIN_ROOT}/hooks/tene_hook.py post-tool",
+            "timeout": 5,
+            "statusMessage": "Scanning output for secret leakage",
+            "additionalContextLimit": 1000
+          }
+        ]
+      }
+    ],
     "SubagentStart": [
       {
         "hooks": [
@@ -68,4 +82,3 @@
     ]
   }
 }
-

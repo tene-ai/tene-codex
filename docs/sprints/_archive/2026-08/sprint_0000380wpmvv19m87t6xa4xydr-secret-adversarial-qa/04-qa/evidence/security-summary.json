@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "overall_passed": true,
+  "adapter_attack_cases": 6,
+  "poisoned_evidence_patterns_rejected": 3,
+  "hook_cases_passed": 5,
+  "accepted_plaintext_matches": 0,
+  "preview_fields_returned": 0,
+  "quarantine_failures": 0,
+  "commands": ["make check", "go test -race ./...", "go vet ./...", "npm run test:e2e"],
+  "validators": {"plugin": "passed", "skills": 9},
+  "redaction_status": "passed"
+}

