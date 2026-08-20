@@ -297,3 +297,30 @@ func TestCLIApprovalLoopAndGapLifecycle(t *testing.T) {
 		t.Fatalf("security defer code=%d", code)
 	}
 }
+
+func TestGraphBuildUsesDeterministicEdgeIDs(t *testing.T) {
+	root := t.TempDir()
+	execute(t, root, "init")
+	execute(t, root, "sprint", "create", "--title", "Stable graph")
+	_, captured := execute(t, root, "intent", "capture", "--statement", "stable", "--ac", "stable edge", "--observable", "same id")
+	intentID := captured.Result.(map[string]any)["intent"].(map[string]any)["intent_id"].(string)
+	execute(t, root, "intent", "confirm", intentID)
+	execute(t, root, "graph", "build")
+	first, err := state.New(root).Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	execute(t, root, "graph", "build")
+	second, err := state.New(root).Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(first.Graph.Edges) != len(second.Graph.Edges) {
+		t.Fatal("edge count drift")
+	}
+	for id := range first.Graph.Edges {
+		if _, ok := second.Graph.Edges[id]; !ok {
+			t.Fatalf("edge id drift: %s", id)
+		}
+	}
+}

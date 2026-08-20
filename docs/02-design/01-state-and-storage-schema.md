@@ -103,7 +103,8 @@ interface Event {
 
 `compact`는 journal snapshot을 만들고 기존 segment를 checksummed archive로 옮긴다. `clear`는 derived/ephemeral만 제거한다. `archive`는 Sprint 문서 경로를 이동하고 immutable flag/event를 남긴다.
 
+구현된 replay contract에서 `compact`는 현재 revision의 full `ProjectionCheckpoint`와 checksummed snapshot을 남긴다. 이후 event는 원래 domain payload와 canonical projection merge patch를 함께 hash-chain에 포함한다. `doctor`는 최신 checkpoint부터 patch를 replay하여 세 projection을 비교하고, `--repair`는 timestamped backup 후 replay 결과만 기록한다. Journal 자체가 손상되었거나 checkpoint 이후 patch가 누락되면 fail closed 한다.
+
 ## 7. Atomicity
 
 mutation은 repo-scoped advisory lock을 획득하고 expected revision을 비교한다. 파일은 같은 filesystem의 temp에 쓴 뒤 flush/fsync/rename한다. lock timeout 기본 5초, stale lock은 PID/host/time 확인 뒤 `doctor`만 정리한다.
-

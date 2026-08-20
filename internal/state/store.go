@@ -70,7 +70,7 @@ func (s *Store) Initialize(project *domain.Project) error {
 		if err := atomicBytes(filepath.Join(s.Dir(), "policies.yaml"), []byte("schema_version: 1.0.0\nworkflow_profile: "+project.Profile+"\nqa:\n  blocking_coverage: 100\nsecrets:\n  provider: tene\n")); err != nil {
 			return err
 		}
-		e := domain.Event{Sequence: 1, EventID: domain.NewID("event"), EventType: "ProjectInitialized", AggregateID: project.ProjectID, OccurredAt: s.Now().UTC(), Actor: domain.Actor{Kind: "user"}, ExpectedRevision: 0, Payload: project}
+		e := domain.Event{Sequence: 1, EventID: domain.NewID("event"), EventType: "ProjectInitialized", AggregateID: project.ProjectID, OccurredAt: s.Now().UTC(), Actor: domain.Actor{Kind: "user"}, ExpectedRevision: 0, Payload: eventEnvelope{Projection: project}}
 		e.Hash = eventHash(e)
 		return appendEvent(s.EventsPath(), e)
 	}); err != nil {
@@ -160,6 +160,7 @@ func (s *Store) Migrate() (MigrationPlan, error) {
 			return err
 		}
 		ensureMaps(&p)
+		before := jsonTree(&p)
 		p.SchemaVersion = domain.SchemaVersion
 		prev, seq, err := s.lastEvent()
 		if err != nil {
@@ -168,7 +169,7 @@ func (s *Store) Migrate() (MigrationPlan, error) {
 		old := p.Revision
 		p.Revision++
 		p.UpdatedAt = s.Now().UTC()
-		e := domain.Event{Sequence: seq + 1, EventID: domain.NewID("event"), EventType: "SchemaMigrated", AggregateID: p.ProjectID, OccurredAt: p.UpdatedAt, Actor: domain.Actor{Kind: "system"}, ExpectedRevision: old, Payload: plan, PreviousHash: prev}
+		e := domain.Event{Sequence: seq + 1, EventID: domain.NewID("event"), EventType: "SchemaMigrated", AggregateID: p.ProjectID, OccurredAt: p.UpdatedAt, Actor: domain.Actor{Kind: "system"}, ExpectedRevision: old, Payload: eventEnvelope{Data: plan, ProjectionPatch: mergePatch(before, jsonTree(&p))}, PreviousHash: prev}
 		e.Hash = eventHash(e)
 		if err := appendEvent(s.EventsPath(), e); err != nil {
 			return err
@@ -189,26 +190,7 @@ func (s *Store) Migrate() (MigrationPlan, error) {
 }
 
 func (s *Store) RepairDerived() ([]string, error) {
-	if _, err := s.VerifyJournal(); err != nil {
-		return nil, err
-	}
-	var repaired []string
-	err := s.withLock(func() error {
-		p, err := s.Load()
-		if err != nil {
-			return err
-		}
-		if err := atomicJSON(s.ActivePath(), p); err != nil {
-			return err
-		}
-		repaired = append(repaired, s.ActivePath())
-		if err := atomicJSON(s.MasterPlanPath(), masterPlan(p)); err != nil {
-			return err
-		}
-		repaired = append(repaired, s.MasterPlanPath())
-		return nil
-	})
-	return repaired, err
+	return s.RepairFromJournal()
 }
 
 func (s *Store) Mutate(expected *uint64, actor domain.Actor, eventType, aggregateID string, payload any, fn func(*domain.Project) error) (*domain.Project, error) {
@@ -221,6 +203,7 @@ func (s *Store) Mutate(expected *uint64, actor domain.Actor, eventType, aggregat
 		if expected != nil && p.Revision != *expected {
 			return fmt.Errorf("%w: expected %d, current %d", ErrConflict, *expected, p.Revision)
 		}
+		before := jsonTree(p)
 		if err := fn(p); err != nil {
 			return err
 		}
@@ -231,7 +214,8 @@ func (s *Store) Mutate(expected *uint64, actor domain.Actor, eventType, aggregat
 		oldRevision := p.Revision
 		p.Revision++
 		p.UpdatedAt = s.Now().UTC()
-		e := domain.Event{Sequence: sequence + 1, EventID: domain.NewID("event"), EventType: eventType, AggregateID: aggregateID, OccurredAt: p.UpdatedAt, Actor: actor, ExpectedRevision: oldRevision, Payload: payload, PreviousHash: previousHash}
+		patch := mergePatch(before, jsonTree(p))
+		e := domain.Event{Sequence: sequence + 1, EventID: domain.NewID("event"), EventType: eventType, AggregateID: aggregateID, OccurredAt: p.UpdatedAt, Actor: actor, ExpectedRevision: oldRevision, Payload: eventEnvelope{Data: payload, ProjectionPatch: patch}, PreviousHash: previousHash}
 		e.Hash = eventHash(e)
 		if err := appendEvent(s.EventsPath(), e); err != nil {
 			return err

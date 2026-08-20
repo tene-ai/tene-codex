@@ -1668,6 +1668,16 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 		return nil, p.Revision, err
 	}
 	findings := validateGraph(p)
+	drift, _, replayErr := s.ProjectionDrift()
+	if replayErr != nil {
+		findings = append(findings, domain.Finding{Code: "STATE_REPLAY_FAILED", Severity: "blocker", Message: replayErr.Error(), Remediation: "Run compact on a known-good projection to create a checkpoint."})
+	} else {
+		for _, d := range drift {
+			if d.Status != "match" {
+				findings = append(findings, domain.Finding{Code: "STATE_PROJECTION_DRIFT", Severity: "blocker", SubjectRefs: []string{relative(rt.root, d.Path)}, Message: "projection does not match journal replay: " + d.Status, Remediation: "Run doctor --repair after reviewing the journal."})
+			}
+		}
+	}
 	for _, id := range invalidEvidence(rt.root, p) {
 		findings = append(findings, domain.Finding{Code: "QA_EVIDENCE_INVALID", Severity: "blocker", SubjectRefs: []string{id}, Message: "evidence is missing, modified, or contains a secret pattern", Remediation: "Restore or regenerate sanitized evidence."})
 	}
@@ -1678,7 +1688,7 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 			}
 		}
 	}
-	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }()}}, p.Revision, nil
+	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }()}}, p.Revision, nil
 }
 
 func invalidEvidence(root string, p *domain.Project) []string {
@@ -1709,12 +1719,11 @@ func documentDue(current, documentPhase domain.Phase) bool {
 }
 func (rt *runtime) compact() (any, uint64, error) {
 	s := state.New(rt.root)
-	p, err := s.Load()
+	path, p, err := s.CreateCheckpoint()
 	if err != nil {
 		return nil, 0, err
 	}
-	path, err := s.Compact()
-	return map[string]string{"snapshot": relative(rt.root, path)}, p.Revision, err
+	return map[string]string{"snapshot": relative(rt.root, path), "checkpoint": "created"}, p.Revision, nil
 }
 func (rt *runtime) clear() (any, uint64, error) {
 	s := state.New(rt.root)
@@ -1770,7 +1779,7 @@ func addEdge(g *domain.Graph, from, to, kind string) {
 	if from == "" || to == "" {
 		return
 	}
-	id := domain.NewID("edge")
+	id := deterministicEdgeID(from, to, kind, "workflow-state", "workflow-state")
 	g.Edges[id] = domain.Edge{ID: id, From: from, To: to, Kind: kind, SourceLocator: "workflow-state", Provider: "workflow-state", Confidence: 1}
 }
 func mergeCodeGraph(g *domain.Graph, report codeintel.Report) {
@@ -1787,9 +1796,13 @@ func mergeCodeGraph(g *domain.Graph, report codeintel.Report) {
 		if _, ok := g.Nodes[e.To]; !ok {
 			g.Nodes[e.To] = domain.Node{ID: e.To, Kind: "ExternalSymbol", Label: strings.TrimPrefix(e.To, "call:"), Source: "derived", Confidence: e.Confidence, Attributes: map[string]any{"resolution": "unresolved by current provider"}}
 		}
-		id := domain.NewID("edge")
+		id := deterministicEdgeID(e.From, e.To, e.Kind, e.Provider, e.Locator)
 		g.Edges[id] = domain.Edge{ID: id, From: e.From, To: e.To, Kind: e.Kind, SourceLocator: e.Locator, Provider: e.Provider, Confidence: e.Confidence}
 	}
+}
+func deterministicEdgeID(from, to, kind, provider, locator string) string {
+	sum := sha256.Sum256([]byte(strings.Join([]string{from, to, kind, provider, locator}, "\x00")))
+	return "edge_" + hex.EncodeToString(sum[:16])
 }
 func traceGraph(p *domain.Project, id string) map[string]any {
 	nodes := map[string]domain.Node{}

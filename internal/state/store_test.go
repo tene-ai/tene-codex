@@ -46,6 +46,9 @@ func TestMigrateLegacyAndRepairDerived(t *testing.T) {
 	if err != nil || got.SchemaVersion != domain.SchemaVersion || got.Waivers == nil {
 		t.Fatalf("%#v %v", got, err)
 	}
+	if _, _, err := s.CreateCheckpoint(); err != nil {
+		t.Fatal(err)
+	}
 	os.Remove(s.ActivePath())
 	os.Remove(s.MasterPlanPath())
 	paths, err := s.RepairDerived()

@@ -1,7 +1,7 @@
 {
   "active_sprint_id": "",
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 289,
+  "revision": 339,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -52,6 +52,14 @@
       "phase": "archived",
       "predecessor_ids": [
         "sprint_0000380wh5p6fktd02fj5fzjcm"
+      ]
+    },
+    {
+      "sprint_id": "sprint_0000380wmbmks792hdhe03j7bg",
+      "title": "State Recovery and Deterministic Projection",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380wjfxtbq8sgcngq0tmz4"
       ]
     }
   ]

@@ -28,3 +28,5 @@ tene-workflow secret check|list ENV|run ENV -- COMMAND
 Global options can appear anywhere: `--root`, `--json`, `--expected-revision`, `--request-id`.
 
 Exit codes: 0 success; 2 validation/usage; 3 guard or QA failure; 4 conflict/lock; 5 missing capability; 6 security; 7 corruption/migration; 8 child tool failure; 10 internal.
+
+`compact` creates a full, hash-chained projection checkpoint and snapshot. Later events contain compact merge patches. `doctor` compares journal replay with project, active, and master-plan projections; `doctor --repair` backs up divergent files and rebuilds them from replay. It never repairs a corrupt journal.

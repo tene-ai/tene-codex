@@ -7,6 +7,7 @@ coverage.out
 # Local workflow caches and large evidence
 .tene-workflow/.lock
 .tene-workflow/cache/
+.tene-workflow/backups/
 .tene-workflow/evidence/**
 !.tene-workflow/evidence/**/manifest.json
 

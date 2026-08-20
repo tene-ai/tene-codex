@@ -1,0 +1,13 @@
+State Recovery and Deterministic Projection verification — 2026-08-20 UTC
+
+PASS checkpoint and replay: live checkpoint revision 303 plus patches through QA revision 320 replayed project, active, and master-plan projections with status match.
+PASS repair tests: a corrupted project projection was rebuilt from verified replay and reloaded with expected semantic state; backup path was created.
+PASS merge patch: nested updates, deletion, and array replacement round-trip.
+PASS concurrency: two writers with expected revision produced exactly one commit.
+PASS graph: repeated rebuilds retained identical semantic edge IDs; live graph validation passed.
+PASS corruption boundary: VerifyJournal hash/sequence checks remain fail-closed and replay rejects missing checkpoint/patch.
+PASS make check, go test -race ./..., go vet ./....
+PASS Playwright reference journeys: 3/3.
+PASS Codex plugin validator and 9/9 skill validators.
+PASS evidence verify: 15 existing artifacts valid before registration.
+PASS doctor: healthy, 321 events, no blockers, all projections match; four expected pre-registration AC warnings only.
