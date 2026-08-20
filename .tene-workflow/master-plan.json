@@ -21,7 +21,7 @@
     ]
   },
   "project_id": "project_0000380v060bf8678xh7wgm6y8",
-  "revision": 1048,
+  "revision": 1086,
   "schema_version": "1.0.0",
   "sprints": [
     {
@@ -189,6 +189,14 @@
       "phase": "archived",
       "predecessor_ids": [
         "sprint_0000380y1g1eyc1xeym60b0rtc"
+      ]
+    },
+    {
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "title": "Doctor Fail Closed Exit",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380y2tr1qg8yzy7gc6dgm0"
       ]
     }
   ]

@@ -481,7 +481,7 @@ func TestCLICompactBoundsJournalAndDoctorDetectsArchiveTamper(t *testing.T) {
 	if err := os.WriteFile(segmentPath, []byte("tampered\n"), 0o644); err != nil {
 		t.Fatal(err)
 	}
-	if code, checked := execute(t, root, "doctor"); code != 0 || checked.Result.(map[string]any)["healthy"].(bool) {
+	if code, checked := execute(t, root, "doctor"); code != 7 || checked.Errors[0].Code != "STATE_CORRUPT" || checked.Errors[0].Details.(map[string]any)["healthy"].(bool) {
 		t.Fatalf("doctor accepted tampered archive: code=%d result=%#v", code, checked)
 	}
 }

@@ -23,8 +23,8 @@
       "all implementation follows the fixed Sprint lifecycle"
     ]
   },
-  "revision": 1048,
-  "updated_at": "2026-08-20T07:38:06.343194Z",
+  "revision": 1086,
+  "updated_at": "2026-08-20T07:44:39.81584Z",
   "sprints": {
     "sprint_0000380v060y01n452j1rk3xr4": {
       "sprint_id": "sprint_0000380v060y01n452j1rk3xr4",
@@ -643,6 +643,35 @@
       "last_loop_outcome": "passed",
       "last_loop_summary": "Blanket archive credit removed; passed-case link and omission-or-exact provenance predicates verify all 45 blockers with negative self-tests",
       "last_loop_at": "2026-08-20T07:35:05.611953Z"
+    },
+    "sprint_0000380y3ew66xhrtn9e3sdy2r": {
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "slug": "doctor-fail-closed-exit",
+      "title": "Doctor Fail Closed Exit",
+      "phase": "archived",
+      "predecessor_ids": [
+        "sprint_0000380y2tr1qg8yzy7gc6dgm0"
+      ],
+      "intent_ids": [
+        "intent_0000380y3hff9tbrqh38mvehb8"
+      ],
+      "task_ids": [
+        "task_0000380y3mjbzq6kbm80a0y2mg"
+      ],
+      "document_root": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit",
+      "archived_at": "2026-08-20T07:44:39.657499Z",
+      "approval_refs": [
+        "approval_0000380y3mpdz1wyzq72mjj0bw",
+        "approval_0000380y447q9bxtzsgx0ysfk8"
+      ],
+      "last_qa_status": "passed",
+      "last_qa_id": "run_0000380y3np8xedncbr42hs210",
+      "report_path": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/05-report/00-report.md",
+      "loop_iteration": 1,
+      "max_loop_iterations": 5,
+      "last_loop_outcome": "passed",
+      "last_loop_summary": "Healthy doctor remains exit 0; state tamper now returns STATE_CORRUPT exit 7 with complete diagnostics; no gaps",
+      "last_loop_at": "2026-08-20T07:40:37.763953Z"
     }
   },
   "tasks": {
@@ -1306,6 +1335,21 @@
         "tests/requirements_audit_test.py",
         "scripts/qa-evidence-provenance-observations.py"
       ]
+    },
+    "task_0000380y3mjbzq6kbm80a0y2mg": {
+      "task_id": "task_0000380y3mjbzq6kbm80a0y2mg",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "title": "Fail doctor closed on blocking findings",
+      "status": "done",
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "layer": "interface",
+      "artifacts": [
+        "internal/app/app.go",
+        "internal/app/app_test.go",
+        "scripts/qa-doctor-exit-observations.py"
+      ]
     }
   },
   "intents": {
@@ -1636,6 +1680,37 @@
       "source_locator": "conversation:2026-08-20",
       "confirmed_by": "user",
       "confirmed_at": "2026-08-20T07:34:39.342885Z"
+    },
+    "intent_0000380y3hff9tbrqh38mvehb8": {
+      "intent_id": "intent_0000380y3hff9tbrqh38mvehb8",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "revision": 2,
+      "status": "confirmed",
+      "statement": "Doctor must be an executable harness gate: blocking workflow findings fail with exit 3 and state-integrity corruption fails with exit 7 while retaining structured diagnostics",
+      "rationale": "A healthy=false response with exit zero can be silently accepted by CI and agents",
+      "actors": [
+        "CI runner",
+        "Codex agent",
+        "repository maintainer"
+      ],
+      "desired_outcomes": [
+        "nonzero unhealthy diagnostics",
+        "stable exit classification",
+        "structured remediation"
+      ],
+      "non_goals": [
+        "auto-repairing canonical source",
+        "changing healthy doctor output"
+      ],
+      "policies": [
+        "workflow blockers use 3",
+        "state corruption uses 7",
+        "result remains in error details"
+      ],
+      "source": "user",
+      "source_locator": "conversation:2026-08-20",
+      "confirmed_by": "user",
+      "confirmed_at": "2026-08-20T07:40:19.473228Z"
     }
   },
   "acceptance_criteria": {
@@ -1960,6 +2035,13 @@
       "statement": "The requirements audit rejects unlinked or mismatched evidence while accepting hash-valid redaction-safe legacy evidence only through an explicit passed case link",
       "priority": "blocking",
       "observable": "self-tests cover unlinked, compatible linked, and mismatched provenance; all 45 blocking ACs remain verified"
+    },
+    "ac_0000380y3hff8thtbtry95g2zc": {
+      "ac_id": "ac_0000380y3hff8thtbtry95g2zc",
+      "intent_id": "intent_0000380y3hff9tbrqh38mvehb8",
+      "statement": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details",
+      "priority": "blocking",
+      "observable": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0"
     }
   },
   "gaps": {
@@ -2641,6 +2723,34 @@
       "approved_at": "2026-08-20T07:38:05.64498Z",
       "expires_at": "2026-08-20T09:38:04Z",
       "consumed_at": "2026-08-20T07:38:06.234237Z"
+    },
+    "approval_0000380y3mpdz1wyzq72mjj0bw": {
+      "approval_id": "approval_0000380y3mpdz1wyzq72mjj0bw",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "from": "design",
+      "to": "do",
+      "reason": "User instructed continuous completion of harness gate requirements",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:40:23.647406Z",
+      "approved_at": "2026-08-20T07:40:24.311242Z",
+      "expires_at": "2026-08-20T09:40:23Z",
+      "consumed_at": "2026-08-20T07:40:25.033638Z"
+    },
+    "approval_0000380y447q9bxtzsgx0ysfk8": {
+      "approval_id": "approval_0000380y447q9bxtzsgx0ysfk8",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "from": "report",
+      "to": "archived",
+      "reason": "Doctor exit contract and all QA/release gates passed",
+      "requester": "kay",
+      "approver": "kay",
+      "status": "consumed",
+      "requested_at": "2026-08-20T07:44:38.26008Z",
+      "approved_at": "2026-08-20T07:44:38.92025Z",
+      "expires_at": "2026-08-20T09:44:38Z",
+      "consumed_at": "2026-08-20T07:44:39.657499Z"
     }
   },
   "evidence": {
@@ -13032,6 +13142,776 @@
       "environment": "local:1382c4208946a24a",
       "started_at": "2026-08-20T07:35:48.442778Z",
       "finished_at": "2026-08-20T07:35:49.246905Z"
+    },
+    "evidence_0000380y3qhnfjvq4k8yg701hg": {
+      "evidence_id": "evidence_0000380y3qhnfjvq4k8yg701hg",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8w08xm3h660jhf0.json",
+      "sha256": "8bd0ada2bea20a82bcf02c68af2c6569944ecdbeb59c74c49fa224fdd3127f29",
+      "size": 3480,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:10.359918Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8w08xm3h660jhf0",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:validation"
+          ],
+          "actual": "state-prefixed blockers classify as STATE_CORRUPT; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
+    },
+    "evidence_0000380y3qkqzczdvp2chdpmb0": {
+      "evidence_id": "evidence_0000380y3qkqzczdvp2chdpmb0",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8wjk93jwfkmc21w.json",
+      "sha256": "91dbca19b28eb0446ee831307e89081eef82a3bcebaa8a0d97d531348d5742bf",
+      "size": 3440,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:11.4237Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8wjk93jwfkmc21w",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:alternate"
+          ],
+          "actual": "workflow blockers use DOCTOR_UNHEALTHY exit 3; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
+    },
+    "evidence_0000380y3qnr4vx1zvb1f64qy0": {
+      "evidence_id": "evidence_0000380y3qnr4vx1zvb1f64qy0",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8x96nxyn8xpr3dm.json",
+      "sha256": "7f67260cd24a13c6a97adf3810c188eb77567be680ab476d6a76d13ca7c5d010",
+      "size": 3344,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:12.450985Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8x96nxyn8xpr3dm",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:happy"
+          ],
+          "actual": "healthy doctor returns success exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
+    },
+    "evidence_0000380y3qqraqa1r0989xktgw": {
+      "evidence_id": "evidence_0000380y3qqraqa1r0989xktgw",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8xbw53fp8mwbn1c.json",
+      "sha256": "fc62ce536ab23252c4570baa46cfcab9fa6970d58eb8a0809ea6016c7258cffa",
+      "size": 3608,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:13.478027Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8xbw53fp8mwbn1c",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:permission"
+          ],
+          "actual": "diagnostic checks remain read-only unless explicit repair applies; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
+    },
+    "evidence_0000380y3qss9edq7a1csv9e0r": {
+      "evidence_id": "evidence_0000380y3qss9edq7a1csv9e0r",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8xnn6kxed6rc9yr.json",
+      "sha256": "d98fdefd50b91f0ab0b1d41f566d6a3392e46fd0898ab3940c7ebc42bdeb8db0",
+      "size": 3384,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:14.516708Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8xnn6kxed6rc9yr",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:failure"
+          ],
+          "actual": "tampered archived segment returns exit 7; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
+    },
+    "evidence_0000380y3qvv2j42r9hfj9vb24": {
+      "evidence_id": "evidence_0000380y3qvv2j42r9hfj9vb24",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8xpk54r6150y1pm.json",
+      "sha256": "17dae2f3c0775c88b1f01a9f4f73edbeb1433615e638cc0a5930c2565ef46b68",
+      "size": 3496,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:15.569496Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8xpk54r6150y1pm",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:empty"
+          ],
+          "actual": "healthy inactive state retains structured empty findings; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
+    },
+    "evidence_0000380y3qxtfz97x2kpcmyb6r": {
+      "evidence_id": "evidence_0000380y3qxtfz97x2kpcmyb6r",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "kind": "journey-observation",
+      "uri": "docs/sprints/_archive/2026-08/sprint_0000380y3ew66xhrtn9e3sdy2r-doctor-fail-closed-exit/04-qa/observations/case_0000380y3np8xs5qs2vttd40w4.json",
+      "sha256": "652d7221bdfffcc7dd93b8b80601fa8a6896801a5a2f139ae3ce206c1136e7bd",
+      "size": 3432,
+      "ac_ids": [
+        "ac_0000380y3hff8thtbtry95g2zc"
+      ],
+      "created_at": "2026-08-20T07:41:16.583184Z",
+      "redaction_status": "passed",
+      "case_id": "case_0000380y3np8xs5qs2vttd40w4",
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+      "state_revision": 1070,
+      "layers": [
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7"
+      ],
+      "assertions": [
+        {
+          "statement": "L1 doctor exit contract passed",
+          "passed": true,
+          "layer": "L1",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L2 doctor exit contract passed",
+          "passed": true,
+          "layer": "L2",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L3 doctor exit contract passed",
+          "passed": true,
+          "layer": "L3",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L4 doctor exit contract passed",
+          "passed": true,
+          "layer": "L4",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L5 doctor exit contract passed",
+          "passed": true,
+          "layer": "L5",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L6 doctor exit contract passed",
+          "passed": true,
+          "layer": "L6",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        },
+        {
+          "statement": "L7 doctor exit contract passed",
+          "passed": true,
+          "layer": "L7",
+          "requirement_refs": [
+            "observable",
+            "variant:recovery"
+          ],
+          "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+          "expected": "shell exit and structured diagnostic severity agree"
+        }
+      ],
+      "tool": "doctor-exit-contract",
+      "tool_version": "doctor-exit-contract/1.0.0",
+      "environment": "local:1382c4208946a24a",
+      "started_at": "2026-08-20T07:41:05.804455Z",
+      "finished_at": "2026-08-20T07:41:09.93994Z"
     }
   },
   "qa_runs": {
@@ -20973,6 +21853,319 @@
       "finished_at": "2026-08-20T07:35:53.327181Z",
       "state_revision": 1032,
       "spec_hash": "f9631f4d80d4b14d7fe2c1b570d8b1b30370434b4ca3ba829141d480b1ffac53"
+    },
+    "run_0000380y3np8xedncbr42hs210": {
+      "run_id": "run_0000380y3np8xedncbr42hs210",
+      "sprint_id": "sprint_0000380y3ew66xhrtn9e3sdy2r",
+      "status": "passed",
+      "environment": "local:1382c4208946a24a",
+      "cases": [
+        {
+          "case_id": "case_0000380y3np8x96nxyn8xpr3dm",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — happy",
+          "variant": "happy",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qnr4vx1zvb1f64qy0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete the primary user and data journey",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y3np8wjk93jwfkmc21w",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — alternate",
+          "variant": "alternate",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qkqzczdvp2chdpmb0"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Complete a valid alternate or back-navigation journey",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y3np8xpk54r6150y1pm",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — empty",
+          "variant": "empty",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qvv2j42r9hfj9vb24"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise empty initial and no-result states",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y3np8w08xm3h660jhf0",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — validation",
+          "variant": "validation",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qhnfjvq4k8yg701hg"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Submit invalid or boundary input and confirm no forbidden write",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y3np8xbw53fp8mwbn1c",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — permission",
+          "variant": "permission",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qqraqa1r0989xktgw"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Exercise least-privilege denial and authorized recovery",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y3np8xnn6kxed6rc9yr",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — failure",
+          "variant": "failure",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qss9edq7a1csv9e0r"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Induce a downstream failure and observe user-visible and data-consistency behavior",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        },
+        {
+          "case_id": "case_0000380y3np8xs5qs2vttd40w4",
+          "ac_ids": [
+            "ac_0000380y3hff8thtbtry95g2zc"
+          ],
+          "title": "Doctor exits nonzero for blockers and returns the complete diagnostic result in structured error details — recovery",
+          "variant": "recovery",
+          "layers": [
+            "L1",
+            "L2",
+            "L3",
+            "L4",
+            "L5",
+            "L6",
+            "L7"
+          ],
+          "status": "passed",
+          "evidence_ids": [
+            "evidence_0000380y3qxtfz97x2kpcmyb6r"
+          ],
+          "actor": "project user",
+          "steps": [
+            {
+              "action": "Retry or roll back after failure and verify idempotent recovery",
+              "expected_ui": "tampered archive returns STATE_CORRUPT exit 7 with healthy false while healthy state remains exit 0",
+              "observer_ids": [
+                "interface",
+                "boundary",
+                "persistence"
+              ]
+            }
+          ],
+          "required_layers": {
+            "L1": "required",
+            "L2": "required",
+            "L3": "required",
+            "L4": "required",
+            "L5": "required",
+            "L6": "required",
+            "L7": "required"
+          },
+          "risk": "high"
+        }
+      ],
+      "started_at": "2026-08-20T07:40:39.950577Z",
+      "finished_at": "2026-08-20T07:41:17.621814Z",
+      "state_revision": 1070,
+      "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431"
     }
   },
   "graph": {

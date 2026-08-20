@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "adapter": "doctor-exit-contract",
+  "run_id": "run_0000380y3np8xedncbr42hs210",
+  "case_id": "case_0000380y3np8xs5qs2vttd40w4",
+  "environment": "local:1382c4208946a24a",
+  "started_at": "2026-08-20T07:41:05.804455Z",
+  "finished_at": "2026-08-20T07:41:09.939940Z",
+  "checkpoints": [
+    {
+      "name": "doctor-shell-gate",
+      "kind": "cli-integrity",
+      "before": {
+        "variant": "recovery"
+      },
+      "after": {
+        "actual": "restored valid history returns healthy exit 0",
+        "healthy_revision": 1072
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "statement": "L1 doctor exit contract passed",
+      "passed": true,
+      "layer": "L1",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    },
+    {
+      "statement": "L2 doctor exit contract passed",
+      "passed": true,
+      "layer": "L2",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    },
+    {
+      "statement": "L3 doctor exit contract passed",
+      "passed": true,
+      "layer": "L3",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    },
+    {
+      "statement": "L4 doctor exit contract passed",
+      "passed": true,
+      "layer": "L4",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    },
+    {
+      "statement": "L5 doctor exit contract passed",
+      "passed": true,
+      "layer": "L5",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    },
+    {
+      "statement": "L6 doctor exit contract passed",
+      "passed": true,
+      "layer": "L6",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    },
+    {
+      "statement": "L7 doctor exit contract passed",
+      "passed": true,
+      "layer": "L7",
+      "requirement_refs": [
+        "observable",
+        "variant:recovery"
+      ],
+      "actual": "restored valid history returns healthy exit 0; focused integration tests pass",
+      "expected": "shell exit and structured diagnostic severity agree"
+    }
+  ],
+  "redaction_status": "passed",
+  "spec_hash": "0be09673ec8925df7644692848a113de4ef3838437564c5461669a20ca558431",
+  "state_revision": 1070,
+  "layers": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6",
+    "L7"
+  ],
+  "tool_version": "doctor-exit-contract/1.0.0"
+}

@@ -2286,7 +2286,18 @@ func (rt *runtime) doctor(args []string) (any, uint64, error) {
 			}
 		}
 	}
-	return map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "archived_event_segments": len(archives), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }(), "codex": projectconfig.ProbeCodex(rt.root)}}, p.Revision, nil
+	result := map[string]any{"healthy": !workflow.Blocking(findings), "events": len(events), "archived_event_segments": len(archives), "revision": p.Revision, "findings": findings, "projection_drift": drift, "repaired": repaired, "capabilities": map[string]any{"tene_cli": func() bool { _, e := secret.Check(); return e == nil }(), "codex": projectconfig.ProbeCodex(rt.root)}}
+	if workflow.Blocking(findings) {
+		exit, code := 3, "DOCTOR_UNHEALTHY"
+		for _, finding := range findings {
+			if finding.Severity == "blocker" && strings.HasPrefix(finding.Code, "STATE_") {
+				exit, code = 7, "STATE_CORRUPT"
+				break
+			}
+		}
+		return result, p.Revision, &commandError{code, "doctor found blocking integrity or workflow findings", "Review the structured findings and apply the named remediation before retrying.", exit}
+	}
+	return result, p.Revision, nil
 }
 
 func invalidEvidence(root string, p *domain.Project) []string {
